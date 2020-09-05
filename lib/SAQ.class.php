@@ -89,7 +89,9 @@ class SAQ extends Modele {
 	private function nettoyerEspace($chaine)
 	{
 		return preg_replace('/\s+/', ' ',$chaine);
-	}
+    }
+    
+    
 	private function recupereInfo($noeud) {
 		
 		$info = new stdClass();

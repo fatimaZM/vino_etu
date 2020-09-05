@@ -10,7 +10,7 @@ foreach ($data as $cle => $bouteille) {
         </div>
         <div class="description">
             <p class="nom">Nom : <?php echo $bouteille['nom'] ?></p>
-            <p class="quantite">Quantité : <?php echo $bouteille['quantite'] ?></p>
+            <p class="quantite">Quantité : <span><?php echo $bouteille['quantite'] ?></span></p>
             <p class="pays">Pays : <?php echo $bouteille['pays'] ?></p>
             <p class="type">Type : <?php echo $bouteille['type'] ?></p>
             <p class="millesime">Millesime : <?php echo $bouteille['millesime'] ?></p>
