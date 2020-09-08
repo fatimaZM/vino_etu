@@ -10,23 +10,11 @@
 
 //const BaseURL = "https://jmartel.webdev.cmaisonneuve.qc.ca/n61/vino/";
 const BaseURL = document.baseURI;
-// console.log(BaseURL);
+console.log(BaseURL);
 window.addEventListener('load', function () {
     console.log("load");
-
-    let bouteille = {
-        nom: document.querySelector(".nom_bouteille"),
-        millesime: document.querySelector("[name='millesime']"),
-        quantite: document.querySelector(".quantite"),
-        date_achat: document.querySelector("[name='date_achat']"),
-        prix: document.querySelector("[name='prix']"),
-        garde_jusqua: document.querySelector("[name='garde_jusqua']"),
-        notes: document.querySelector("[name='notes']"),
-    };
-
-
     document.querySelectorAll(".btnBoire").forEach(function (element) {
-        // console.log(element);
+
         element.addEventListener("click", function (evt) {
             let id = evt.target.parentElement.dataset.id;
             let requete = new Request(BaseURL + "index.php?requete=boireBouteilleCellier", { method: 'POST', body: '{"id": ' + id + '}' });
@@ -34,9 +22,9 @@ window.addEventListener('load', function () {
             fetch(requete)
                 .then(response => {
                     if (response.status === 200) {
-                        bouteille.quantite.firstElementChild.innerHTML -= 1;
+                        //récupérer la quantité affichée de bouteille dans le cellier et soustraire 1
+                        element.parentElement.parentElement.querySelector('.quantite').firstElementChild.innerHTML = parseInt(element.parentElement.parentElement.querySelector('.quantite').firstElementChild.innerHTML) - 1;
                         return response.json();
-
                     } else {
                         throw new Error('Erreur');
                     }
@@ -51,7 +39,6 @@ window.addEventListener('load', function () {
     });
 
     document.querySelectorAll(".btnAjouter").forEach(function (element) {
-        // console.log(element);
         element.addEventListener("click", function (evt) {
             let id = evt.target.parentElement.dataset.id;
             let requete = new Request(BaseURL + "index.php?requete=ajouterBouteilleCellier", { method: 'POST', body: '{"id": ' + id + '}' });
@@ -59,7 +46,8 @@ window.addEventListener('load', function () {
             fetch(requete)
                 .then(response => {
                     if (response.status === 200) {
-                        bouteille.quantite.firstElementChild.innerHTML = parseInt(bouteille.quantite.firstElementChild.innerHTML) + 1;
+                        //récupérer la quantité affichée de bouteille dans le cellier et ajouter 1
+                        element.parentElement.parentElement.querySelector('.quantite').firstElementChild.innerHTML = parseInt(element.parentElement.parentElement.querySelector('.quantite').firstElementChild.innerHTML) + 1;
                         return response.json();
                     } else {
                         throw new Error('Erreur');
@@ -108,6 +96,17 @@ window.addEventListener('load', function () {
 
         });
 
+        let bouteille = {
+            nom: document.querySelector(".nom_bouteille"),
+            millesime: document.querySelector("[name='millesime']"),
+            quantite: document.querySelector("[name='quantite']"),
+            date_achat: document.querySelector("[name='date_achat']"),
+            prix: document.querySelector("[name='prix']"),
+            garde_jusqua: document.querySelector("[name='garde_jusqua']"),
+            notes: document.querySelector("[name='notes']"),
+        };
+
+
         liste.addEventListener("click", function (evt) {
             console.dir(evt.target)
             if (evt.target.tagName == "LI") {
@@ -123,21 +122,28 @@ window.addEventListener('load', function () {
         let btnAjouter = document.querySelector("[name='ajouterBouteilleCellier']");
         if (btnAjouter) {
             btnAjouter.addEventListener("click", function (evt) {
-                //   var param = {
-                //     "id_bouteille":bouteille.nom.dataset.id,
-                //     "date_achat":bouteille.date_achat.value,
-                //     "garde_jusqua":bouteille.garde_jusqua.value,
-                //     "notes":bouteille.date_achat.value,
-                //     "prix":bouteille.prix.value,
-                //     "quantite":bouteille.quantite.value,
-                //     "millesime":bouteille.millesime.value,
-                // };
+                var param = {
+                    "id_bouteille": bouteille.nom.dataset.id,
+                    "date_achat": bouteille.date_achat.value,
+                    "garde_jusqua": bouteille.garde_jusqua.value,
+                    "notes": bouteille.date_achat.value,
+                    "prix": bouteille.prix.value,
+                    "quantite": bouteille.quantite.value,
+                    "millesime": bouteille.millesime.value,
+                };
                 let requete = new Request(BaseURL + "index.php?requete=ajouterNouvelleBouteilleCellier", { method: 'POST', body: JSON.stringify(param) });
+                let msgRetour = document.querySelector('.msgRetour');
+
+                //affichage de la modal :
+                modal.style.display = "block";
+
                 fetch(requete)
                     .then(response => {
                         if (response.status === 200) {
+                            msgRetour.innerHTML = "Votre bouteille a été ajoutée au cellier !";
                             return response.json();
                         } else {
+                            msgRetour.innerHTML = "Erreur lors de l'ajout de la bouteille.";
                             throw new Error('Erreur');
                         }
                     })
@@ -148,10 +154,12 @@ window.addEventListener('load', function () {
                         console.error(error);
                     });
 
+                document.querySelector('.retourCellier').addEventListener('click', evt => {
+                    window.location.href = BaseURL + '?requete=accueil';
+                });
             });
         }
     }
 
 
 });
-

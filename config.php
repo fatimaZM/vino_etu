@@ -13,26 +13,24 @@
 	
 	
 
-
+    /**
+	 * Cette méthode permet de charger automatiquement les classes utilisées dans un script
+	 * 
+	 * @param String $class : nom de la classe appelée.
+     *
+	 */
 	function mon_autoloader($class) 
 	{
-		$dossierClasse = array('modeles/', 'vues/', 'lib/', 'lib/mysql/', '' );	// Ajouter les dossiers au besoin
+		$dossierClasse = array('modeles/', 'vues/', 'lib/', 'controler/' );	// Ajouter les dossiers au besoin
 		
 		foreach ($dossierClasse as $dossier) 
 		{
-			//var_dump('./'.$dossier.$class.'.class.php');
 			if(file_exists('./'.$dossier.$class.'.class.php'))
 			{
 				require_once('./'.$dossier.$class.'.class.php');
 			}
 		}
-		
-	  
 	}
 	
 	spl_autoload_register('mon_autoloader');
-	
-	
-	
-	
 ?>

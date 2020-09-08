@@ -20,7 +20,6 @@ class Controler
 		 */
 		public function gerer()
 		{
-			
 			switch ($_GET['requete']) {
 				case 'listeBouteille':
 					$this->listeBouteille();
@@ -79,10 +78,11 @@ class Controler
 			//var_dump($body);
 			if(!empty($body)){
 				$bte = new Bouteille();
-				//var_dump($_POST['data']);
+				var_dump($_POST['data']);
+			var_dump($body);
 				
 				//var_dump($data);
-				$resultat = $bte->ajouterBouteilleCellier($body);
+                $resultat = $bte->ajouterBouteilleCellier($body);
 				echo json_encode($resultat);
 			}
 			else{

@@ -13,18 +13,23 @@
 class Modele {
 	
     protected $_db;
+
+    /**
+     * Constructeur de la classe 
+     *
+     */ 
 	function __construct ()
 	{
 		$this->_db = MonSQL::getInstance();
 	}
-	
+    
+    /**
+     * Destructeur de la classe 
+     *
+     */ 
 	function __destruct ()
 	{
 		
 	}
 }
-
-
-
-
 ?>

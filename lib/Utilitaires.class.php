@@ -1,7 +1,7 @@
 <?php
 /**
- * Class MonSQL
- * Classe qui génère ma connection à MySQL à travers un singleton
+ * Class Untilitaires
+ * Classe qui contient les outils utiles pour tous les scripts
  *
  *
  * @author Jonathan Martel
@@ -13,10 +13,10 @@
 class Utilitaires {
 	
 	/**
-	 * 
+	 * afficheTable permet d'afficher des données sous forme de table
 	 *
-	 * @param void
-	 * @return Singleton
+	 * @param Array $data : tableau de données à ficher sous forme de table
+	 * @return HTML $res : code HTML de la table
 	 */
 	public static function afficheTable($data) {
 		$res = '';

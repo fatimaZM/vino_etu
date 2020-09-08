@@ -13,9 +13,7 @@
 		<link rel="stylesheet" href="./css/normalize.css" type="text/css" media="screen">
 		<link rel="stylesheet" href="./css/base_h5bp.css" type="text/css" media="screen">
 		<link rel="stylesheet" href="./css/main.css" type="text/css" media="screen">
-		<base href="<?php echo BASEURL; ?>">
-		<!--<script src="./js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>-->
-		<script src="./js/plugins.js"></script>
+		<base href="<?php echo BASEURL; ?>"> <!-- Specify a default URL and a default target for all links on a page -->
 		<script src="./js/main.js"></script>
 	</head>
 	<body >
