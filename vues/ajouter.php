@@ -15,13 +15,5 @@
         </div>
         <button name="ajouterBouteilleCellier">Ajouter la bouteille</button>
     </div>
-
-    <!-- Modal pour afficher le résulat de la tentative d'ajout : -->
-    <div id="modal" class="modal">
-        <div class="contenuModal">
-            <p class="msgRetour">Réponse</p>
-            <input type="button" class="retourCellier" value='Retour au cellier'>
-        </div>
-    </div>
 </div>
 </div>

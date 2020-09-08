@@ -11,7 +11,12 @@
  * 
  */
 class Modele {
-	
+    
+    
+	/**
+	 * @var $_db : instance unique de la classe MonSQL
+	 * @access protected
+	 */
     protected $_db;
 
     /**

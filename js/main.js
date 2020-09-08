@@ -13,6 +13,8 @@ const BaseURL = document.baseURI;
 console.log(BaseURL);
 window.addEventListener('load', function () {
     console.log("load");
+
+    /* Comportement du bouton "boire" sur la page de cellier :*/
     document.querySelectorAll(".btnBoire").forEach(function (element) {
 
         element.addEventListener("click", function (evt) {
@@ -38,6 +40,7 @@ window.addEventListener('load', function () {
 
     });
 
+    /* Comportement du bouton "Ajouter" sur la page de cellier : */
     document.querySelectorAll(".btnAjouter").forEach(function (element) {
         element.addEventListener("click", function (evt) {
             let id = evt.target.parentElement.dataset.id;
@@ -62,10 +65,12 @@ window.addEventListener('load', function () {
 
     });
 
+    /* comportement du formulaire d'ajout d'une nouvelle bouteille au cellier : */
     let inputNomBouteille = document.querySelector("[name='nom_bouteille']");
     console.log(inputNomBouteille);
     let liste = document.querySelector('.listeAutoComplete');
 
+    //fonctionnement de l'auto-complétion :
     if (inputNomBouteille) {
         inputNomBouteille.addEventListener("keyup", function (evt) {
             console.log(evt);
@@ -107,6 +112,7 @@ window.addEventListener('load', function () {
         };
 
 
+        //Affichage des résultats de recherche d'auto-complétion :
         liste.addEventListener("click", function (evt) {
             console.dir(evt.target)
             if (evt.target.tagName == "LI") {
@@ -119,6 +125,7 @@ window.addEventListener('load', function () {
             }
         });
 
+        //Comportement du bouton "ajouter la bouteille" du formulaire d'ajout de bouteille au cellier :
         let btnAjouter = document.querySelector("[name='ajouterBouteilleCellier']");
         if (btnAjouter) {
             btnAjouter.addEventListener("click", function (evt) {
@@ -132,18 +139,13 @@ window.addEventListener('load', function () {
                     "millesime": bouteille.millesime.value,
                 };
                 let requete = new Request(BaseURL + "index.php?requete=ajouterNouvelleBouteilleCellier", { method: 'POST', body: JSON.stringify(param) });
-                let msgRetour = document.querySelector('.msgRetour');
-
-                //affichage de la modal :
-                modal.style.display = "block";
 
                 fetch(requete)
                     .then(response => {
                         if (response.status === 200) {
-                            msgRetour.innerHTML = "Votre bouteille a été ajoutée au cellier !";
-                            return response.json();
+                            console.log(response.json());
+                            return response;
                         } else {
-                            msgRetour.innerHTML = "Erreur lors de l'ajout de la bouteille.";
                             throw new Error('Erreur');
                         }
                     })
@@ -153,10 +155,6 @@ window.addEventListener('load', function () {
                     }).catch(error => {
                         console.error(error);
                     });
-
-                document.querySelector('.retourCellier').addEventListener('click', evt => {
-                    window.location.href = BaseURL + '?requete=accueil';
-                });
             });
         }
     }
