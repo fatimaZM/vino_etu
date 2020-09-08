@@ -13,21 +13,13 @@
  */
 class Bouteille extends Modele
 {
-	const BOUTEILLE = 'vino__bouteille'; //table contenant la liste de bouteille du catalogue
-	const CELLIER = 'vino__cellier'; //table contenant la liste de bouteille du cellier
-	const TYPE = 'vino__type'; //table contenant la liste des types de vin (rouge, blanc, etc.)
+	const TABLE = 'vino__bouteille';
 
-
-    /**
-	 * Cette méthode retourne la liste des bouteilles contenues dans la base de données
-	 * 
-	 * @return Array $rows contenant toutes les bouteilles.
-	 */
 	public function getListeBouteille()
 	{
 
 		$rows = array();
-		$res = $this->_db->query('SELECT * FROM ' . self::BOUTEILLE);
+		$res = $this->_db->query('Select * from ' . self::TABLE);
 		if ($res->num_rows) {
 			while ($row = $res->fetch_assoc()) {
 				$rows[] = $row;
@@ -35,41 +27,37 @@ class Bouteille extends Modele
 		}
 
 		return $rows;
-    }
-    
-    /**
-	 * Cette méthode retourne la liste des bouteilles contenues dans un cellier
-	 * 
-	 * @return Array $rows contenant toutes les bouteilles.
-	 */
+	}
 	//clause WHERE de getListeBouteilleCellier() pour fin de test seulement 
 	public function getListeBouteilleCellier()
 	{
 
 		$rows = array();
-		$requete = 'SELECT 
-						c.id AS id_bouteille_cellier,
-						c.id_bouteille, 
-						c.date_achat, 
-						c.garde_jusqua, 
-						c.notes, 
-						c.prix, 
-						c.quantite,
-						c.millesime,
-						c.fk_id_utilisateur, 
-						b.id,
-						b.nom,  
-						b.image, 
-						b.code_saq, 
-						b.url_saq, 
-						b.pays, 
-						b.description,
-						t.type 
-						FROM ' . self::CELLIER . ' c 
-						INNER JOIN ' . self::BOUTEILLE . ' b ON c.id_bouteille = b.id
-						INNER JOIN ' . self::TYPE . ' t ON t.id = b.fk_type_id
-						WHERE c.fk_id_utilisateur = 3
-						';
+		$requete = 'SELECT
+								c.vino__cellier_id,
+								c.vino__bouteille_id,
+								c.date_achat,
+								c.garde_jusqua,
+								c.notes,
+								c.prix,
+								c.quantite,
+								c.millesime,
+								vc.id,
+								vc.fk_id_utilisateur,
+								b.id,
+								b.nom,
+								b.image,
+								b.code_saq,
+								b.url_saq,
+								b.pays,
+								b.description,
+								t.type
+							FROM cellier__bouteille c
+							INNER JOIN vino__bouteille b ON c.vino__bouteille_id = b.id
+							INNER JOIN vino__cellier vc ON c.vino__cellier_id = vc.id
+							INNER JOIN vino__type t ON t.id = b.fk_type_id
+							WHERE c.vino__cellier_id = 2';
+
 		if (($res = $this->_db->query($requete)) ==	 true) {
 			if ($res->num_rows) {
 				while ($row = $res->fetch_assoc()) {
@@ -81,9 +69,11 @@ class Bouteille extends Modele
 			throw new Exception("Erreur de requête sur la base de donnée", 1);
 			//$this->_db->error;
 		}
+
+
+
 		return $rows;
-    }
-    
+	}
 
 	/**
 	 * Cette méthode permet de retourner les résultats de recherche pour la fonction d'autocomplete de l'ajout des bouteilles dans le cellier
@@ -104,7 +94,7 @@ class Bouteille extends Modele
 		$nom = preg_replace("/\*/", "%", $nom);
 
 		//echo $nom;
-		$requete = 'SELECT id, nom FROM ' . self::BOUTEILLE . ' WHERE LOWER(nom) LIKE LOWER("%' . $nom . '%") LIMIT 0,' . $nb_resultat;
+		$requete = 'SELECT id, nom FROM vino__bouteille where LOWER(nom) like LOWER("%' . $nom . '%") LIMIT 0,' . $nb_resultat;
 		//var_dump($requete);
 		if (($res = $this->_db->query($requete)) ==	 true) {
 			if ($res->num_rows) {
@@ -135,7 +125,7 @@ class Bouteille extends Modele
 		//TODO : Valider les données.
 		//var_dump($data);	
 
-		$requete = "INSERT INTO " . self::CELLIER . "(id_bouteille,date_achat,garde_jusqua,notes,prix,quantite,millesime) VALUES (" .
+		$requete = "INSERT INTO vino__cellier(id_bouteille,date_achat,garde_jusqua,notes,prix,quantite,millesime) VALUES (" .
 			"'" . $data->id_bouteille . "'," .
 			"'" . $data->date_achat . "'," .
 			"'" . $data->garde_jusqua . "'," .
@@ -162,7 +152,8 @@ class Bouteille extends Modele
 	{
 		//TODO : Valider les données.
 
-		$requete = "UPDATE " . self::CELLIER . " SET quantite = GREATEST(quantite + " . $nombre . ", 0) WHERE id = " . $id;
+
+		$requete = "UPDATE vino__cellier SET quantite = GREATEST(quantite + " . $nombre . ", 0) WHERE id = " . $id;
 		//echo $requete;
 		$res = $this->_db->query($requete);
 
