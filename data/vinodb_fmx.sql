@@ -30,16 +30,16 @@ DEFAULT CHARACTER SET = latin1;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `vinodb`.`vino__bouteille` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
-  `nom` VARCHAR(200) NULL DEFAULT NULL,
-  `image` VARCHAR(200) NULL DEFAULT NULL,
-  `code_saq` VARCHAR(50) NULL DEFAULT NULL,
-  `pays` VARCHAR(50) NULL DEFAULT NULL,
-  `description` VARCHAR(200) NULL DEFAULT NULL,
-  `prix_saq` DECIMAL(10,2) NULL DEFAULT NULL,
+  `nom` VARCHAR(200) NULL,
+  `image` VARCHAR(200) NULL,
+  `code_saq` VARCHAR(50) NULL,
+  `pays` VARCHAR(50) NULL,
+  `description` VARCHAR(200) NULL,
+  `prix_saq` DECIMAL(10,2) NULL,
   `url_saq` VARCHAR(200) NULL,
-  `url_img` VARCHAR(200) NULL DEFAULT NULL,
-  `format` VARCHAR(20) NULL DEFAULT NULL,
-  `fk_type_id` INT(11) NULL DEFAULT NULL,
+  `url_img` VARCHAR(200) NULL,
+  `format` VARCHAR(20) NULL,
+  `fk_type_id` INT(11) NOT NULL,
   PRIMARY KEY (`id`),
   INDEX `fk_vino__bouteille_vino__type_idx` (`fk_type_id` ASC),
   CONSTRAINT `fk_vino__bouteille_vino__type`
@@ -72,13 +72,8 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `vinodb`.`vino__cellier` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
-  `id_bouteille` INT(11) NULL DEFAULT NULL,
-  `date_achat` DATE NULL DEFAULT NULL,
-  `garde_jusqua` VARCHAR(200) NULL DEFAULT NULL,
-  `notes` VARCHAR(200) NULL DEFAULT NULL,
-  `prix` FLOAT NULL DEFAULT NULL,
-  `quantite` INT(11) NULL DEFAULT NULL,
-  `millesime` INT(11) NULL DEFAULT NULL,
+  `date_creation_cellier` DATE NOT NULL,
+  `notes_cellier` VARCHAR(200) NULL,
   `fk_id_utilisateur` INT NOT NULL,
   PRIMARY KEY (`id`),
   INDEX `fk_vino__cellier_vino__utilisateur1_idx` (`fk_id_utilisateur` ASC),
@@ -98,6 +93,12 @@ DEFAULT CHARACTER SET = latin1;
 CREATE TABLE IF NOT EXISTS `vinodb`.`cellier__bouteille` (
   `vino__cellier_id` INT(11) NOT NULL,
   `vino__bouteille_id` INT(11) NOT NULL,
+  `date_achat` DATE NOT NULL,
+  `garde_jusqua` VARCHAR(45) NULL,
+  `notes` VARCHAR(200) NULL,
+  `prix` DECIMAL(10,2) NULL,
+  `quantite` INT(11) NOT NULL,
+  `millesime` INT(11) NULL,
   PRIMARY KEY (`vino__cellier_id`, `vino__bouteille_id`),
   INDEX `fk_vino__cellier_has_vino__bouteille_vino__bouteille1_idx` (`vino__bouteille_id` ASC),
   INDEX `fk_vino__cellier_has_vino__bouteille_vino__cellier1_idx` (`vino__cellier_id` ASC),
@@ -120,7 +121,6 @@ DEFAULT CHARACTER SET = latin1;
 
 INSERT INTO `vino__type` VALUES(1, 'Vin rouge');
 INSERT INTO `vino__type` VALUES(2, 'Vin blanc');
-
 
 --
 -- Contenu de la table `vino__bouteille`
@@ -153,16 +153,21 @@ INSERT INTO `vino__utilisateur` VALUES(3, 'Cage', 'Nicolas', 'NCage', 'Cage', 'n
 -- Contenu de la table `vino__cellier`
 --
 
+INSERT INTO `vino__cellier` VALUES(1, '2019-01-16', 'Contient les meilleures bouteilles au monde',2);
+INSERT INTO `vino__cellier` VALUES(2, '2020-09-07', 'Vin cheap',3);
 
+--
+-- Contenu de la table `cellier_bouteille`
+--
 
-INSERT INTO `vino__cellier` VALUES(1, 5, '2019-01-16', '2020', '2019-01-16', 22, 10, 1999,2);
-INSERT INTO `vino__cellier` VALUES(2, 4, '2020-09-07', '', '', 0, 10, 2000,2);
-INSERT INTO `vino__cellier` VALUES(3, 8, '2019-01-26', 'non', '2019-01-26', 23.52, 1, 2015,3);
-INSERT INTO `vino__cellier` VALUES(4, 6, '2019-01-26', 'non', '2019-01-26', 23.52, 1, 2015,3);
-INSERT INTO `vino__cellier` VALUES(5, 3, '2020-09-07', '', '', 0, 1, 0,3);
-INSERT INTO `vino__cellier` VALUES(6, 2, '2020-09-07', '', '', 0, 1, 0,3);
-INSERT INTO `vino__cellier` VALUES(7, 1, '2020-09-07', '', '', 0, 1, 0,3);
-INSERT INTO `vino__cellier` VALUES(8, 7, '2020-09-07', '', '', 0, 1, 0,3);
+INSERT INTO `cellier__bouteille` VALUES(1, 5, '2019-01-16', '2020', 'excellent vin', 22, 10, 1999);
+INSERT INTO `cellier__bouteille` VALUES(1, 4, '2020-09-07', '2015', '', 0, 10, 2000);
+INSERT INTO `cellier__bouteille` VALUES(2, 8, '2019-01-26', 'non', '', 23.52, 12, 2015);
+INSERT INTO `cellier__bouteille` VALUES(2, 6, '2019-01-26', 'non', '', 23.52, 8, 2015);
+INSERT INTO `cellier__bouteille` VALUES(2, 3, '2020-09-07', '2050', '', 0, 1, 0);
+INSERT INTO `cellier__bouteille` VALUES(2, 2, '2020-09-07', 'non', '', 0, 15, 0);
+INSERT INTO `cellier__bouteille` VALUES(2, 1, '2020-09-07', '2150', '', 0, 3, 0);
+INSERT INTO `cellier__bouteille` VALUES(2, 7, '2020-09-07', 'non', '', 0, 2, 0);
 
 -- --------------------------------------------------------
 
