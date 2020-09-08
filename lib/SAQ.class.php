@@ -94,6 +94,8 @@ class SAQ extends Modele
 	{
 		return preg_replace('/\s+/', ' ', $chaine);
 	}
+
+
 	private function recupereInfo($noeud)
 	{
 

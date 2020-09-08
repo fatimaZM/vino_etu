@@ -27,6 +27,6 @@
     /** Démarrage du controleur **/
     /***************************************************/
 	$oCtl = new Controler();
-	$oCtl->gerer();
+	$oCtl->gerer(); // gerer() permet le routage
 
 ?>
