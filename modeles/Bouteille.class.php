@@ -28,7 +28,7 @@ class Bouteille extends Modele
 
 		return $rows;
 	}
-	//clause WHERE de getListeBouteilleCellier() pour fin de test seulement 
+	//clause WHERE de getListeBouteilleCellier() pour fin de tests seulement 
 	public function getListeBouteilleCellier()
 	{
 
