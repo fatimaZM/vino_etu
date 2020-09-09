@@ -8,7 +8,6 @@
 	<meta http-equiv="cache-control" content="no-cache">
 	<meta name="viewport" content="width=device-width, minimum-scale=0.5, initial-scale=1.0, user-scalable=yes">
 
-<<<<<<< HEAD
 		<link rel="stylesheet" href="./css/normalize.css" type="text/css" media="screen">
 		<link rel="stylesheet" href="./css/base_h5bp.css" type="text/css" media="screen">
 		<link rel="stylesheet" href="./css/main.css" type="text/css" media="screen">
@@ -29,7 +28,6 @@
 		</header>
 		<main>
 			
-=======
 	<link rel="stylesheet" href="./css/normalize.css" type="text/css" media="screen">
 	<link rel="stylesheet" href="./css/base_h5bp.css" type="text/css" media="screen">
 	<link rel="stylesheet" href="./css/main.css" type="text/css" media="screen">
@@ -48,4 +46,3 @@
 		</nav>
 	</header>
 	<main>
->>>>>>> 4d12ef68779e8335085667ab591f953197965286

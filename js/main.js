@@ -8,14 +8,13 @@
  *
  */
 
-<<<<<<< HEAD
+
 //const BaseURL = "https://jmartel.webdev.cmaisonneuve.qc.ca/n61/vino/";
 //const BaseURL = "http://localhost/";
-const BaseURL = document.baseURI;
-=======
-const BaseURL = "http://localhost/vino_etu/";
 //const BaseURL = document.baseURI;
->>>>>>> 4d12ef68779e8335085667ab591f953197965286
+
+//const BaseURL = "http://localhost/vino_etu/";
+const BaseURL = document.baseURI;
 console.log(BaseURL);
 window.addEventListener("load", function () {
     console.log("load");
