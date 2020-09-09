@@ -15,8 +15,8 @@ class Bouteille extends Modele
 {
 	const BOUTEILLE = 'vino__bouteille'; //table contenant la liste de bouteille du catalogue
 	const CELLIER = 'vino__cellier'; //table contenant la liste des celliers et les informations les concernant (à quel utilisateur il appartient apr exemple)
-    const TYPE = 'vino__type'; //table contenant la liste des types de vin (rouge, blanc, etc.)
-    const CELLIER_BOUTEILLE = 'cellier__bouteille'; //table contenant la liste des bouteilles du celliers avec leurs informations
+	const TYPE = 'vino__type'; //table contenant la liste des types de vin (rouge, blanc, etc.)
+	const CELLIER_BOUTEILLE = 'cellier__bouteille'; //table contenant la liste des bouteilles du celliers avec leurs informations
 
 	/**
 	 * Cette méthode retourne la liste des bouteilles contenues dans la base de données
@@ -149,8 +149,8 @@ class Bouteille extends Modele
 			"'" . $data->quantite . "'," .
 			"'" . $data->millesime . "')";
 
-        $res = $this->_db->query($requete);
-        
+		$res = $this->_db->query($requete);
+
 		return $res;
 	}
 
@@ -168,7 +168,7 @@ class Bouteille extends Modele
 		//TODO : Valider les données.
 
 
-		$requete = "UPDATE " . self::CELLIER_BOUTEILLE . " SET quantite = GREATEST(quantite + " . $nombre . ", 0) WHERE vino__bouteille_id = " . $id . " AND vino__cellier_id = 2" ;
+		$requete = "UPDATE " . self::CELLIER_BOUTEILLE . " SET quantite = GREATEST(quantite + " . $nombre . ", 0) WHERE vino__bouteille_id = " . $id . " AND vino__cellier_id = 2";
 		//echo $requete;
 		$res = $this->_db->query($requete);
 

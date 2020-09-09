@@ -24,8 +24,8 @@ class SAQ extends Modele
 	public function __construct()
 	{
 		parent::__construct();
-		if (!($this->stmt = $this->_db->prepare("INSERT INTO vino__bouteille(nom, type, image, code_saq, pays, description, prix_saq, url_saq, url_img, format) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"))) {
-			echo "Echec de la préparation : (" . $mysqli->errno . ") " . $mysqli->error;
+		if (!($this->stmt = $this->_db->prepare("INSERT INTO vino__bouteille(nom, fk_type_id, image, code_saq, pays, description, prix_saq, url_saq, url_img, format) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"))) {
+			echo "Echec de la préparation : (" . $this->_db->errno . ") " . $this->_db->error;
 		}
 	}
 
@@ -90,13 +90,13 @@ class SAQ extends Modele
 
 		return $innerHTML;
 	}
-	private function nettoyerEspace($chaine)
+	private static function nettoyerEspace($chaine)
 	{
 		return preg_replace('/\s+/', ' ', $chaine);
 	}
 
 
-	private function recupereInfo($noeud)
+	private static function recupereInfo($noeud)
 	{
 
 		$info = new stdClass();
@@ -140,6 +140,7 @@ class SAQ extends Modele
 		foreach ($aElements as $node) {
 			if ($node->getAttribute('class') == 'price') {
 				$info->prix = trim($node->textContent);
+				$info->prix = preg_replace("/,/", ".", "$info->prix");
 			}
 		}
 		//var_dump($info);
@@ -163,7 +164,7 @@ class SAQ extends Modele
 
 			$rows = $this->_db->query("select id from vino__bouteille where code_saq = '" . $bte->desc->code_SAQ . "'");
 			if ($rows->num_rows < 1) {
-				$this->stmt->bind_param("sissssisss", $bte->nom, $type, $bte->img, $bte->desc->code_SAQ, $bte->desc->pays, $bte->desc->texte, $bte->prix, $bte->url, $bte->img, $bte->desc->format);
+				$this->stmt->bind_param("sissssdsss", $bte->nom, $type, $bte->img, $bte->desc->code_SAQ, $bte->desc->pays, $bte->desc->texte, $bte->prix, $bte->url, $bte->img, $bte->desc->format);
 				$retour->succes = $this->stmt->execute();
 				$retour->raison = self::INSERE;
 				//var_dump($this->stmt);
