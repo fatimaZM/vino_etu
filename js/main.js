@@ -9,6 +9,7 @@
  */
 
 //const BaseURL = "https://jmartel.webdev.cmaisonneuve.qc.ca/n61/vino/";
+//const BaseURL = "http://localhost/";
 const BaseURL = document.baseURI;
 console.log(BaseURL);
 window.addEventListener('load', function() {

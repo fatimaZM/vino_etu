@@ -159,7 +159,7 @@ class SAQ extends Modele {
 
 			$rows = $this -> _db -> query("select id from vino__bouteille where code_saq = '" . $bte -> desc -> code_SAQ . "'");
 			if ($rows -> num_rows < 1) {
-				$this -> stmt -> bind_param("sissssisss", $bte -> nom, $type, $bte -> img, $bte -> desc -> code_SAQ, $bte -> desc -> pays, $bte -> desc -> texte, $bte -> prix, $bte -> url, $bte -> img, $bte -> desc -> format);
+				$this -> stmt -> bind_param("sissssdsss", $bte -> nom, $type, $bte -> img, $bte -> desc -> code_SAQ, $bte -> desc -> pays, $bte -> desc -> texte, $bte -> prix, $bte -> url, $bte -> img, $bte -> desc -> format);
 				$retour -> succes = $this -> stmt -> execute();
 				$retour -> raison = self::INSERE;
 				//var_dump($this->stmt);
