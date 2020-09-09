@@ -51,7 +51,7 @@ html, body {
 
 footer
 {
-	position: fixed;;
+    position: fixed;
 	bottom:0px;
 	width: 100%;
 	padding-top:3px;
@@ -64,4 +64,8 @@ footer p
 	display:inline;
 	padding-right:50px;
 	font-size : 10px;
+}
+
+.options{
+    margin-bottom: 50px;
 }

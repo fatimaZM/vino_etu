@@ -8,7 +8,7 @@
  *
  */
 
-const BaseURL = "http://localhost/Projet_final/Git/projets/vino_etu/";
+const BaseURL = "http://localhost/vino_etu/";
 //const BaseURL = document.baseURI;
 console.log(BaseURL);
 window.addEventListener("load", function () {
@@ -27,13 +27,7 @@ window.addEventListener("load", function () {
                 .then((response) => {
                     if (response.status === 200) {
                         //récupérer la quantité affichée de bouteille dans le cellier et soustraire 1
-                        element.parentElement.parentElement.querySelector(
-                            ".quantite"
-                        ).firstElementChild.innerHTML =
-                            parseInt(
-                                element.parentElement.parentElement.querySelector(".quantite")
-                                    .firstElementChild.innerHTML
-                            ) - 1;
+                        element.parentElement.parentElement.querySelector(".quantite").firstElementChild.innerHTML = parseInt(element.parentElement.parentElement.querySelector(".quantite").firstElementChild.innerHTML) - 1;
                         return response.json();
                     } else {
                         throw new Error("Erreur");
@@ -61,13 +55,7 @@ window.addEventListener("load", function () {
                 .then((response) => {
                     if (response.status === 200) {
                         //récupérer la quantité affichée de bouteille dans le cellier et ajouter 1
-                        element.parentElement.parentElement.querySelector(
-                            ".quantite"
-                        ).firstElementChild.innerHTML =
-                            parseInt(
-                                element.parentElement.parentElement.querySelector(".quantite")
-                                    .firstElementChild.innerHTML
-                            ) + 1;
+                        element.parentElement.parentElement.querySelector(".quantite").firstElementChild.innerHTML = parseInt(element.parentElement.parentElement.querySelector(".quantite").firstElementChild.innerHTML) + 1;
                         return response.json();
                     } else {
                         throw new Error("Erreur");
@@ -147,10 +135,11 @@ window.addEventListener("load", function () {
         if (btnAjouter) {
             btnAjouter.addEventListener("click", function (evt) {
                 var param = {
+                    id_cellier : 2,
                     id_bouteille: bouteille.nom.dataset.id,
                     date_achat: bouteille.date_achat.value,
                     garde_jusqua: bouteille.garde_jusqua.value,
-                    notes: bouteille.date_achat.value,
+                    notes: bouteille.notes.value,
                     prix: bouteille.prix.value,
                     quantite: bouteille.quantite.value,
                     millesime: bouteille.millesime.value,
@@ -163,7 +152,6 @@ window.addEventListener("load", function () {
                 fetch(requete)
                     .then((response) => {
                         if (response.status === 200) {
-                            console.log(response.json());
                             return response;
                         } else {
                             throw new Error("Erreur");
