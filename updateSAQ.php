@@ -19,9 +19,6 @@
 		echo "importation : ". $nombre. "<br>";
 	
 	}
-	
-	
-	
 
 ?>
 </body>

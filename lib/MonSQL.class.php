@@ -11,12 +11,14 @@
  *
  */
 class MonSQL {
+
 	/**
 	 * @var $_instance
 	 * @access private
 	 * @static
 	 */
-	private static $_instance = null;
+    private static $_instance = null;
+    
 
 	/**
 	 * Constructeur de la classe
@@ -47,7 +49,6 @@ class MonSQL {
 				self::$_instance->set_charset("UTF-8");	
 			}
 		}
-
 		return self::$_instance;
 	}
 

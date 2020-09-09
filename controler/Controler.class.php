@@ -20,11 +20,7 @@ class Controler
 		 */
 		public function gerer()
 		{
-			
 			switch ($_GET['requete']) {
-				case 'listeBouteille':
-					$this->listeBouteille();
-					break;
 				case 'autocompleteBouteille':
 					$this->autocompleteBouteille();
 					break;
@@ -43,6 +39,10 @@ class Controler
 			}
 		}
 
+        /**
+		 * Affiche la page d'accueil sur la liste des bouteilles du cellier
+		 * @return files
+		 */
 		private function accueil()
 		{
 			$bte = new Bouteille();
@@ -50,40 +50,38 @@ class Controler
 			include("vues/entete.php");
 			include("vues/cellier.php");
 			include("vues/pied.php");
-                  
 		}
-		
-
-		private function listeBouteille()
-		{
-			$bte = new Bouteille();
-            $cellier = $bte->getListeBouteilleCellier();
-            
-            echo json_encode($cellier);
-                  
-		}
-		
+        
+        /**
+		 * Récupère les résultats de la recherche d'auto-complétion.
+		 * @return json
+		 */   
 		private function autocompleteBouteille()
 		{
 			$bte = new Bouteille();
-			//var_dump(file_get_contents('php://input'));
+			// var_dump(file_get_contents('php://input'));
 			$body = json_decode(file_get_contents('php://input'));
-			//var_dump($body);
+			// var_dump($body);
             $listeBouteille = $bte->autocomplete($body->nom);
             
             echo json_encode($listeBouteille);
                   
-		}
+        }
+        
+        /**
+		 * Récupère les informations sur la bouteille à ajouter et déclenche la requete sql d'ajout.
+         * Si php://input est vide, affiche le formulaire d'ajout de bouteille
+		 * @return mixted
+		 */  
 		private function ajouterNouvelleBouteilleCellier()
 		{
-			$body = json_decode(file_get_contents('php://input'));
-			//var_dump($body);
+            $body = json_decode(file_get_contents('php://input'));
+            
+            
 			if(!empty($body)){
-				$bte = new Bouteille();
-				//var_dump($_POST['data']);
-				
-				//var_dump($data);
-				$resultat = $bte->ajouterBouteilleCellier($body);
+                var_dump($body);
+                $bte = new Bouteille();
+                $resultat = $bte->ajouterBouteilleCellier($body);
 				echo json_encode($resultat);
 			}
 			else{
@@ -91,10 +89,12 @@ class Controler
 				include("vues/ajouter.php");
 				include("vues/pied.php");
 			}
-			
-            
 		}
-		
+        
+        /**
+		 * Récupère les informations sur la bouteille dont la quantité doit être modifiée et déclenche la requete sql de modification de quantité avec -1.
+		 * @return json
+		 */ 
 		private function boireBouteilleCellier()
 		{
 			$body = json_decode(file_get_contents('php://input'));
@@ -104,6 +104,10 @@ class Controler
 			echo json_encode($resultat);
 		}
 
+         /**
+		 * Récupère les informations sur la bouteille dont la quantité doit être modifiée et déclenche la requete sql de modification de quantité avec +1.
+		 * @return json
+		 */ 
 		private function ajouterBouteilleCellier()
 		{
 			$body = json_decode(file_get_contents('php://input'));
@@ -114,19 +118,3 @@ class Controler
 		}
 		
 }
-?>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
