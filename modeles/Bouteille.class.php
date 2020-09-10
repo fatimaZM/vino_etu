@@ -13,42 +13,44 @@
  */
 class Bouteille extends Modele
 {
-	const BOUTEILLE = 'vino__bouteille'; //table contenant la liste de bouteille du catalogue
-	const CELLIER = 'vino__cellier'; //table contenant la liste des celliers et les informations les concernant (à quel utilisateur il appartient apr exemple)
+    const BOUTEILLE = 'vino__bouteille'; //table contenant la liste de bouteille du catalogue
+    const CELLIER = 'vino__cellier'; //table contenant la liste des celliers et les informations les concernant (à quel utilisateur il appartient apr exemple)
     const TYPE = 'vino__type'; //table contenant la liste des types de vin (rouge, blanc, etc.)
     const CELLIER_BOUTEILLE = 'cellier__bouteille'; //table contenant la liste des bouteilles du celliers avec leurs informations
 
-	/**
-	 * Cette méthode retourne la liste des bouteilles contenues dans la base de données
-	 * 
-	 * @return Array $rows contenant toutes les bouteilles.
-	 */
-	public function getListeBouteille()
-	{
+    private $erreurs = []; //tableau pour récupérer les erreurs lors de la vérifications des données
 
-		$rows = array();
-		$res = $this->_db->query('SELECT * FROM ' . self::BOUTEILLE);
-		if ($res->num_rows) {
-			while ($row = $res->fetch_assoc()) {
-				$rows[] = $row;
-			}
-		}
+    /**
+     * Cette méthode retourne la liste des bouteilles contenues dans la base de données
+     * 
+     * @return Array $rows contenant toutes les bouteilles.
+     */
+    public function getListeBouteille()
+    {
 
-		return $rows;
-	}
+        $rows = array();
+        $res = $this->_db->query('SELECT * FROM ' . self::BOUTEILLE);
+        if ($res->num_rows) {
+            while ($row = $res->fetch_assoc()) {
+                $rows[] = $row;
+            }
+        }
+
+        return $rows;
+    }
 
 
-	/**
-	 * Cette méthode retourne la liste des bouteilles contenues dans un cellier
-	 * 
-	 * @return Array $rows contenant toutes les bouteilles.
-	 */
-	//clause WHERE de getListeBouteilleCellier() pour fin de test seulement 
-	public function getListeBouteilleCellier()
-	{
+    /**
+     * Cette méthode retourne la liste des bouteilles contenues dans un cellier
+     * 
+     * @return Array $rows contenant toutes les bouteilles.
+     */
+    //clause WHERE de getListeBouteilleCellier() pour fin de test seulement 
+    public function getListeBouteilleCellier()
+    {
 
-		$rows = array();
-		$requete = 'SELECT
+        $rows = array();
+        $requete = 'SELECT
 								c.vino__cellier_id,
 								c.vino__bouteille_id,
 								c.date_achat,
@@ -73,105 +75,142 @@ class Bouteille extends Modele
 							INNER JOIN ' . self::TYPE . ' t ON t.id = b.fk_type_id
 							WHERE c.vino__cellier_id = 2';
 
-		if (($res = $this->_db->query($requete)) ==     true) {
-			if ($res->num_rows) {
-				while ($row = $res->fetch_assoc()) {
-					$row['nom'] = trim(utf8_encode($row['nom']));
-					$rows[] = $row;
-				}
-			}
-		} else {
-			throw new Exception("Erreur de requête sur la base de donnée", 1);
-			//$this->_db->error;
-		}
+        if (($res = $this->_db->query($requete)) ==     true) {
+            if ($res->num_rows) {
+                while ($row = $res->fetch_assoc()) {
+                    $row['nom'] = trim(utf8_encode($row['nom']));
+                    $rows[] = $row;
+                }
+            }
+        } else {
+            throw new Exception("Erreur de requête sur la base de donnée", 1);
+            //$this->_db->error;
+        }
 
 
 
-		return $rows;
-	}
+        return $rows;
+    }
 
-	/**
-	 * Cette méthode permet de retourner les résultats de recherche pour la fonction d'autocomplete de l'ajout des bouteilles dans le cellier
-	 * 
-	 * @param string $nom La chaine de caractère à rechercher
-	 * @param integer $nb_resultat Le nombre de résultat maximal à retourner.
-	 * 
-	 * @throws Exception Erreur de requête sur la base de données 
-	 * 
-	 * @return array id et nom de la bouteille trouvée dans le catalogue
-	 */
-	public function autocomplete($nom, $nb_resultat = 10)
-	{
+    /**
+     * Cette méthode permet de retourner les résultats de recherche pour la fonction d'autocomplete de l'ajout des bouteilles dans le cellier
+     * 
+     * @param string $nom La chaine de caractère à rechercher
+     * @param integer $nb_resultat Le nombre de résultat maximal à retourner.
+     * 
+     * @throws Exception Erreur de requête sur la base de données 
+     * 
+     * @return array id et nom de la bouteille trouvée dans le catalogue
+     */
+    public function autocomplete($nom, $nb_resultat = 10)
+    {
 
-		$rows = array();
-		$nom = $this->_db->real_escape_string($nom);
-		$nom = preg_replace("/\*/", "%", $nom);
+        $rows = array();
+        $nom = $this->_db->real_escape_string($nom);
+        $nom = preg_replace("/\*/", "%", $nom);
 
-		//echo $nom;
-		$requete = 'SELECT id, nom FROM ' . self::BOUTEILLE . ' WHERE LOWER(nom) like LOWER("%' . $nom . '%") LIMIT 0,' . $nb_resultat;
-		//var_dump($requete);
-		if (($res = $this->_db->query($requete)) ==     true) {
-			if ($res->num_rows) {
-				while ($row = $res->fetch_assoc()) {
-					$row['nom'] = trim(utf8_encode($row['nom']));
-					$rows[] = $row;
-				}
-			}
-		} else {
-			throw new Exception("Erreur de requête sur la base de données", 1);
-		}
-
-
-		//var_dump($rows);
-		return $rows;
-	}
+        //echo $nom;
+        $requete = 'SELECT id, nom FROM ' . self::BOUTEILLE . ' WHERE LOWER(nom) like LOWER("%' . $nom . '%") LIMIT 0,' . $nb_resultat;
+        //var_dump($requete);
+        if (($res = $this->_db->query($requete)) ==     true) {
+            if ($res->num_rows) {
+                while ($row = $res->fetch_assoc()) {
+                    $row['nom'] = trim(utf8_encode($row['nom']));
+                    $rows[] = $row;
+                }
+            }
+        } else {
+            throw new Exception("Erreur de requête sur la base de données", 1);
+        }
 
 
-	/**
-	 * Cette méthode ajoute une ou des bouteilles au cellier
-	 * 
-	 * @param Object $data Tableau des données représentants la bouteille.
-	 * 
-	 * @return Boolean Succès ou échec de l'ajout.
-	 */
-	public function ajouterBouteilleCellier($data)
-	{
-		//TODO : Valider les données.
-		// var_dump($data);	
-
-		$requete = "INSERT INTO " . self::CELLIER_BOUTEILLE . " (vino__cellier_id,vino__bouteille_id,date_achat,garde_jusqua,notes,prix,quantite,millesime) VALUES (" .
-			"'" . $data->id_cellier . "'," .
-			"'" . $data->id_bouteille . "'," .
-			"'" . $data->date_achat . "'," .
-			"'" . $data->garde_jusqua . "'," .
-			"'" . $data->notes . "'," .
-			"'" . $data->prix . "'," .
-			"'" . $data->quantite . "'," .
-			"'" . $data->millesime . "')";
-
-        $res = $this->_db->query($requete);
-        
-		return $res;
-	}
+        //var_dump($rows);
+        return $rows;
+    }
 
 
-	/**
-	 * Cette méthode change la quantité d'une bouteille en particulier dans le cellier
-	 * 
-	 * @param int $id id de la bouteille
-	 * @param int $nombre Nombre de bouteille a ajouter ou retirer
-	 * 
-	 * @return Boolean Succès ou échec de l'ajout.
-	 */
-	public function modifierQuantiteBouteilleCellier($id, $nombre)
-	{
-		//TODO : Valider les données.
+    /**
+     * Cette méthode ajoute une ou des bouteilles au cellier
+     * 
+     * @param Object $data Tableau des données représentants la bouteille.
+     * 
+     * @return Boolean Succès ou échec de l'ajout.
+     */
+    public function ajouterBouteilleCellier($data)
+    {
+        $reponse = ['erreurs' => null, 'data' => null];
+
+        //Validation des données :
+        /* date : */
+        if (!preg_match('/^((19||20)\d{2}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))$/', $data->date_achat) || $data->date_achat > date('Y-m-d')) {
+            $this->erreurs['date_achat'] = "La date doit être au format AAAA-MM-JJ et comprise entre 1900 et aujourd'hui.";
+        }
+
+        /* garde_jusqu'à */
+        if (!preg_match('/^\d{4}$/', $data->garde_jusqua)) {
+            $this->erreurs['garde_jusqua'] = "Veuillez entrer l'année jusqu'à laquelle vous pouvez garder cette bouteille.";
+        }
+
+        /* validation notes : */
+        if (!preg_match('/^.{1,200}$/', $data->notes)) {
+            $this->erreurs['notes'] = "Veuillez entrer un commentaire sur le vin de 200 caractères au maximum.";
+        }
+
+        /* validation prix */
+        if (!preg_match('/^(0|[1-9][0-9]*)(\.[0-9]{2})?$/', $data->prix)) {
+            $this->erreurs['prix'] = "Veuillez entrer le prix au format suivant 12.34";
+        }
+
+        /* validation quantité */
+        if (!preg_match('/^\d+$/', $data->quantite)) {
+            $this->erreurs['quantite'] = "Veuillez entrer la quantité en chiffre.";
+        }
+
+        /* millesime */
+        if (!preg_match('/^\d{4}$/', $data->millesime) || $data->millesime > date('Y')) {
+            $this->erreurs['millesime'] = "Veuillez entrer une année à 4 chiffres.";
+        }
+
+        if (empty($this->erreurs)) {
+            //requete pour vérifier si la bouteille à ajouter n'est pas déjà au cellier :
+            $sql = "SELECT vino__cellier_id, vino__bouteille_id FROM " . self::CELLIER_BOUTEILLE . " WHERE vino__cellier_id = " . $data->id_cellier . " AND vino__bouteille_id =" . $data->id_bouteille;
+
+            //Si la bouteille est déjà au cellier, on incrémente seulement sa quantité, sinon on créé un nouvelle référence au cellier :
+            if ($this->_db->query($sql)->num_rows > 0) {
+                $reponse['data'] = $this->modifierQuantiteBouteilleCellier($data->id_bouteille, $data->quantite);
+            } else {
+                $requete = "INSERT INTO " . self::CELLIER_BOUTEILLE . " (vino__cellier_id,vino__bouteille_id,date_achat,garde_jusqua,notes,prix,quantite,millesime) VALUES (?,?,?,?,?,?,?,?)";
+                $stmt = $this->_db->prepare($requete);
+                $stmt->bind_param('iisisdii', $data->id_cellier, $data->id_bouteille, $data->date_achat, $data->garde_jusqua, $data->notes, $data->prix, $data->quantite, $data->millesime);
+                $reponse['data'] = $stmt->execute();
+            }
+        } else {
+            $reponse['erreurs'] = $this->erreurs;
+        }
+
+        return $reponse;
+    }
 
 
-		$requete = "UPDATE " . self::CELLIER_BOUTEILLE . " SET quantite = GREATEST(quantite + " . $nombre . ", 0) WHERE vino__bouteille_id = " . $id . " AND vino__cellier_id = 2" ;
-		//echo $requete;
-		$res = $this->_db->query($requete);
+    /**
+     * Cette méthode change la quantité d'une bouteille en particulier dans le cellier
+     * 
+     * @param int $id id de la bouteille
+     * @param int $nombre Nombre de bouteille a ajouter ou retirer
+     * 
+     * @return Boolean Succès ou échec de l'ajout.
+     */
+    public function modifierQuantiteBouteilleCellier($id, $nombre)
+    {
 
-		return $res;
-	}
+        /* validation du nombre de bouteilles */
+        if (preg_match('/^\d+$/', $nombre)) {
+            $requete = "UPDATE " . self::CELLIER_BOUTEILLE . " SET quantite = GREATEST(quantite + " . $nombre . ", 0) WHERE vino__bouteille_id = " . $id . " AND vino__cellier_id = 2";
+            //echo $requete;
+            $reponse['data'] = $this->_db->query($requete);
+    
+            return $reponse;
+        }
+
+    }
 }
