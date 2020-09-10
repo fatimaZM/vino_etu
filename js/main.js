@@ -10,11 +10,8 @@
 
 
 //const BaseURL = "https://jmartel.webdev.cmaisonneuve.qc.ca/n61/vino/";
-//const BaseURL = "http://localhost/";
-//const BaseURL = document.baseURI;
-
-//const BaseURL = "http://localhost/vino_etu/";
-const BaseURL = document.baseURI;
+const BaseURL = "http://localhost/vino_etu/";
+// const BaseURL = document.baseURI;
 console.log(BaseURL);
 window.addEventListener("load", function () {
     console.log("load");
@@ -83,7 +80,6 @@ window.addEventListener("load", function () {
     //fonctionnement de l'auto-complétion :
     if (inputNomBouteille) {
         inputNomBouteille.addEventListener("keyup", function (evt) {
-            console.log(evt);
             let nom = inputNomBouteille.value;
             liste.innerHTML = "";
             if (nom) {
@@ -100,8 +96,6 @@ window.addEventListener("load", function () {
                         }
                     })
                     .then((response) => {
-                        console.log(response);
-
                         response.forEach(function (element) {
                             liste.innerHTML +=
                                 "<li data-id='" + element.id + "'>" + element.nom + "</li>";
@@ -125,7 +119,6 @@ window.addEventListener("load", function () {
 
         //Affichage des résultats de recherche d'auto-complétion :
         liste.addEventListener("click", function (evt) {
-            console.dir(evt.target);
             if (evt.target.tagName == "LI") {
                 bouteille.nom.dataset.id = evt.target.dataset.id;
                 bouteille.nom.innerHTML = evt.target.innerHTML;
@@ -140,7 +133,7 @@ window.addEventListener("load", function () {
         if (btnAjouter) {
             btnAjouter.addEventListener("click", function (evt) {
                 var param = {
-                    id_cellier : 2,
+                    id_cellier: 2,
                     id_bouteille: bouteille.nom.dataset.id,
                     date_achat: bouteille.date_achat.value,
                     garde_jusqua: bouteille.garde_jusqua.value,
@@ -154,20 +147,40 @@ window.addEventListener("load", function () {
                     { method: "POST", body: JSON.stringify(param) }
                 );
 
+                let modal = document.querySelector('.modal');
+                modal.style.display = "block";
+
                 fetch(requete)
                     .then((response) => {
                         if (response.status === 200) {
-                            return response;
+                            return response.json();
                         } else {
                             throw new Error("Erreur");
                         }
                     })
                     .then((response) => {
-                        console.log(response);
+                        if (response.data == null) {
+                            document.querySelector('.millesime').innerHTML = response.erreurs.millesime || '';
+                            document.querySelector('.date_achat').innerHTML = response.erreurs.date_achat || '';
+                            document.querySelector('.garde_jusqua').innerHTML = response.erreurs.garde_jusqua || '';
+                            document.querySelector('.notes').innerHTML = response.erreurs.notes || '';
+                            document.querySelector('.prix').innerHTML = response.erreurs.prix || '';
+                            document.querySelector('.quantite').innerHTML = response.erreurs.quantite || '';
+                        }
+                        if (response.data == true) {
+                            console.log(document.querySelector('.msg_sql'))
+                            document.querySelector('.msg_sql').innerHTML = "Ajout effectué";
+                        } else {
+                            document.querySelector('.msg_sql').innerHTML = "Erreur d'ajout";
+                        }
                     })
                     .catch((error) => {
                         console.error(error);
                     });
+
+                document.querySelector('.retour_cellier').addEventListener('click', _ => {
+                    window.location.href = BaseURL;
+                })
             });
         }
     }
