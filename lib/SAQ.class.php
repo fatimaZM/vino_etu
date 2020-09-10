@@ -24,14 +24,14 @@ class SAQ extends Modele
 	public function __construct()
 	{
 		parent::__construct();
-		if (!($this->stmt = $this->_db->prepare("INSERT INTO vino__bouteille(nom, type, image, code_saq, pays, description, prix_saq, url_saq, url_img, format) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"))) {
-			echo "Echec de la préparation : (" . $mysqli->errno . ") " . $mysqli->error;
+		if (!($this->stmt = $this->_db->prepare("INSERT INTO vino__bouteille(nom, fk_type_id, image, code_saq, pays, description, prix_saq, url_saq, url_img, format) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"))) {
+			echo "Echec de la préparation : (" . $this->_db->errno . ") " . $this->_db->error;
 		}
 	}
 
 	/**
 	 * getProduits
-	 * Cette méthode récupére et affiche la liste des bouteilles de la page 
+	 * Cette méthode retourne le nombre de bouteilles importées. 
 	 * @param int $nombre
 	 * @param int $debut
 	 * @return int
@@ -52,7 +52,7 @@ class SAQ extends Modele
 		$doc = new DOMDocument(); //instanciation de la classe DOMDocument()
 		$doc->recover = true;
 		$doc->strictErrorChecking = false;
-		$doc->loadHTML(self::$_webpage); //chargement du code html de la page web
+		$doc->loadHTML(file_get_contents($url)); //chargement du code html de la page web
 		$elements = $doc->getElementsByTagName("li"); //Création de l'objet contenant la liste des 
 		                                             //éléments li
 		$i = 0;
@@ -107,17 +107,16 @@ class SAQ extends Modele
 	 * @param string $node
 	 * @return string
 	 */
-
-	static private function nettoyerEspace($chaine)
+      private static function nettoyerEspace($chaine)
 	{
 		return preg_replace('/\s+/', ' ', $chaine);
 	}
 
     /**
 	 * recupereInfo
-	 * Cette méthode enléve les espace en trop dans la chaine
+	 * Cette méthode parcour le DOM et récupére les infos spécifiques pour chaque bouteille
 	 * @param string $node
-	 * @return string
+	 * @return array
 	 */
 	private static function recupereInfo($noeud)
 	{
@@ -125,11 +124,25 @@ class SAQ extends Modele
 		$info = new stdClass(); //déclaration d'un objet vide
 		$info->img = $noeud->getElementsByTagName("img")->item(0)->getAttribute('src'); //TODO : Nettoyer le lien
 		;
+		
 		$a_titre = $noeud->getElementsByTagName("a")->item(0);
+
 		$info->url = $a_titre->getAttribute('href');
-
+		//Tableau contenant tous les formats des bouteilles de la SAQ.
+        $tab = array("1 L", "1,5 L", "2,25 L", "250 ml", "3 L", "375 ml", "4 L", "4,5 L", "500 ml", "5 L","6 L", 
+		"750 ml");
+	
 		$info->nom = self::nettoyerEspace(trim($a_titre->textContent));	//TODO : Retirer le format de la bouteille du titre.
+		//Rechercher l'existance d'un format dans le titre d'une bouteille et le remplacer par une chaine vide.
+		foreach($tab as $format){
+			$format_b = $format;
+			if(stripos($info->nom, $format_b) !== false){ 
+			//var_dump($format_b);
+			
+            $info->nom = preg_replace("/$format_b/", ' ', $info->nom);
 
+		}}
+		
 		// Type, format et pays
 		$aElements = $noeud->getElementsByTagName("strong");
 		foreach ($aElements as $node) {
@@ -146,6 +159,9 @@ class SAQ extends Modele
 				}
 
 				$info->desc->texte = trim($info->desc->texte);
+				//Enlever le "|" de la chaine de description d'une bouteille.
+				$info->desc->texte = preg_replace("/\|/", " ", $info->desc->texte);
+
 			}
 		}
 
@@ -163,11 +179,21 @@ class SAQ extends Modele
 		foreach ($aElements as $node) {
 			if ($node->getAttribute('class') == 'price') {
 				$info->prix = trim($node->textContent);
+				//Remplacer la virgule contenu dans le prix par un point 
+				//Pour l'insertion compléte du prix dans la table.
+				$info->prix = preg_replace("/,/", ".", "$info->prix");
 			}
 		}
-		//var_dump($info);
+		var_dump($info);
 		return $info;
 	}
+
+	/**
+	 * ajouteProduit
+	 * Cette méthode Permet d'insérer les boouteilles dans la table vino__bouteille
+	 * @param array $bte
+	 * @return string
+	 */
 
 	private function ajouteProduit($bte)
 	{
@@ -176,6 +202,7 @@ class SAQ extends Modele
 		$retour->raison = '';
 
 		//var_dump($bte);
+		
 		// Récupère le type
 		$rows = $this->_db->query("select id from vino__type where type = '" . $bte->desc->type . "'");
 
@@ -187,6 +214,7 @@ class SAQ extends Modele
 
 			$rows = $this -> _db -> query("select id from vino__bouteille where code_saq = '" . $bte -> desc -> code_SAQ . "'");
 			if ($rows -> num_rows < 1) {
+                //changement du type du prix de integer a double
 				$this -> stmt -> bind_param("sissssdsss", $bte -> nom, $type, $bte -> img, $bte -> desc -> code_SAQ, $bte -> desc -> pays, $bte -> desc -> texte, $bte -> prix, $bte -> url, $bte -> img, $bte -> desc -> format);
 				$retour -> succes = $this -> stmt -> execute();
 				$retour -> raison = self::INSERE;
