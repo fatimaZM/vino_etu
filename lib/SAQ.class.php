@@ -100,6 +100,7 @@ class SAQ extends Modele
 
 		return $innerHTML;
 	}
+
 	
 	/**
 	 * nettoyerEspace
@@ -108,9 +109,11 @@ class SAQ extends Modele
 	 * @return string
 	 */
       private static function nettoyerEspace($chaine)
+
 	{
 		return preg_replace('/\s+/', ' ', $chaine);
 	}
+
 
     /**
 	 * recupereInfo
@@ -118,6 +121,7 @@ class SAQ extends Modele
 	 * @param string $node
 	 * @return array
 	 */
+
 	private static function recupereInfo($noeud)
 	{
 
