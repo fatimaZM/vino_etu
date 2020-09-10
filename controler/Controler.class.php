@@ -28,6 +28,9 @@ class Controler
 			case 'ajouterNouvelleBouteilleCellier':
 				$this->ajouterNouvelleBouteilleCellier();
 				break;
+			case 'modifierBouteilleCellier':
+				$this->modifierBouteilleCellier();
+				break;
 			case 'ajouterBouteilleCellier':
 				$this->ajouterBouteilleCellier();
 				break;
@@ -79,13 +82,35 @@ class Controler
 
 
 		if (!empty($body)) {
-			var_dump($body);
+			// var_dump($body);
 			$bte = new Bouteille();
 			$resultat = $bte->ajouterBouteilleCellier($body);
 			echo json_encode($resultat);
 		} else {
 			include("vues/entete.php");
 			include("vues/ajouter.php");
+			include("vues/pied.php");
+		}
+	}
+
+	/**
+	 * Récupère les informations sur la bouteille à modifier et déclenche la requete sql de modification.
+	 * Si php://input est vide, affiche la page de modification de bouteille
+	 * @return mixted
+	 */
+	private function modifierBouteilleCellier()
+	{
+		$body = json_decode(file_get_contents('php://input'));
+
+		if (!empty($body)) {
+			$bte = new Bouteille();
+			$resultat = $bte->modifierInfoBouteilleCellier($body);
+			echo json_encode($resultat);
+		} else {
+			$bte = new Bouteille();
+			$data = $bte->getBouteilleCellier($_GET['id']);
+			include("vues/entete.php");
+			include("vues/modifier.php");
 			include("vues/pied.php");
 		}
 	}
