@@ -51,7 +51,7 @@ class SAQ extends Modele
 		$doc = new DOMDocument();
 		$doc->recover = true;
 		$doc->strictErrorChecking = false;
-		$doc->loadHTML(self::$_webpage);
+		$doc->loadHTML(file_get_contents($url));
 		$elements = $doc->getElementsByTagName("li");
 		$i = 0;
 
