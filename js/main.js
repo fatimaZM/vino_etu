@@ -11,7 +11,7 @@
 
 //const BaseURL = "https://jmartel.webdev.cmaisonneuve.qc.ca/n61/vino/";
 const BaseURL = "http://localhost/vino_etu/";
-// const BaseURL = document.baseURI;
+ //const BaseURL = document.baseURI;
 console.log(BaseURL);
 window.addEventListener("load", function () {
     console.log("load");
