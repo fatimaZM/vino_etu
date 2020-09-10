@@ -8,7 +8,7 @@
  *
  */
 
-const BaseURL = "http://localhost/Projet_final/Git/projets/vino_etu/";
+const BaseURL = "http://localhost/vino_etu/";
 //const BaseURL = document.baseURI;
 console.log(BaseURL);
 window.addEventListener("load", function () {
