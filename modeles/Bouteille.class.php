@@ -18,6 +18,7 @@ class Bouteille extends Modele
 	const TYPE = 'vino__type'; //table contenant la liste des types de vin (rouge, blanc, etc.)
 	const CELLIER_BOUTEILLE = 'cellier__bouteille'; //table contenant la liste des bouteilles du celliers avec leurs informations
 
+	private $erreurs = array();
 	/**
 	 * Cette méthode retourne la liste des bouteilles contenues dans la base de données
 	 * 
@@ -72,6 +73,47 @@ class Bouteille extends Modele
 							INNER JOIN ' . self::CELLIER . ' vc ON c.vino__cellier_id = vc.id
 							INNER JOIN ' . self::TYPE . ' t ON t.id = b.fk_type_id
 							WHERE c.vino__cellier_id = 2';
+
+		if (($res = $this->_db->query($requete)) ==     true) {
+			if ($res->num_rows) {
+				while ($row = $res->fetch_assoc()) {
+					$row['nom'] = trim(utf8_encode($row['nom']));
+					$rows[] = $row;
+				}
+			}
+		} else {
+			throw new Exception("Erreur de requête sur la base de donnée", 1);
+			//$this->_db->error;
+		}
+
+
+
+		return $rows;
+	}
+
+	/**
+	 * Cette méthode retourne une bouteilles contenues dans un cellier 
+	 * 
+	 * @return Array $rows contenant la bouteille.
+	 */
+	public function getBouteilleCellier($id)
+	{
+
+		$rows = array();
+		$requete = 'SELECT
+								
+								c.vino__bouteille_id,
+								c.date_achat,
+								c.garde_jusqua,
+								c.notes,
+								c.prix,
+								c.quantite,
+								c.millesime,
+								b.nom,
+								b.id
+							FROM cellier__bouteille c
+							INNER JOIN ' . self::BOUTEILLE . ' b ON c.vino__bouteille_id = b.id
+							WHERE c.vino__bouteille_id =' . $id;
 
 		if (($res = $this->_db->query($requete)) ==     true) {
 			if ($res->num_rows) {
@@ -152,6 +194,68 @@ class Bouteille extends Modele
 		$res = $this->_db->query($requete);
 
 		return $res;
+	}
+
+	/**
+	 * Cette méthode modifie une ou des bouteilles au cellier
+	 * 
+	 * @param Object $data Tableau des données représentants la bouteille.
+	 * 
+	 * @return Boolean Succès ou échec de l'ajout.
+	 */
+	public function modifierInfoBouteilleCellier($data)
+	{
+		//TODO : Valider les données.
+		// var_dump($data);	
+		$reponse = ['erreurs' => null, 'data' => null];
+
+		//Validation des données :
+		/* date : */
+		if (!preg_match('/^((19||20)\d{2}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))$/', $data->date_achat) || $data->date_achat > date('Y-m-d')) {
+			$this->erreurs['date_achat'] = "La date doit être au format AAAA-MM-JJ et comprise entre 1900 et aujourd'hui.";
+		}
+
+		/* garde_jusqu'à */
+		if (!preg_match('/^\d{4}$/', $data->garde_jusqua)) {
+			$this->erreurs['garde_jusqua'] = "Veuillez entrer l'année jusqu'à laquelle vous pouvez garder cette bouteille.";
+		}
+
+		/* validation notes : */
+		if (!preg_match('/^.{1,200}$/', $data->notes)) {
+			$this->erreurs['notes'] = "Veuillez entrer un commentaire sur le vin de 200 caractères au maximum.";
+		}
+
+		/* validation prix */
+		if (!preg_match('/^(0|[1-9][0-9]*)(\.[0-9]{2})?$/', $data->prix)) {
+			$this->erreurs['prix'] = "Veuillez entrer le prix au format suivant 12.34";
+		}
+
+		/* validation quantité */
+		if (!preg_match('/^\d+$/', $data->quantite)) {
+			$this->erreurs['quantite'] = "Veuillez entrer la quantité en chiffre.";
+		}
+
+		/* millesime */
+		if (!preg_match('/^\d{4}$/', $data->millesime) || $data->millesime >= date('Y')) {
+			$this->erreurs['millesime'] = "Veuillez entrer une année à 4 chiffres.";
+		}
+		if (empty($this->erreurs)) {
+			//requete pour vérifier si la bouteille à ajouter n'est pas déjà au cellier :
+
+			$requete = "UPDATE cellier__bouteille SET 
+		date_achat = '$data->date_achat',
+		garde_jusqua = '$data->garde_jusqua',
+		notes = '$data->notes',
+		prix = '$data->prix',
+		quantite = '$data->quantite',
+		millesime = '$data->millesime'
+		WHERE vino__bouteille_id = '$data->id_bouteille' AND vino__cellier_id = '$data->id_cellier'";
+			$reponse['data'] = $this->_db->query($requete);
+		} else {
+			$reponse['erreurs'] = $this->erreurs;
+		}
+
+		return $reponse;
 	}
 
 
