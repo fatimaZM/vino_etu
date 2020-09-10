@@ -167,16 +167,41 @@ window.addEventListener("load", function () {
         fetch(requete)
           .then((response) => {
             if (response.status === 200) {
-              return response;
+              return response.json();
             } else {
               throw new Error("Erreur");
             }
           })
           .then((response) => {
-            console.log(response);
+            if (response.data == null) {
+              document.querySelector(".millesime").innerHTML =
+                response.erreurs.millesime || "";
+              document.querySelector(".date_achat").innerHTML =
+                response.erreurs.date_achat || "";
+              document.querySelector(".garde_jusqua").innerHTML =
+                response.erreurs.garde_jusqua || "";
+              document.querySelector(".notes").innerHTML =
+                response.erreurs.notes || "";
+              document.querySelector(".prix").innerHTML =
+                response.erreurs.prix || "";
+              document.querySelector(".quantite").innerHTML =
+                response.erreurs.quantite || "";
+            }
+            if (response.data == true) {
+              console.log(document.querySelector(".msg_sql"));
+              document.querySelector(".msg_sql").innerHTML = "Ajout effectué";
+            } else {
+              document.querySelector(".msg_sql").innerHTML = "Erreur d'ajout";
+            }
           })
           .catch((error) => {
             console.error(error);
+          });
+
+        document
+          .querySelector(".retour_cellier")
+          .addEventListener("click", (_) => {
+            window.location.href = BaseURL;
           });
       });
     }
@@ -231,9 +256,11 @@ window.addEventListener("load", function () {
           }
           if (response.data == true) {
             console.log(document.querySelector(".msg_sql"));
-            document.querySelector(".msg_sql").innerHTML = "Ajout effectué";
+            document.querySelector(".msg_sql").innerHTML =
+              "Modification effectué";
           } else {
-            document.querySelector(".msg_sql").innerHTML = "Erreur d'ajout";
+            document.querySelector(".msg_sql").innerHTML =
+              "Erreur de modification";
           }
         })
         .catch((error) => {

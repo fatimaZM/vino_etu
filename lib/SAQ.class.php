@@ -31,15 +31,16 @@ class SAQ extends Modele
 
 	/**
 	 * getProduits
+	 * Cette méthode retourne le nombre de bouteilles importées. 
 	 * @param int $nombre
 	 * @param int $debut
+	 * @return int
 	 */
+
 	public function getProduits($nombre = 24, $page = 1)
 	{
 		$s = curl_init();
 		$url = "https://www.saq.com/fr/produits/vin/vin-rouge?p=1&product_list_limit=24&product_list_order=name_asc";
-		//curl_setopt($s, CURLOPT_URL, "http://www.saq.com/webapp/wcs/stores/servlet/SearchDisplay?searchType=&orderBy=&categoryIdentifier=06&showOnly=product&langId=-2&beginIndex=".$debut."&tri=&metaData=YWRpX2YxOjA8TVRAU1A%2BYWRpX2Y5OjE%3D&pageSize=". $nombre ."&catalogId=50000&searchTerm=*&sensTri=&pageView=&facet=&categoryId=39919&storeId=20002");
-		//curl_setopt($s, CURLOPT_URL, "https://www.saq.com/webapp/wcs/stores/servlet/SearchDisplay?categoryIdentifier=06&showOnly=product&langId=-2&beginIndex=" . $debut . "&pageSize=" . $nombre . "&catalogId=50000&searchTerm=*&categoryId=39919&storeId=20002");
 		curl_setopt($s, CURLOPT_URL, $url);
 		curl_setopt($s, CURLOPT_RETURNTRANSFER, true);
 		//curl_setopt($s, CURLOPT_FOLLOWLOCATION, 1);
@@ -48,16 +49,18 @@ class SAQ extends Modele
 		self::$_status = curl_getinfo($s, CURLINFO_HTTP_CODE);
 		curl_close($s);
 
-		$doc = new DOMDocument();
+		$doc = new DOMDocument(); //instanciation de la classe DOMDocument()
 		$doc->recover = true;
 		$doc->strictErrorChecking = false;
-		$doc->loadHTML(file_get_contents($url));
-		$elements = $doc->getElementsByTagName("li");
+		$doc->loadHTML(file_get_contents($url)); //chargement du code html de la page web
+		$elements = $doc->getElementsByTagName("li"); //Création de l'objet contenant la liste des 
+		//éléments li
 		$i = 0;
 
 		foreach ($elements as $key => $noeud) {
 			//var_dump($noeud -> getAttribute('class')) ;
-			//if ("resultats_product" == str$noeud -> getAttribute('class')) {
+
+			//tester si la classe "product-item existe
 			if (strpos($noeud->getAttribute('class'), "product-item") !== false) {
 
 				//echo $this->get_inner_html($noeud);
@@ -80,32 +83,71 @@ class SAQ extends Modele
 		return $i;
 	}
 
+	/**
+	 * get_inner_html
+	 * Cette méthode sauvegarde la collection d'éléments dans une chaine de caractéres 
+	 * @param string $node
+	 * @return string
+	 */
+
 	private function get_inner_html($node)
 	{
 		$innerHTML = '';
-		$children = $node->childNodes;
+		$children = $node->childNodes; //récuperer la collection d'éléments
 		foreach ($children as $child) {
-			$innerHTML .= $child->ownerDocument->saveXML($child);
+			$innerHTML .= $child->ownerDocument->saveXML($child); //sauvegarde la liste dans une chaine de caractéres
 		}
 
 		return $innerHTML;
 	}
+
+
+	/**
+	 * nettoyerEspace
+	 * Cette méthode enléve les espace en trop dans la chaine
+	 * @param string $node
+	 * @return string
+	 */
 	private static function nettoyerEspace($chaine)
+
 	{
 		return preg_replace('/\s+/', ' ', $chaine);
 	}
 
 
+	/**
+	 * recupereInfo
+	 * Cette méthode parcour le DOM et récupére les infos spécifiques pour chaque bouteille
+	 * @param string $node
+	 * @return array
+	 */
+
 	private static function recupereInfo($noeud)
 	{
 
-		$info = new stdClass();
+		$info = new stdClass(); //déclaration d'un objet vide
 		$info->img = $noeud->getElementsByTagName("img")->item(0)->getAttribute('src'); //TODO : Nettoyer le lien
 		;
+
 		$a_titre = $noeud->getElementsByTagName("a")->item(0);
+
 		$info->url = $a_titre->getAttribute('href');
+		//Tableau contenant tous les formats des bouteilles de la SAQ.
+		$tab = array(
+			"1 L", "1,5 L", "2,25 L", "250 ml", "3 L", "375 ml", "4 L", "4,5 L", "500 ml", "5 L", "6 L",
+			"750 ml"
+		);
 
 		$info->nom = self::nettoyerEspace(trim($a_titre->textContent));	//TODO : Retirer le format de la bouteille du titre.
+		//Rechercher l'existance d'un format dans le titre d'une bouteille et le remplacer par une chaine vide.
+		foreach ($tab as $format) {
+			$format_b = $format;
+			if (stripos($info->nom, $format_b) !== false) {
+				//var_dump($format_b);
+
+				$info->nom = preg_replace("/$format_b/", ' ', $info->nom);
+			}
+		}
 
 		// Type, format et pays
 		$aElements = $noeud->getElementsByTagName("strong");
@@ -123,6 +165,8 @@ class SAQ extends Modele
 				}
 
 				$info->desc->texte = trim($info->desc->texte);
+				//Enlever le "|" de la chaine de description d'une bouteille.
+				$info->desc->texte = preg_replace("/\|/", " ", $info->desc->texte);
 			}
 		}
 
@@ -140,12 +184,21 @@ class SAQ extends Modele
 		foreach ($aElements as $node) {
 			if ($node->getAttribute('class') == 'price') {
 				$info->prix = trim($node->textContent);
+				//Remplacer la virgule contenu dans le prix par un point 
+				//Pour l'insertion compléte du prix dans la table.
 				$info->prix = preg_replace("/,/", ".", "$info->prix");
 			}
 		}
-		//var_dump($info);
+		var_dump($info);
 		return $info;
 	}
+
+	/**
+	 * ajouteProduit
+	 * Cette méthode Permet d'insérer les boouteilles dans la table vino__bouteille
+	 * @param array $bte
+	 * @return string
+	 */
 
 	private function ajouteProduit($bte)
 	{
@@ -154,6 +207,7 @@ class SAQ extends Modele
 		$retour->raison = '';
 
 		//var_dump($bte);
+
 		// Récupère le type
 		$rows = $this->_db->query("select id from vino__type where type = '" . $bte->desc->type . "'");
 
@@ -162,11 +216,15 @@ class SAQ extends Modele
 			//var_dump($type);
 			$type = $type['id'];
 
+
 			$rows = $this->_db->query("select id from vino__bouteille where code_saq = '" . $bte->desc->code_SAQ . "'");
 			if ($rows->num_rows < 1) {
+				//changement du type du prix de integer a double
 				$this->stmt->bind_param("sissssdsss", $bte->nom, $type, $bte->img, $bte->desc->code_SAQ, $bte->desc->pays, $bte->desc->texte, $bte->prix, $bte->url, $bte->img, $bte->desc->format);
 				$retour->succes = $this->stmt->execute();
 				$retour->raison = self::INSERE;
+
+
 				//var_dump($this->stmt);
 			} else {
 				$retour->succes = false;
