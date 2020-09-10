@@ -36,13 +36,4 @@
 </head>
 
 <body>
-	<header>
-		<h1>Un petit verre de vino ?</h1>
-		<nav>
-			<ul>
-				<li><a href="?requete=accueil">Mon cellier</a></li>
-				<li><a href="?requete=ajouterNouvelleBouteilleCellier">Ajouter une bouteille au cellier</a></li>
-			</ul>
-		</nav>
-	</header>
 	<main>
