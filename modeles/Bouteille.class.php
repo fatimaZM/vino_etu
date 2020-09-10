@@ -18,6 +18,8 @@ class Bouteille extends Modele
     const TYPE = 'vino__type'; //table contenant la liste des types de vin (rouge, blanc, etc.)
     const CELLIER_BOUTEILLE = 'cellier__bouteille'; //table contenant la liste des bouteilles du celliers avec leurs informations
 
+    private $erreurs = []; //tableau pour récupérer les erreurs lors de la vérifications des données
+
     /**
      * Cette méthode retourne la liste des bouteilles contenues dans la base de données
      * 
@@ -136,23 +138,57 @@ class Bouteille extends Modele
      */
     public function ajouterBouteilleCellier($data)
     {
-        //TODO : Valider les données.
-        // var_dump($data);	
+        $reponse = ['erreurs' => null, 'data' => null];
 
-        //requete pour vérifier si la bouteille à ajouter n'est pas déjà au cellier :
-        $sql = "SELECT vino__cellier_id, vino__bouteille_id FROM " . self::CELLIER_BOUTEILLE . " WHERE vino__cellier_id = " . $data->id_cellier . " AND vino__bouteille_id =" . $data->id_bouteille;
-
-        //Si la bouteille est déjà au cellier, on incrémente seulement sa quantité, sinon on créé un nouvelle référence au cellier :
-        if ($this->_db->query($sql)->num_rows > 0) {
-            $this->modifierQuantiteBouteilleCellier($data->id_bouteille, $data->quantite);
-        } else {
-            $requete = "INSERT INTO " . self::CELLIER_BOUTEILLE . " (vino__cellier_id,vino__bouteille_id,date_achat,garde_jusqua,notes,prix,quantite,millesime) VALUES (?,?,?,?,?,?,?,?)";
-            $stmt = $this->_db->prepare($requete);
-            $stmt->bind_param('iisisdii', $data->id_cellier, $data->id_bouteille, $data->date_achat, $data->garde_jusqua, $data->notes, $data->prix, $data->quantite, $data->millesime);
-            $res = $stmt->execute();
+        //Validation des données :
+        /* date : */
+        if (!preg_match('/^((19||20)\d{2}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))$/', $data->date_achat) || $data->date_achat > date('Y-m-d')) {
+            $this->erreurs['date_achat'] = "La date doit être au format AAAA-MM-JJ et comprise entre 1900 et aujourd'hui.";
         }
 
-        return $res;
+        /* garde_jusqu'à */
+        if (!preg_match('/^\d{4}$/', $data->garde_jusqua)) {
+            $this->erreurs['garde_jusqua'] = "Veuillez entrer l'année jusqu'à laquelle vous pouvez garder cette bouteille.";
+        }
+
+        /* validation notes : */
+        if (!preg_match('/^.{1,200}$/', $data->notes)) {
+            $this->erreurs['notes'] = "Veuillez entrer un commentaire sur le vin de 200 caractères au maximum.";
+        }
+
+        /* validation prix */
+        if (!preg_match('/^(0|[1-9][0-9]*)(\.[0-9]{2})?$/', $data->prix)) {
+            $this->erreurs['prix'] = "Veuillez entrer le prix au format suivant 12.34";
+        }
+
+        /* validation quantité */
+        if (!preg_match('/^\d+$/', $data->quantite)) {
+            $this->erreurs['quantite'] = "Veuillez entrer la quantité en chiffre.";
+        }
+
+        /* millesime */
+        if (!preg_match('/^\d{4}$/', $data->millesime) || $data->millesime > date('Y')) {
+            $this->erreurs['millesime'] = "Veuillez entrer une année à 4 chiffres.";
+        }
+
+        if (empty($this->erreurs)) {
+            //requete pour vérifier si la bouteille à ajouter n'est pas déjà au cellier :
+            $sql = "SELECT vino__cellier_id, vino__bouteille_id FROM " . self::CELLIER_BOUTEILLE . " WHERE vino__cellier_id = " . $data->id_cellier . " AND vino__bouteille_id =" . $data->id_bouteille;
+
+            //Si la bouteille est déjà au cellier, on incrémente seulement sa quantité, sinon on créé un nouvelle référence au cellier :
+            if ($this->_db->query($sql)->num_rows > 0) {
+                $reponse['data'] = $this->modifierQuantiteBouteilleCellier($data->id_bouteille, $data->quantite);
+            } else {
+                $requete = "INSERT INTO " . self::CELLIER_BOUTEILLE . " (vino__cellier_id,vino__bouteille_id,date_achat,garde_jusqua,notes,prix,quantite,millesime) VALUES (?,?,?,?,?,?,?,?)";
+                $stmt = $this->_db->prepare($requete);
+                $stmt->bind_param('iisisdii', $data->id_cellier, $data->id_bouteille, $data->date_achat, $data->garde_jusqua, $data->notes, $data->prix, $data->quantite, $data->millesime);
+                $reponse['data'] = $stmt->execute();
+            }
+        } else {
+            $reponse['erreurs'] = $this->erreurs;
+        }
+
+        return $reponse;
     }
 
 
@@ -166,13 +202,15 @@ class Bouteille extends Modele
      */
     public function modifierQuantiteBouteilleCellier($id, $nombre)
     {
-        //TODO : Valider les données.
 
+        /* validation du nombre de bouteilles */
+        if (preg_match('/^\d+$/', $nombre)) {
+            $requete = "UPDATE " . self::CELLIER_BOUTEILLE . " SET quantite = GREATEST(quantite + " . $nombre . ", 0) WHERE vino__bouteille_id = " . $id . " AND vino__cellier_id = 2";
+            //echo $requete;
+            $reponse['data'] = $this->_db->query($requete);
+    
+            return $reponse;
+        }
 
-        $requete = "UPDATE " . self::CELLIER_BOUTEILLE . " SET quantite = GREATEST(quantite + " . $nombre . ", 0) WHERE vino__bouteille_id = " . $id . " AND vino__cellier_id = 2";
-        //echo $requete;
-        $res = $this->_db->query($requete);
-
-        return $res;
     }
 }
