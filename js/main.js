@@ -14,6 +14,16 @@ console.log(BaseURL);
 window.addEventListener("load", function () {
   console.log("load");
 
+  let bouteille = {
+    nom: document.querySelector(".nom_bouteille"),
+    millesime: document.querySelector("[name='millesime']"),
+    quantite: document.querySelector("[name='quantite']"),
+    date_achat: document.querySelector("[name='date_achat']"),
+    prix: document.querySelector("[name='prix']"),
+    garde_jusqua: document.querySelector("[name='garde_jusqua']"),
+    notes: document.querySelector("[name='notes']"),
+  };
+
   /* Comportement du bouton "boire" sur la page de cellier :*/
   document.querySelectorAll(".btnBoire").forEach(function (element) {
     element.addEventListener("click", function (evt) {
@@ -120,16 +130,6 @@ window.addEventListener("load", function () {
       }
     });
 
-    let bouteille = {
-      nom: document.querySelector(".nom_bouteille"),
-      millesime: document.querySelector("[name='millesime']"),
-      quantite: document.querySelector("[name='quantite']"),
-      date_achat: document.querySelector("[name='date_achat']"),
-      prix: document.querySelector("[name='prix']"),
-      garde_jusqua: document.querySelector("[name='garde_jusqua']"),
-      notes: document.querySelector("[name='notes']"),
-    };
-
     //Affichage des résultats de recherche d'auto-complétion :
     liste.addEventListener("click", function (evt) {
       console.dir(evt.target);
@@ -161,6 +161,9 @@ window.addEventListener("load", function () {
           { method: "POST", body: JSON.stringify(param) }
         );
 
+        let modal = document.querySelector(".modal");
+        modal.style.display = "block";
+
         fetch(requete)
           .then((response) => {
             if (response.status === 200) {
@@ -177,5 +180,70 @@ window.addEventListener("load", function () {
           });
       });
     }
+  }
+
+  //Comportement du bouton "modifier la bouteille" de la page modifier :
+  let btnModifier = document.querySelector("[name='modifierBouteilleCellier']");
+  if (btnModifier) {
+    btnModifier.addEventListener("click", function (evt) {
+      console.log("click btn modifier");
+      var param = {
+        id_cellier: 2,
+        id_bouteille: bouteille.nom.dataset.id,
+        date_achat: bouteille.date_achat.value,
+        garde_jusqua: bouteille.garde_jusqua.value,
+        notes: bouteille.notes.value,
+        prix: bouteille.prix.value,
+        quantite: bouteille.quantite.value,
+        millesime: bouteille.millesime.value,
+      };
+      let requete = new Request(
+        BaseURL + "index.php?requete=modifierBouteilleCellier",
+        { method: "POST", body: JSON.stringify(param) }
+      );
+
+      let modal = document.querySelector(".modal");
+      modal.style.display = "block";
+
+      fetch(requete)
+        .then((response) => {
+          if (response.status === 200) {
+            return response.json();
+          } else {
+            throw new Error("Erreur");
+          }
+        })
+        .then((response) => {
+          if (response.data == null) {
+            console.log(response);
+            document.querySelector(".millesime").innerHTML =
+              response.erreurs.millesime || "";
+            document.querySelector(".date_achat").innerHTML =
+              response.erreurs.date_achat || "";
+            document.querySelector(".garde_jusqua").innerHTML =
+              response.erreurs.garde_jusqua || "";
+            document.querySelector(".notes").innerHTML =
+              response.erreurs.notes || "";
+            document.querySelector(".prix").innerHTML =
+              response.erreurs.prix || "";
+            document.querySelector(".quantite").innerHTML =
+              response.erreurs.quantite || "";
+          }
+          if (response.data == true) {
+            console.log(document.querySelector(".msg_sql"));
+            document.querySelector(".msg_sql").innerHTML = "Ajout effectué";
+          } else {
+            document.querySelector(".msg_sql").innerHTML = "Erreur d'ajout";
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+      document
+        .querySelector(".retour_cellier")
+        .addEventListener("click", (_) => {
+          window.location.href = BaseURL;
+        });
+    });
   }
 });
