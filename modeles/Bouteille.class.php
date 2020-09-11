@@ -87,8 +87,6 @@ class Bouteille extends Modele
 			//$this->_db->error;
 		}
 
-
-
 		return $rows;
 	}
 
@@ -97,12 +95,12 @@ class Bouteille extends Modele
 	 * 
 	 * @return Array $rows contenant la bouteille.
 	 */
-	public function getBouteilleCellier($id)
+	public function getBouteilleCellier($id, $cellier)
 	{
 
 		$rows = array();
 		$requete = 'SELECT
-								
+								c.vino__cellier_id,
 								c.vino__bouteille_id,
 								c.date_achat,
 								c.garde_jusqua,
@@ -114,7 +112,7 @@ class Bouteille extends Modele
 								b.id
 							FROM cellier__bouteille c
 							INNER JOIN ' . self::BOUTEILLE . ' b ON c.vino__bouteille_id = b.id
-							WHERE c.vino__bouteille_id =' . $id;
+							WHERE c.vino__bouteille_id =' . $id . ' AND c.vino__cellier_id=' . $cellier;
 
 		if (($res = $this->_db->query($requete)) ==     true) {
 			if ($res->num_rows) {
@@ -189,12 +187,12 @@ class Bouteille extends Modele
 		}
 
 		/* garde_jusqu'à */
-		if (!preg_match('/^\d{4}$/', $data->garde_jusqua)) {
+		if ($data->notes !== "" && !preg_match('/^\d{4}$/', $data->garde_jusqua)) {
 			$this->erreurs['garde_jusqua'] = "Veuillez entrer l'année jusqu'à laquelle vous pouvez garder cette bouteille.";
 		}
 
 		/* validation notes : */
-		if (!preg_match('/^.{1,200}$/', $data->notes)) {
+		if ($data->notes !== "" && !preg_match('/^.{1,200}$/', $data->notes)) {
 			$this->erreurs['notes'] = "Veuillez entrer un commentaire sur le vin de 200 caractères au maximum.";
 		}
 
@@ -226,8 +224,8 @@ class Bouteille extends Modele
 			$reponse['data'] = $this->_db->query($requete);
 		} else {
 			$reponse['erreurs'] = $this->erreurs;
-		}
-
+        }
+        
 		return $reponse;
 	}
 
@@ -249,12 +247,12 @@ class Bouteille extends Modele
 		}
 
 		/* garde_jusqu'à */
-		if (!preg_match('/^\d{4}$/', $data->garde_jusqua)) {
+		if ($data->notes !== "" && !preg_match('/^\d{4}$/', $data->garde_jusqua)) {
 			$this->erreurs['garde_jusqua'] = "Veuillez entrer l'année jusqu'à laquelle vous pouvez garder cette bouteille.";
 		}
 
 		/* validation notes : */
-		if (!preg_match('/^.{1,200}$/', $data->notes)) {
+		if ($data->notes !== "" && !preg_match('/^.{1,200}$/', $data->notes)) {
 			$this->erreurs['notes'] = "Veuillez entrer un commentaire sur le vin de 200 caractères au maximum.";
 		}
 
@@ -309,9 +307,9 @@ class Bouteille extends Modele
 		if (preg_match('/^\d+$/', $nombre)) {
 			$requete = "UPDATE " . self::CELLIER_BOUTEILLE . " SET quantite = GREATEST(quantite + " . $nombre . ", 0) WHERE vino__bouteille_id = " . $id . " AND vino__cellier_id = 2";
 			//echo $requete;
-			$reponse['data'] = $this->_db->query($requete);
+			$res = $this->_db->query($requete);
 
-			return $reponse;
+			return $res;
 		}
 	}
 }
