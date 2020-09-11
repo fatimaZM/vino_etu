@@ -8,7 +8,7 @@
  *
  */
 
-const BaseURL = "http://localhost/Projet_final/Git/projets/vino_etu/";
+const BaseURL = "https://e1995672.webdev.cmaisonneuve.qc.ca/vino_etu/";
 //const BaseURL = document.baseURI;
 console.log(BaseURL);
 window.addEventListener("load", function () {
@@ -84,7 +84,17 @@ window.addEventListener("load", function () {
           }
         })
         .then((response) => {
-          console.debug(response);
+          if (
+            response.data == true &&
+            document.querySelector(".msg_sql") != null
+          ) {
+            console.log(document.querySelector(".msg_sql"));
+            document.querySelector(".msg_sql").innerHTML =
+              "Modification effectué";
+          } else if (document.querySelector(".msg_sql") != null) {
+            document.querySelector(".msg_sql").innerHTML =
+              "Erreur de modification";
+          }
         })
         .catch((error) => {
           console.error(error);
@@ -162,7 +172,6 @@ window.addEventListener("load", function () {
         );
 
         let modal = document.querySelector(".modal");
-        modal.style.display = "block";
 
         fetch(requete)
           .then((response) => {
@@ -188,6 +197,7 @@ window.addEventListener("load", function () {
                 response.erreurs.quantite || "";
             }
             if (response.data == true) {
+              modal.style.display = "block";
               console.log(document.querySelector(".msg_sql"));
               document.querySelector(".msg_sql").innerHTML = "Ajout effectué";
             } else {
@@ -228,7 +238,6 @@ window.addEventListener("load", function () {
       );
 
       let modal = document.querySelector(".modal");
-      modal.style.display = "block";
 
       fetch(requete)
         .then((response) => {
@@ -255,6 +264,7 @@ window.addEventListener("load", function () {
               response.erreurs.quantite || "";
           }
           if (response.data == true) {
+            modal.style.display = "block";
             console.log(document.querySelector(".msg_sql"));
             document.querySelector(".msg_sql").innerHTML =
               "Modification effectué";
