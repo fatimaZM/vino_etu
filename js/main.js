@@ -84,12 +84,12 @@ window.addEventListener("load", function () {
                     }
                 })
                 .then((response) => {
-                    console.debug(response);
-                    if (response.data == true) {
+                    console.log(response);
+                    if (response.data == true && document.querySelector(".msg_sql") != null) {
                         console.log(document.querySelector(".msg_sql"));
                         document.querySelector(".msg_sql").innerHTML =
                             "Modification effectué";
-                    } else {
+                    } else if (document.querySelector(".msg_sql") != null){
                         document.querySelector(".msg_sql").innerHTML =
                             "Erreur de modification";
                     }
@@ -102,7 +102,7 @@ window.addEventListener("load", function () {
 
     /* comportement du formulaire d'ajout d'une nouvelle bouteille au cellier : */
     let inputNomBouteille = document.querySelector("[name='nom_bouteille']");
-    console.log(inputNomBouteille);
+    // console.log(inputNomBouteille);
     let liste = document.querySelector(".listeAutoComplete");
 
     //fonctionnement de l'auto-complétion :

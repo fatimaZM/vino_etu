@@ -10,7 +10,7 @@
             <span class='erreur millesime'></span>
             <p>Quantite : <input name="quantite" value="1"></p>
             <span class='erreur quantite'></span>
-            <p>Date achat : <input name="date_achat"></p>
+            <p>Date achat : <input name="date_achat" type="date"></p>
             <span class='erreur date_achat'></span>
             <p>Prix : <input name="prix"></p>
             <span class='erreur prix'></span>

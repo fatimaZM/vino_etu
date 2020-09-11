@@ -304,7 +304,7 @@ class Bouteille extends Modele
 	{
 
 		/* validation du nombre de bouteilles */
-		if (preg_match('/^\d+$/', $nombre)) {
+		if (preg_match('/^[-+]?\d*$/', $nombre)) {
 			$requete = "UPDATE " . self::CELLIER_BOUTEILLE . " SET quantite = GREATEST(quantite + " . $nombre . ", 0) WHERE vino__bouteille_id = " . $id . " AND vino__cellier_id = 2";
 			//echo $requete;
 			$res = $this->_db->query($requete);
