@@ -108,7 +108,8 @@ class Controler
 			echo json_encode($resultat);
 		} else {
 			$bte = new Bouteille();
-			$data = $bte->getBouteilleCellier($_GET['id']);
+			
+            $data = $bte->getBouteilleCellier($_GET['id'], $_GET['cellier']);
 			include("vues/entete.php");
 			include("vues/modifier.php");
 			include("vues/pied.php");

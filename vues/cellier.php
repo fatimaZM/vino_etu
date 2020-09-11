@@ -18,9 +18,9 @@
 
             <div class="options" data-id="<?php echo $bouteille['vino__bouteille_id'] ?>">
 
-                <button class='btnModifier'><a href="?requete=modifierBouteilleCellier&id=<?php echo $bouteille['id'] ?>">Modifier</a></button>
-                <button class='btnAjouter'>Ajouter</button>
-                <button class='btnBoire'>Boire</button>
+            <button class='btnModifier'><a href="?requete=modifierBouteilleCellier&id=<?php echo $bouteille['id'] ?>&cellier=<?php echo $bouteille['vino__cellier_id'] ?>">Modifier</a></button>                 
+            <button class='btnAjouter'>Ajouter</button>
+            <button class='btnBoire'>Boire</button>
 
             </div>
         </div>

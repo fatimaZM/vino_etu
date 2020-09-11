@@ -97,41 +97,41 @@ class Bouteille extends Modele
 	 * 
 	 * @return Array $rows contenant la bouteille.
 	 */
-	public function getBouteilleCellier($id)
-	{
+	public function getBouteilleCellier($id, $cellier)
+    {
 
-		$rows = array();
-		$requete = 'SELECT
-								
-								c.vino__bouteille_id,
-								c.date_achat,
-								c.garde_jusqua,
-								c.notes,
-								c.prix,
-								c.quantite,
-								c.millesime,
-								b.nom,
-								b.id
-							FROM cellier__bouteille c
-							INNER JOIN ' . self::BOUTEILLE . ' b ON c.vino__bouteille_id = b.id
-							WHERE c.vino__bouteille_id =' . $id;
+        $rows = array();
+        $requete = 'SELECT
+                                c.vino__cellier_id,
+                                c.vino__bouteille_id,
+                                c.date_achat,
+                                c.garde_jusqua,
+                                c.notes,
+                                c.prix,
+                                c.quantite,
+                                c.millesime,
+                                b.nom,
+                                b.id
+                            FROM cellier__bouteille c
+                            INNER JOIN ' . self::BOUTEILLE . ' b ON c.vino__bouteille_id = b.id
+                            WHERE c.vino__cellier_id=' .$cellier.' AND c.vino__bouteille_id =' . $id;
 
-		if (($res = $this->_db->query($requete)) ==     true) {
-			if ($res->num_rows) {
-				while ($row = $res->fetch_assoc()) {
-					$row['nom'] = trim(utf8_encode($row['nom']));
-					$rows[] = $row;
-				}
-			}
-		} else {
-			throw new Exception("Erreur de requête sur la base de donnée", 1);
-			//$this->_db->error;
-		}
+        if (($res = $this->_db->query($requete)) ==     true) {
+            if ($res->num_rows) {
+                while ($row = $res->fetch_assoc()) {
+                    $row['nom'] = trim(utf8_encode($row['nom']));
+                    $rows[] = $row;
+                }
+            }
+        } else {
+            throw new Exception("Erreur de requête sur la base de donnée", 1);
+            //$this->_db->error;
+        }
 
 
 
-		return $rows;
-	}
+        return $rows;
+    }
 
 	/**
 	 * Cette méthode permet de retourner les résultats de recherche pour la fonction d'autocomplete de l'ajout des bouteilles dans le cellier
@@ -189,12 +189,12 @@ class Bouteille extends Modele
 		}
 
 		/* garde_jusqu'à */
-		if (!preg_match('/^\d{4}$/', $data->garde_jusqua)) {
+		if ($data->garde_jusqua !== '' && !preg_match('/^\d{4}$/', $data->garde_jusqua)) {
 			$this->erreurs['garde_jusqua'] = "Veuillez entrer l'année jusqu'à laquelle vous pouvez garder cette bouteille.";
 		}
 
 		/* validation notes : */
-		if (!preg_match('/^.{1,200}$/', $data->notes)) {
+		if ($data->notes !== '' && !preg_match('/^.{1,200}$/', $data->notes)) {
 			$this->erreurs['notes'] = "Veuillez entrer un commentaire sur le vin de 200 caractères au maximum.";
 		}
 
@@ -249,12 +249,12 @@ class Bouteille extends Modele
 		}
 
 		/* garde_jusqu'à */
-		if (!preg_match('/^\d{4}$/', $data->garde_jusqua)) {
+		if ($data->garde_jusqua !== '' && !preg_match('/^\d{4}$/', $data->garde_jusqua)) {
 			$this->erreurs['garde_jusqua'] = "Veuillez entrer l'année jusqu'à laquelle vous pouvez garder cette bouteille.";
 		}
 
 		/* validation notes : */
-		if (!preg_match('/^.{1,200}$/', $data->notes)) {
+		if ($data->notes !== '' && !preg_match('/^.{1,200}$/', $data->notes)) {
 			$this->erreurs['notes'] = "Veuillez entrer un commentaire sur le vin de 200 caractères au maximum.";
 		}
 
@@ -306,12 +306,12 @@ class Bouteille extends Modele
 	{
 
 		/* validation du nombre de bouteilles */
-		if (preg_match('/^\d+$/', $nombre)) {
+		if (preg_match('/^[-+]?\d*$/', $nombre)) {
 			$requete = "UPDATE " . self::CELLIER_BOUTEILLE . " SET quantite = GREATEST(quantite + " . $nombre . ", 0) WHERE vino__bouteille_id = " . $id . " AND vino__cellier_id = 2";
 			//echo $requete;
-			$reponse['data'] = $this->_db->query($requete);
+			$res = $this->_db->query($requete);
 
-			return $reponse;
+			return $res;
 		}
 	}
 }
