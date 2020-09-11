@@ -32,9 +32,9 @@ class SAQ extends Modele
 	/**
 	 * getProduits
 	 * Cette méthode retourne le nombre de bouteilles importées. 
-	 * @param int $nombre
-	 * @param int $debut
-	 * @return int
+	 * @param int $nombre désigne le nombre de bouteilles par page.
+	 * @param int $page le numéro de la page ou se trouve les bouteilles.
+	 * @return int $i le nombre de bouteilles importées.
 	 */
 
 	public function getProduits($nombre = 24, $page = 1)
@@ -52,7 +52,8 @@ class SAQ extends Modele
 		$doc = new DOMDocument(); //instanciation de la classe DOMDocument()
 		$doc->recover = true;
 		$doc->strictErrorChecking = false;
-		$doc->loadHTML(file_get_contents($url)); //chargement du code html de la page web
+		//@$doc->loadHTML(file_get_contents($url)); //chargement du code html de la page web
+		@$doc->loadHTML(self::$_webpage);
 		$elements = $doc->getElementsByTagName("li"); //Création de l'objet contenant la liste des 
 		//éléments li
 		$i = 0;
@@ -85,9 +86,9 @@ class SAQ extends Modele
 
 	/**
 	 * get_inner_html
-	 * Cette méthode sauvegarde la collection d'éléments dans une chaine de caractéres 
-	 * @param string $node
-	 * @return string
+	 * Cette méthode sauvegarde la collection d'éléments dans une chaine de caractéres.
+	 * @param object $node tableau de données des bouteilles.
+	 * @return string $innerHTML la collection d'éléments.
 	 */
 
 	private function get_inner_html($node)
@@ -105,8 +106,8 @@ class SAQ extends Modele
 	/**
 	 * nettoyerEspace
 	 * Cette méthode enléve les espace en trop dans la chaine
-	 * @param string $node
-	 * @return string
+	 * @param string $chaine informations des bouteilles.
+	 * @return string retourne une chaine sans les espaces en trop.
 	 */
 	private static function nettoyerEspace($chaine)
 
@@ -117,9 +118,9 @@ class SAQ extends Modele
 
 	/**
 	 * recupereInfo
-	 * Cette méthode parcour le DOM et récupére les infos spécifiques pour chaque bouteille
-	 * @param string $node
-	 * @return array
+	 * Cette méthode parcour le DOM et récupére les infos spécifiques pour chaque bouteille.
+	 * @param object $noeud Tableau des éléments dans le DOM.
+	 * @return object $info Tableau contenant les informations des bouteilles récupérées.
 	 */
 
 	private static function recupereInfo($noeud)
@@ -127,7 +128,8 @@ class SAQ extends Modele
 
 		$info = new stdClass(); //déclaration d'un objet vide
 		$info->img = $noeud->getElementsByTagName("img")->item(0)->getAttribute('src'); //TODO : Nettoyer le lien
-		;
+		$info->img = preg_replace('/https:/', '', $info->img);
+
 
 		$a_titre = $noeud->getElementsByTagName("a")->item(0);
 
@@ -196,8 +198,8 @@ class SAQ extends Modele
 	/**
 	 * ajouteProduit
 	 * Cette méthode Permet d'insérer les boouteilles dans la table vino__bouteille
-	 * @param array $bte
-	 * @return string
+	 * @param object $bte Tableau des données de la bouteille a inserer dans la table.
+	 * @return object $retour retourne un message sur l'état de l'importation des bouteilles.
 	 */
 
 	private function ajouteProduit($bte)
@@ -206,7 +208,6 @@ class SAQ extends Modele
 		$retour->succes = false;
 		$retour->raison = '';
 
-		//var_dump($bte);
 
 		// Récupère le type
 		$rows = $this->_db->query("select id from vino__type where type = '" . $bte->desc->type . "'");
