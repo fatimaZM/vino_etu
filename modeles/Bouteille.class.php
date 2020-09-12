@@ -187,7 +187,7 @@ class Bouteille extends Modele
 		}
 
 		/* garde_jusqu'à */
-		if ($data->notes !== "" && !preg_match('/^\d{4}$/', $data->garde_jusqua)) {
+		if ($data->garde_jusqua !== "" && !preg_match('/^\d{4}$/', $data->garde_jusqua)) {
 			$this->erreurs['garde_jusqua'] = "Veuillez entrer l'année jusqu'à laquelle vous pouvez garder cette bouteille.";
 		}
 
@@ -247,7 +247,7 @@ class Bouteille extends Modele
 		}
 
 		/* garde_jusqu'à */
-		if ($data->notes !== "" && !preg_match('/^\d{4}$/', $data->garde_jusqua)) {
+		if ($data->garde_jusqua !== "" && !preg_match('/^\d{4}$/', $data->garde_jusqua)) {
 			$this->erreurs['garde_jusqua'] = "Veuillez entrer l'année jusqu'à laquelle vous pouvez garder cette bouteille.";
 		}
 

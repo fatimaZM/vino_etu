@@ -129,7 +129,6 @@ class SAQ extends Modele
 		$info = new stdClass(); //déclaration d'un objet vide
 		$info->img = $noeud->getElementsByTagName("img")->item(0)->getAttribute('src'); //TODO : Nettoyer le lien
 		$info->img = preg_replace('/https:/', '', $info->img);
-		
 
 		$a_titre = $noeud->getElementsByTagName("a")->item(0);
 

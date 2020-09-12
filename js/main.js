@@ -84,12 +84,14 @@ window.addEventListener("load", function () {
                     }
                 })
                 .then((response) => {
-                    console.log(response);
-                    if (response.data == true && document.querySelector(".msg_sql") != null) {
+                    if (
+                        response.data == true &&
+                        document.querySelector(".msg_sql") != null
+                    ) {
                         console.log(document.querySelector(".msg_sql"));
                         document.querySelector(".msg_sql").innerHTML =
                             "Modification effectué";
-                    } else if (document.querySelector(".msg_sql") != null){
+                    } else if (document.querySelector(".msg_sql") != null) {
                         document.querySelector(".msg_sql").innerHTML =
                             "Erreur de modification";
                     }
@@ -246,8 +248,8 @@ window.addEventListener("load", function () {
                     }
                 })
                 .then((response) => {
-                    console.log(response);
                     if (response.data == null) {
+                        console.log(response);
                         document.querySelector(".millesime").innerHTML =
                             response.erreurs.millesime || "";
                         document.querySelector(".date_achat").innerHTML =
@@ -263,6 +265,7 @@ window.addEventListener("load", function () {
                     }
                     if (response.data == true) {
                         modal.style.display = "block";
+                        console.log(document.querySelector(".msg_sql"));
                         document.querySelector(".msg_sql").innerHTML =
                             "Modification effectué";
                     } else {
