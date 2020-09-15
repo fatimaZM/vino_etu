@@ -37,13 +37,7 @@ window.addEventListener("load", function () {
                 .then((response) => {
                     if (response.status === 200) {
                         //récupérer la quantité affichée de bouteille dans le cellier et soustraire 1
-                        element.parentElement.parentElement.querySelector(
-                            ".quantite"
-                        ).firstElementChild.innerHTML =
-                            parseInt(
-                                element.parentElement.parentElement.querySelector(".quantite")
-                                    .firstElementChild.innerHTML
-                            ) - 1;
+                        element.parentElement.parentElement.querySelector(".quantite").firstElementChild.innerHTML = parseInt(element.parentElement.parentElement.querySelector(".quantite").firstElementChild.innerHTML) - 1;
                         return response.json();
                     } else {
                         throw new Error("Erreur");
@@ -71,23 +65,14 @@ window.addEventListener("load", function () {
                 .then((response) => {
                     if (response.status === 200) {
                         //récupérer la quantité affichée de bouteille dans le cellier et ajouter 1
-                        element.parentElement.parentElement.querySelector(
-                            ".quantite"
-                        ).firstElementChild.innerHTML =
-                            parseInt(
-                                element.parentElement.parentElement.querySelector(".quantite")
-                                    .firstElementChild.innerHTML
-                            ) + 1;
+                        element.parentElement.parentElement.querySelector(".quantite").firstElementChild.innerHTML = parseInt(element.parentElement.parentElement.querySelector(".quantite").firstElementChild.innerHTML) + 1;
                         return response.json();
                     } else {
                         throw new Error("Erreur");
                     }
                 })
                 .then((response) => {
-                    if (
-                        response.data == true &&
-                        document.querySelector(".msg_sql") != null
-                    ) {
+                    if (response.data == true && document.querySelector(".msg_sql") != null) {
                         console.log(document.querySelector(".msg_sql"));
                         document.querySelector(".msg_sql").innerHTML =
                             "Modification effectué";
@@ -281,6 +266,45 @@ window.addEventListener("load", function () {
                 .addEventListener("click", (_) => {
                     window.location.href = BaseURL;
                 });
+        });
+    }
+
+
+    // Comportement du bouton "valider_authentification" du la page d'authentification :
+    let btnAuthentification = document.querySelector("[name='validerAuthentification']");
+    console.log(btnAuthentification);
+    if (btnAuthentification) {
+        btnAuthentification.addEventListener("click", function (evt) {
+            var param = {
+                courriel: document.querySelector("[name='courriel']").value,
+                mdp: document.querySelector("[name='mdp']").value
+            };
+
+            let requete = new Request(
+                BaseURL + "index.php?requete=authentification",
+                { method: "POST", body: JSON.stringify(param) });
+
+            fetch(requete)
+                .then((response) => {
+                    if (response.status === 200) {
+                        return response.json();
+                    } else {
+                        throw new Error("Erreur");
+                    }
+                })
+                .then((response) => {
+                    console.log(response.data);
+                    if(response.data !== null) {
+                        console.log("enregistrer des infos dans une variable de session et aller vers le cellier");
+                    } else {
+                        console.log("afficher les erreurs");
+                    }
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
+
+
         });
     }
 });
