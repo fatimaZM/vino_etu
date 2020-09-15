@@ -8,8 +8,9 @@
  *
  */
 
-const BaseURL = "https://e1995672.webdev.cmaisonneuve.qc.ca/vino_etu/";
+//const BaseURL = "https://e1995672.webdev.cmaisonneuve.qc.ca/vino_etu/";
 //const BaseURL = document.baseURI;
+const BaseURL = "http://localhost/Projet_final/Git/projets/vino_etu/";
 console.log(BaseURL);
 window.addEventListener("load", function () {
   console.log("load");
