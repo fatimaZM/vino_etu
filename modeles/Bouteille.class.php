@@ -93,7 +93,60 @@ class Bouteille extends Modele
 	}
 
 	/**
-	 * Cette méthode retourne une bouteilles contenues dans un cellier 
+	 * Cette méthode retourne la liste des bouteilles contenues dans un cellier filtré par le tri
+	 * 
+	 * @return Array $rows contenant toutes les bouteilles.
+	 */
+	//clause WHERE de getListeBouteilleCellier() pour fin de test seulement 
+	public function getListeBouteilleCellierTri($type, $ordre)
+	{
+
+		$rows = array();
+		$requete = 'SELECT
+								c.vino__cellier_id,
+								c.vino__bouteille_id,
+								c.date_achat,
+								c.garde_jusqua,
+								c.notes,
+								c.prix,
+								c.quantite,
+								c.millesime,
+								vc.id,
+								vc.fk_id_utilisateur,
+								b.id,
+								b.nom,
+								b.image,
+								b.code_saq,
+								b.url_saq,
+								b.pays,
+								b.description,
+								t.type
+							FROM cellier__bouteille c
+							INNER JOIN ' . self::BOUTEILLE . ' b ON c.vino__bouteille_id = b.id
+							INNER JOIN ' . self::CELLIER . ' vc ON c.vino__cellier_id = vc.id
+							INNER JOIN ' . self::TYPE . ' t ON t.id = b.fk_type_id
+							WHERE c.vino__cellier_id = 2 ORDER BY ' . "$type $ordre" . '';
+
+		if (($res = $this->_db->query($requete)) ==     true) {
+			if ($res->num_rows) {
+				while ($row = $res->fetch_assoc()) {
+					$row['nom'] = trim(utf8_encode($row['nom']));
+					$rows[] = $row;
+				}
+			}
+		} else {
+			var_dump($type, $ordre);
+			throw new Exception("Erreur de requête sur la base de donnée", 1);
+			//$this->_db->error;
+		}
+
+
+
+		return $rows;
+	}
+
+	/**
+	 * Cette méthode retourne une bouteille contenue dans un cellier 
 	 * 
 	 * @return Array $rows contenant la bouteille.
 	 */
