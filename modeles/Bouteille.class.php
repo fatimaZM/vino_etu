@@ -93,7 +93,116 @@ class Bouteille extends Modele
 	}
 
 	/**
-	 * Cette méthode retourne une bouteilles contenues dans un cellier 
+	 * Cette méthode retourne la liste des bouteilles contenues dans un cellier filtré par le tri
+	 * 
+	 * @return Array $rows contenant toutes les bouteilles.
+	 */
+	//clause WHERE de getListeBouteilleCellier() pour fin de test seulement 
+	public function getListeBouteilleCellierTri($type, $ordre)
+	{
+
+		$rows = array();
+		$requete = 'SELECT
+								c.vino__cellier_id,
+								c.vino__bouteille_id,
+								c.date_achat,
+								c.garde_jusqua,
+								c.notes,
+								c.prix,
+								c.quantite,
+								c.millesime,
+								vc.id,
+								vc.fk_id_utilisateur,
+								b.id,
+								b.nom,
+								b.image,
+								b.code_saq,
+								b.url_saq,
+								b.pays,
+								b.description,
+								t.type
+							FROM cellier__bouteille c
+							INNER JOIN ' . self::BOUTEILLE . ' b ON c.vino__bouteille_id = b.id
+							INNER JOIN ' . self::CELLIER . ' vc ON c.vino__cellier_id = vc.id
+							INNER JOIN ' . self::TYPE . ' t ON t.id = b.fk_type_id
+							WHERE c.vino__cellier_id = 2 ORDER BY ' . "$type $ordre" . '';
+
+		if (($res = $this->_db->query($requete)) ==     true) {
+			if ($res->num_rows) {
+				while ($row = $res->fetch_assoc()) {
+					$row['nom'] = trim(utf8_encode($row['nom']));
+					$rows[] = $row;
+				}
+			}
+		} else {
+			var_dump($type, $ordre);
+			throw new Exception("Erreur de requête sur la base de donnée", 1);
+			//$this->_db->error;
+		}
+
+
+
+		return $rows;
+	}
+
+	/**
+	 * Cette méthode retourne la bouteille contenue dans un cellier 
+	 * 
+	 * @return Array $rows contenant toutes les bouteilles.
+	 */
+	//clause WHERE de getListeBouteilleCellier() pour fin de test seulement 
+	public function getRechercheBouteilleCellier($recherche)
+	{
+		// var_dump($recherche);
+		// exit;
+		$rows = array();
+		$requete = 'SELECT
+								c.vino__cellier_id,
+								c.vino__bouteille_id,
+								c.date_achat,
+								c.garde_jusqua,
+								c.notes,
+								c.prix,
+								c.quantite,
+								c.millesime,
+								vc.id,
+								vc.fk_id_utilisateur,
+								b.id,
+								b.nom,
+								b.image,
+								b.code_saq,
+								b.url_saq,
+								b.pays,
+								b.description,
+								t.type
+							FROM cellier__bouteille c
+							INNER JOIN ' . self::BOUTEILLE . ' b ON c.vino__bouteille_id = b.id
+							INNER JOIN ' . self::CELLIER . ' vc ON c.vino__cellier_id = vc.id
+							INNER JOIN ' . self::TYPE . ' t ON t.id = b.fk_type_id
+							WHERE b.nom =' . "'$recherche'" . 'AND c.vino__cellier_id=2
+							OR c.vino__bouteille_id =' . "'$recherche'" . 'AND c.vino__cellier_id=2
+							OR b.pays =' . "'$recherche'" . 'AND c.vino__cellier_id=2';
+
+		if (($res = $this->_db->query($requete)) ==     true) {
+			if ($res->num_rows) {
+				while ($row = $res->fetch_assoc()) {
+					$row['nom'] = trim(utf8_encode($row['nom']));
+					$rows[] = $row;
+				}
+			}
+		} else {
+			var_dump($recherche);
+			throw new Exception("Erreur de requête sur la base de donnée", 1);
+			//$this->_db->error;
+		}
+
+
+
+		return $rows;
+	}
+
+	/**
+	 * Cette méthode retourne une bouteille contenue dans un cellier 
 	 * 
 	 * @return Array $rows contenant la bouteille.
 	 */
@@ -112,7 +221,7 @@ class Bouteille extends Modele
 								c.millesime,
 								b.nom,
 								b.id
-							FROM cellier__bouteille c
+							FROM ' . self::CELLIER_BOUTEILLE . ' c
 							INNER JOIN ' . self::BOUTEILLE . ' b ON c.vino__bouteille_id = b.id
 							WHERE c.vino__bouteille_id =' . $id . ' AND c.vino__cellier_id=' . $cellier;
 
@@ -152,6 +261,48 @@ class Bouteille extends Modele
 
 		//echo $nom;
 		$requete = 'SELECT id, nom FROM ' . self::BOUTEILLE . ' WHERE LOWER(nom) like LOWER("%' . $nom . '%") LIMIT 0,' . $nb_resultat;
+		//var_dump($requete);
+		if (($res = $this->_db->query($requete)) ==     true) {
+			if ($res->num_rows) {
+				while ($row = $res->fetch_assoc()) {
+					$row['nom'] = trim(utf8_encode($row['nom']));
+					$rows[] = $row;
+				}
+			}
+		} else {
+			throw new Exception("Erreur de requête sur la base de données", 1);
+		}
+
+
+		//var_dump($rows);
+		return $rows;
+	}
+
+	/**
+	 * Cette méthode permet de retourner les résultats de recherche pour la fonction d'autocomplete de recherche de bouteilles dans le cellier
+	 * 
+	 * @param string $nom La chaine de caractère à rechercher
+	 * @param integer $nb_resultat Le nombre de résultat maximal à retourner.
+	 * 
+	 * @throws Exception Erreur de requête sur la base de données 
+	 * 
+	 * @return array id et nom de la bouteille trouvée dans le cellier
+	 */
+	public function autocompleteCellier($nom, $nb_resultat = 10)
+	{
+
+		$rows = array();
+		$nom = $this->_db->real_escape_string($nom);
+		$nom = preg_replace("/\*/", "%", $nom);
+
+		//echo $nom;
+		$requete = 'SELECT 
+							c.vino__cellier_id,
+							c.vino__bouteille_id, 
+							b.nom 
+							FROM ' . self::CELLIER_BOUTEILLE . ' c 
+							INNER JOIN ' . self::BOUTEILLE . ' b ON c.vino__bouteille_id = b.id
+							WHERE LOWER(nom) like LOWER("%' . $nom . '%") AND c.vino__cellier_id= 2 LIMIT 0,' . $nb_resultat;
 		//var_dump($requete);
 		if (($res = $this->_db->query($requete)) ==     true) {
 			if ($res->num_rows) {

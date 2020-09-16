@@ -52,8 +52,8 @@ class SAQ extends Modele
 		$doc = new DOMDocument(); //instanciation de la classe DOMDocument()
 		$doc->recover = true;
 		$doc->strictErrorChecking = false;
-		//@$doc->loadHTML(file_get_contents($url)); //chargement du code html de la page web
-		@$doc->loadHTML(self::$_webpage);
+		@$doc->loadHTML(file_get_contents($url)); //chargement du code html de la page web
+		//@$doc->loadHTML(self::$_webpage);
 		$elements = $doc->getElementsByTagName("li"); //Création de l'objet contenant la liste des 
 		//éléments li
 		$i = 0;

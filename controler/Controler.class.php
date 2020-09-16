@@ -25,6 +25,9 @@ class Controler
 			case 'autocompleteBouteille':
 				$this->autocompleteBouteille();
 				break;
+			case 'autocompleteBouteilleCellier':
+				$this->autocompleteBouteilleCellier();
+				break;
 			case 'ajouterNouvelleBouteilleCellier':
 				$this->ajouterNouvelleBouteilleCellier();
 				break;
@@ -44,16 +47,40 @@ class Controler
 	}
 
 	/**
-	 * Affiche la page d'accueil sur la liste des bouteilles du cellier
+	 * Affiche la page d'accueil sur la liste des bouteilles du cellier avec tri si le bouton tri est déclenché
 	 * @return files
 	 */
 	private function accueil()
 	{
-		$bte = new Bouteille();
-		$data = $bte->getListeBouteilleCellier();
-		include("vues/entete.php");
-		include("vues/cellier.php");
-		include("vues/pied.php");
+		if (isset($_POST['type']) && isset($_POST['ordre'])) {
+			$type = $_POST['type'];
+			$ordre = $_POST['ordre'];
+			$bte = new Bouteille();
+
+			// var_dump($type, $ordre);
+			// exit;
+			$data = $bte->getListeBouteilleCellierTri($type, $ordre);
+			include("vues/entete.php");
+			include("vues/cellier.php");
+			include("vues/pied.php");
+		}
+		if (isset($_POST['nom_bouteille_cellier'])) {
+			$recherche = $_POST['nom_bouteille_cellier'];
+			$bte = new Bouteille();
+
+			// var_dump($recherche);
+			// exit;
+			$data = $bte->getRechercheBouteilleCellier($recherche);
+			include("vues/entete.php");
+			include("vues/cellier.php");
+			include("vues/pied.php");
+		} else {
+			$bte = new Bouteille();
+			$data = $bte->getListeBouteilleCellier();
+			include("vues/entete.php");
+			include("vues/cellier.php");
+			include("vues/pied.php");
+		}
 	}
 
 	/**
@@ -67,6 +94,21 @@ class Controler
 		$body = json_decode(file_get_contents('php://input'));
 		// var_dump($body);
 		$listeBouteille = $bte->autocomplete($body->nom);
+
+		echo json_encode($listeBouteille);
+	}
+
+	/**
+	 * Récupère les résultats de la recherche d'auto-complétion.
+	 * @return json
+	 */
+	private function autocompleteBouteilleCellier()
+	{
+		$bte = new Bouteille();
+		// var_dump(file_get_contents('php://input'));
+		$body = json_decode(file_get_contents('php://input'));
+		// var_dump($body);
+		$listeBouteille = $bte->autocompleteCellier($body->nom);
 
 		echo json_encode($listeBouteille);
 	}
