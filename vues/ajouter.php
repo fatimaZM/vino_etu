@@ -5,7 +5,7 @@
         <ul class="listeAutoComplete">
         </ul>
         <div>
-            <p>Nom : <span data-id="" class="nom_bouteille"></span></p>
+            <p>Nom : <span name = "nom" data-id_cellier="<?= $_SESSION['info_utilisateur']['id']?>" class="nom_bouteille"></span></p>
             <p>Millesime : <input name="millesime"></p>
             <span class='erreur millesime'></span>
             <p>Quantite : <input name="quantite" value="1"></p>

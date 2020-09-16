@@ -46,9 +46,8 @@ class Bouteille extends Modele
 	 * @return Array $rows contenant toutes les bouteilles.
 	 */
 	//clause WHERE de getListeBouteilleCellier() pour fin de test seulement 
-	public function getListeBouteilleCellier()
+	public function getListeBouteilleCellier($id_utilisateur = '')
 	{
-
 		$rows = array();
 		$requete = 'SELECT
 								c.vino__cellier_id,
@@ -73,7 +72,8 @@ class Bouteille extends Modele
 							INNER JOIN ' . self::BOUTEILLE . ' b ON c.vino__bouteille_id = b.id
 							INNER JOIN ' . self::CELLIER . ' vc ON c.vino__cellier_id = vc.id
 							INNER JOIN ' . self::TYPE . ' t ON t.id = b.fk_type_id
-							WHERE c.vino__cellier_id = 2';
+                            WHERE vc.fk_id_utilisateur =' . $id_utilisateur;
+                            
 
 		if (($res = $this->_db->query($requete)) ==     true) {
 			if ($res->num_rows) {
@@ -86,8 +86,6 @@ class Bouteille extends Modele
 			throw new Exception("Erreur de requête sur la base de donnée", 1);
 			//$this->_db->error;
 		}
-
-
 
 		return $rows;
 	}
@@ -377,8 +375,8 @@ class Bouteille extends Modele
 			$reponse['data'] = $this->_db->query($requete);
 		} else {
 			$reponse['erreurs'] = $this->erreurs;
-		}
-
+        }
+        
 		return $reponse;
 	}
 
@@ -453,12 +451,12 @@ class Bouteille extends Modele
 	 * 
 	 * @return Boolean Succès ou échec de l'ajout.
 	 */
-	public function modifierQuantiteBouteilleCellier($id, $nombre)
+	public function modifierQuantiteBouteilleCellier($id_bouteille, $id_cellier, $nombre)
 	{
 
 		/* validation du nombre de bouteilles */
 		if (preg_match('/^[-+]?\d*$/', $nombre)) {
-			$requete = "UPDATE " . self::CELLIER_BOUTEILLE . " SET quantite = GREATEST(quantite + " . $nombre . ", 0) WHERE vino__bouteille_id = " . $id . " AND vino__cellier_id = 2";
+			$requete = "UPDATE " . self::CELLIER_BOUTEILLE . " SET quantite = GREATEST(quantite + " . $nombre . ", 0) WHERE vino__bouteille_id = " . $id_bouteille . " AND vino__cellier_id = $id_cellier";
 			//echo $requete;
 			$res = $this->_db->query($requete);
 
