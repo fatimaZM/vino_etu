@@ -27,10 +27,13 @@ window.addEventListener("load", function () {
     /* Comportement du bouton "boire" sur la page de cellier :*/
     document.querySelectorAll(".btnBoire").forEach(function (element) {
         element.addEventListener("click", function (evt) {
-            let id = evt.target.parentElement.dataset.id;
+            let param = {
+                id_bouteille: evt.target.parentElement.dataset.id_bouteille,
+                id_cellier: evt.target.parentElement.dataset.id_cellier,
+            }
             let requete = new Request(
                 BaseURL + "index.php?requete=boireBouteilleCellier",
-                { method: "POST", body: '{"id": ' + id + "}" }
+                { method: "POST", body: JSON.stringify(param) }
             );
 
             fetch(requete)
@@ -55,10 +58,13 @@ window.addEventListener("load", function () {
     /* Comportement du bouton "Ajouter" sur la page de cellier : */
     document.querySelectorAll(".btnAjouter").forEach(function (element) {
         element.addEventListener("click", function (evt) {
-            let id = evt.target.parentElement.dataset.id;
+            let param = {
+                id_bouteille: evt.target.parentElement.dataset.id_bouteille,
+                id_cellier: evt.target.parentElement.dataset.id_cellier,
+            }
             let requete = new Request(
                 BaseURL + "index.php?requete=ajouterBouteilleCellier",
-                { method: "POST", body: '{"id": ' + id + "}" }
+                { method: "POST", body: JSON.stringify(param) }
             );
 
             fetch(requete)
@@ -142,7 +148,7 @@ window.addEventListener("load", function () {
         if (btnAjouter) {
             btnAjouter.addEventListener("click", function (evt) {
                 var param = {
-                    id_cellier: 2,
+                    id_cellier: bouteille.nom.dataset.id_cellier,
                     id_bouteille: bouteille.nom.dataset.id,
                     date_achat: bouteille.date_achat.value,
                     garde_jusqua: bouteille.garde_jusqua.value,
@@ -208,7 +214,7 @@ window.addEventListener("load", function () {
         btnModifier.addEventListener("click", function (evt) {
             console.log("click btn modifier");
             var param = {
-                id_cellier: 2,
+                id_cellier: bouteille.nom.dataset.id_cellier,
                 id_bouteille: bouteille.nom.dataset.id,
                 date_achat: bouteille.date_achat.value,
                 garde_jusqua: bouteille.garde_jusqua.value,
@@ -275,11 +281,11 @@ window.addEventListener("load", function () {
     console.log(btnAuthentification);
     if (btnAuthentification) {
         btnAuthentification.addEventListener("click", function (evt) {
+            document.querySelector(".erreur").innerHTML = '';
             var param = {
                 courriel: document.querySelector("[name='courriel']").value,
                 mdp: document.querySelector("[name='mdp']").value
             };
-
             let requete = new Request(
                 BaseURL + "index.php?requete=authentification",
                 { method: "POST", body: JSON.stringify(param) });
@@ -293,18 +299,20 @@ window.addEventListener("load", function () {
                     }
                 })
                 .then((response) => {
-                    console.log(response.data);
-                    if(response.data !== null) {
-                        console.log("enregistrer des infos dans une variable de session et aller vers le cellier");
-                    } else {
-                        console.log("afficher les erreurs");
+                    if (response.data !== null) { //la requête à fonctionnée, redirection vers la page du cellier de l'utilisateur connecté :
+                        window.location = BaseURL + "index.php?requete=afficherCellier&id_utilisateur=" + response.data.id_utilisateur;
+                        console.log("aller vers le cellier");
+
+                    } else if (response.data == null && response.erreurs == null) { //la requete à focntionnée mais n'a rien retournée
+                        document.querySelector(".identifiants_inconnus").innerHTML = "Aucun compte utlisateur lié aux identifiants renseignés";
+                    } else if (response.erreurs !== null) {
+                        document.querySelector(".courriel").innerHTML =
+                            response.erreurs.courriel || "";
                     }
                 })
                 .catch((error) => {
                     console.error(error);
                 });
-
-
         });
     }
 });

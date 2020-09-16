@@ -40,6 +40,15 @@ class Controler
             case 'authentification':
                 $this->controllerUtilisateur();
                 break;
+            case 'creerCompte':
+                $this->creerCompte();
+                break;
+            case 'afficherCellier':
+                $this->afficherCellier();
+                break;
+            case 'deconnexion':
+                $this->deconnexion();
+                break;
             default:
                 $this->accueil();
                 break;
@@ -52,16 +61,36 @@ class Controler
      */
     private function accueil()
     {
-        /* si l'utilisateur n'est pas déjà connecté, redirection vers la page d'authentification, sinon affichage de la page d'accueil : */
-        if (!isset($_SESSION['id_utilisateur'])) {
-            header("Location: http://localhost/vino_etu/?requete=authentification");
+        /* si l'utilisateur s'est déjà connecté et a une session ouverte : affichage de son cellier. Sinon redirection vers la page de création de compte : */
+        if (isset($_SESSION['info_utilisateur'])) {
+            $this->afficherCellier($_SESSION['info_utilisateur']['id_utilisateur']);
         } else {
-            $bte = new Bouteille();
-            $data = $bte->getListeBouteilleCellier(); //ajouter l'id utilisateur en paramètre
-            include("vues/entete.php");
-            include("vues/cellier.php");
-            include("vues/pied.php");
+            $this->creerCompte();
         }
+    }
+
+    /**
+     * Affiche la page de création d'un compte
+     * @return files
+     */
+    private function creerCompte()
+    {
+        // pas d'inclusion de l'entete car on ne veut pas avoir accès au menu
+        include("vues/creerCompte.php");
+        include("vues/pied.php");
+    }
+
+    /**
+     * Affiche la liste des bouteilles du cellier d'un utilisateur
+     * @return files
+     */
+    private function afficherCellier($id_utilisateur = '')
+    {
+        $bte = new Bouteille();
+        $data = $bte->getListeBouteilleCellier($_GET['id_utilisateur'] ?? $id_utilisateur);
+        include("vues/entete.php");
+        include("vues/cellier.php");
+        include("vues/pied.php");
     }
 
     /**
@@ -132,7 +161,7 @@ class Controler
         $body = json_decode(file_get_contents('php://input'));
 
         $bte = new Bouteille();
-        $resultat = $bte->modifierQuantiteBouteilleCellier($body->id, -1);
+        $resultat = $bte->modifierQuantiteBouteilleCellier($body->id_bouteille, $body->id_cellier, -1);
         echo json_encode($resultat);
     }
 
@@ -145,7 +174,7 @@ class Controler
         $body = json_decode(file_get_contents('php://input'));
 
         $bte = new Bouteille();
-        $resultat = $bte->modifierQuantiteBouteilleCellier($body->id, 1);
+        $resultat = $bte->modifierQuantiteBouteilleCellier($body->id_bouteille, $body->id_cellier, 1);
         echo json_encode($resultat);
     }
 
@@ -163,9 +192,20 @@ class Controler
             $resultat = $utilisateur->controllerUtilisateur($body->courriel, $body->mdp);
             echo json_encode($resultat);
         } else {
-            include("vues/entete.php");
+            // pas d'inclusion de l'entete car on ne veut pas avoir accès au menu
             include("vues/authentification.php");
             include("vues/pied.php");
         }
+    }
+
+    /**
+     * Déconnexion d'un compte
+     * @return files
+     */
+    private function deconnexion()
+    {
+        session_unset();
+        session_destroy();
+        $this->controllerUtilisateur();
     }
 }

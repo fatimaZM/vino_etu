@@ -17,7 +17,7 @@
                 <p><a href="<?php echo $bouteille['url_saq'] ?>">Voir SAQ</a></p>
             </div>
 
-            <div class="options" data-id="<?php echo $bouteille['vino__bouteille_id'] ?>">
+            <div class="options" data-id_bouteille="<?php echo $bouteille['vino__bouteille_id'] ?>" data-id_cellier="<?php echo $bouteille['vino__cellier_id'] ?>">
 
                 <button class='btnModifier'><a href="?requete=modifierBouteilleCellier&id=<?php echo $bouteille['id'] ?>&cellier=<?php echo $bouteille['vino__cellier_id'] ?>">Modifier</a></button>
                 <button class='btnAjouter'>Ajouter</button>

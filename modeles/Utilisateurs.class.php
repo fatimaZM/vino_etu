@@ -8,11 +8,7 @@
 class Utilisateurs extends Modele
 {
 
-    /**
-     * @var 
-     * @access private
-     * @static
-     */
+    private $erreurs = []; //tableau pour récupérer les erreurs lors de la vérifications des données
 
 
 
@@ -25,22 +21,33 @@ class Utilisateurs extends Modele
 
     function controllerUtilisateur($courriel, $mot_de_passe)
     {
-        $response = ['data' => null];
+        $reponse = ['erreurs' => null, 'data' => null];
         //SHA : mot de passe en clair
-        $req = "SELECT * FROM vino__utilisateur WHERE courriel_utilisateur='$courriel' AND password_utilisateur = '$mot_de_passe'"; 
+        // INNER JOIN pour récupérer l'id du cellier
+        $req = "SELECT * FROM vino__utilisateur u
+        INNER JOIN vino__cellier c ON u.id_utilisateur = c.fk_id_utilisateur
+        WHERE courriel_utilisateur='$courriel' AND password_utilisateur = '$mot_de_passe'";
 
         //SHA : hachage du mot de passe
-        // $req = "SELECT * FROM vino__utilisateur WHERE courriel_utilisateur='$identifiant' AND password_utilisateur = SHA2('$mot_de_passe', 256)";
+        // $req = "SELECT * FROM vino__utilisateur FROM vino__utilisateur u INNER JOIN vino__cellier c ON u.id_utilisateur = c.fk_id_utilisateurWHERE courriel_utilisateur='$identifiant' AND password_utilisateur = SHA2('$mot_de_passe', 256)";
 
-        if ($result = $this->_db->query($req)) {
-            $response['data'] = $result->fetch_assoc();
-        } else {
-            throw new Exception("Erreur de requête sur la base de données", 1);
+        //Validation des données :
+        /* courriel : */
+        if(!filter_var($courriel, FILTER_VALIDATE_EMAIL)) {
+            $this->erreurs['courriel'] = "Veuillez entrer un courriel valide.";
         }
 
-        return $response;
+        if (empty($this->erreurs)) {
+            if ($result = $this->_db->query($req)) {
+                $reponse['data'] = $result->fetch_assoc();
+                $_SESSION['info_utilisateur'] =  $reponse['data'];
+            } 
+        } else {
+            $reponse['erreurs'] = $this->erreurs;
+            // $reponse['courriel'] = $courriel;
+            // throw new Exception("Erreur de requête sur la base de données", 1);
+        }
+
+        return $reponse;
     }
-
-
-
 }
