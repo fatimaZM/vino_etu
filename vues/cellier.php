@@ -1,7 +1,9 @@
 <div class="cellier">
-    <form id="tri" action="" method="post">
+    <form id="tri" method="post">
         <h3><strong>Critères de tri :</strong></h3>
         <?php
+        //Vérifie si un champs de tri "type" a déja été appliqué
+        //Si oui le laisse sélectionné au submit ou refresh
         if (isset($_POST["type"])) {
         ?>
             <label>Type</label>
@@ -24,6 +26,7 @@
                         } ?>value="date_achat">Date d'achat</option>
             </select>
         <?php
+            //Si aucun champs sélectionné 
         } else {
         ?>
             <label>Type</label>
@@ -37,8 +40,8 @@
             </select>
         <?php
         }
-        ?>
-        <?php
+        //Vérifie si un champs de tri "ordre" a déja été appliqué
+        //Si oui le laisse sélectionné au submit ou refresh
         if (isset($_POST["ordre"])) {
         ?>
             <label>Ordre</label>
@@ -52,6 +55,7 @@
                         } ?>value="DESC">Décroissant</option>
             </select>
         <?php
+            //Si aucun champs sélectionné
         } else {
         ?>
             <label>Ordre</label>
@@ -65,7 +69,24 @@
         ?>
         <input type="submit" name="tri" value="Triez">
     </form>
+
+    <!-- Recherche dans le celier -->
+    <form id="recherche_cellier" method="post">
+        <div class="rechercheBouteilleCellier" vertical layout>
+            <h3><strong>Recherche par id,nom ou pays:</strong></h3>
+            <input type="text" class="nom_bouteille_cellier" name="nom_bouteille_cellier" value="">
+            <input type="submit" name="recherche" value="Rechercher">
+            <ul class="listeAutoComplete">
+            </ul>
+
+    </form>
+    <!----------------------------->
+
     <?php
+    if ($data == null) {
+    ?><h4>La recherche n'a donnée aucun résultat</h4>
+    <?php
+    }
     foreach ($data as $cle => $bouteille) {
     ?>
         <div class="bouteille" data-quantite="">
