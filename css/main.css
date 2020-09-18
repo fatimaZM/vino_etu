@@ -2,90 +2,527 @@
  * Votre CSS
  ********/
 
+
+
+/* Rétablir les couleurs des liens visités */
+a:visited {
+    color: inherit;
+}
+
+/* Retirer les les lignes sur 
+	tous les liens de navigation */
+.compte-logo a,
+.nav a {
+    text-decoration: none;
+}
+
+
+
+/* Établir une marge intérieure
+	qui aligne mieux les puces */
+ul {
+    padding-left: 1rem;
+}
+
+/* Rythme minimal pour les items de liste */
+ul > * + * {
+    margin-top: 10px;
+}
+
+/*---------------------------------------*/
+
+/* Structure */
+/* Tout ce qui est de l'ordre de la structure maîtresse */
+/* Marges, dimensions, positionnement, etc. */
+
 html,
 body {
-  height: 100%;
-  margin: 0;
-  background-color: #e5e5e5;
+    height: 100%;
+    background-color: #f5f2f2;
 
-  font-family: "Roboto", "RobotoDraft", sans-serif;
-  font-size: 95%;
+    font-family: "Roboto", "RobotoDraft", sans-serif;
+    font-size: 95%;
+
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+
+    /* Générer un nouveu contexte de grille 
+		pour les enfants */
+    display: flex;
+    flex-wrap: wrap;
 }
+
+body,
+figure {
+
+    margin: 0;
+
+}
+
+/* Retirer les marges par défaut 
+	pour tous les enfants de toute entête. */
+.header > * {
+    margin: 0;
+}
+
+/* Assurer que les éléments choisis
+	occupent seuls toute leur rangée/ligne */
+body > header,
+body > nav,
+body > footer {
+    flex-basis: 100%;
+    flex-shrink: 0;
+}
+
+/* Si on met pas flex on va avoir 
+	des espaces entre les éléments 
+	à cause de inline-block */
+body > nav > ul {
+    display: flex;
+    align-items: center;
+
+}
+
+
+
+
+/* Forcer le champ de recherche
+	à la droite du conteneur flex */
+body > nav > aside > a:last-of-type {
+    margin-right: auto;
+}
+
+/*mettre le logo et mon compte aux extremités*/
+.compte-logo {
+
+    display: flex;
+    justify-content: space-between;
+}
+
+/*pousser mon compte sur la droite*/
+.compte-logo aside > a:last-of-type {
+
+    margin-right: auto;
+}
+
+/**mettre la nav en haut*/
+
+
+}
+
+/* Séparer l'espace entre le 
+	contenu principal et secondaire */
+body > main {
+    flex-basis: 100%;
+    display: flex;
+}
+
+body > main {
+    /* Permettre l'occupation totale de l'espace
+		sur fenêtre moyenne ou étroite */
+    flex-grow: 1;
+}
+
+/* Rythme pour les sections de la
+	navigation principale */
+body > nav > * + * {
+    margin-top: 10px;
+
+}
+
 .liste {
-  display: block;
-  border-top: 1px solid #ccc;
-  border-bottom: none;
-  /*background: #666;*/
-  /*color: #03a9f4;*/
-  list-style: none;
-  margin: 0;
-  padding: 0;
+    display: block;
+    border-top: 1px solid #ccc;
+    border-bottom: none;
+    /*background: #666;*/
+    /*color: #03a9f4;*/
+    list-style: none;
+    margin: 0;
+    padding: 0;
 }
 
 .liste > div {
-  height: 40px;
-  line-height: 40px;
-  padding: 0 20px;
-  border-bottom: 1px solid #ccc;
-  /*background: #666;*/
-  cursor: pointer;
-  transition: color 200ms ease-in-out;
-  /*background-color: #003777;*/
-  background-color: #e85e30;
-  color: #ffffff;
+    height: 40px;
+    line-height: 40px;
+    padding: 0 20px;
+    border-bottom: 1px solid #ccc;
+    /*background: #666;*/
+    cursor: pointer;
+    transition: color 200ms ease-in-out;
+    /*background-color: #003777;*/
+    background-color: #e85e30;
+    color: #ffffff;
 }
+
 .liste > div:hover {
-  color: #000000;
-  transition: color 200ms ease-in-out;
+    color: #000000;
+    transition: color 200ms ease-in-out;
 }
 
 @media all and (max-width: 640px) {
-  footer {
-    display: none;
-  }
+    footer {
+        display: none;
+    }
 }
 
 footer {
-  position: fixed;
-  bottom: 0px;
-  width: 100%;
-  padding-top: 3px;
-  text-align: center;
-  background-color: #ffffff;
+    position: fixed;
+    bottom: 0px;
+    width: 100%;
+    padding-top: 3px;
+    text-align: center;
+    background-color: #ffffff;
 }
 
 footer p {
-  display: inline;
-  padding-right: 50px;
-  font-size: 10px;
+    display: inline;
+    padding-right: 50px;
+    font-size: 10px;
 }
 
 .options {
-  margin-bottom: 50px;
+    margin-bottom: 50px;
 }
 
 .erreur {
-  color: red;
+    color: red;
 }
 
 .modal {
-  display: none;
-  position: fixed;
-  z-index: 1;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  overflow: auto;
-  background-color: rgb(0, 0, 0);
-  background-color: rgba(0, 0, 0, 0.4);
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0, 0, 0);
+    background-color: rgba(0, 0, 0, 0.4);
 }
 
 /* Modal Content/Box */
 .contenu_modal {
-  background-color: #fefefe;
-  margin: 15% auto;
-  padding: 20px;
-  border: 1px solid #888;
-  width: 50%;
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 50%;
+}
+
+.nav {
+
+    text-align: right;
+    height: 50px;
+    line-height: 70px;
+    background-color: black;
+    opacity: 0.8;
+    width: 100%;
+}
+
+.menu {
+    margin: 0 30px 0 0;
+
+
+
+}
+
+.menu li a {
+    clear: right;
+    text-decoration: none;
+    color: gray;
+    margin: 0 10px;
+    line-height: 70px;
+}
+
+ul.menu li {
+
+    display: inline;
+}
+
+
+
+label {
+    margin: 0 40px 0 0;
+    font-size: 26px;
+    line-height: 50px;
+    display: none;
+    width: 26px;
+    float: right;
+}
+
+#toggle {
+    display: none;
+}
+
+/*style compte-log*/
+
+.compte-logo {
+
+    background-color: #c79169;
+    opacity: 0.7;
+    height: 120px;
+    width: 100%;
+    display: flex;
+}
+
+
+.compte-logo a > img {
+
+
+    align-content: flex-start;
+
+    z-index: 999;
+
+    /*
+    position: absolute;
+    left: -600px;
+    top: -180px;
+    
+*/
+
+}
+
+.compte-logo aside {
+
+    margin-right: 10px;
+    margin-top: 5px;
+}
+compte-logo  a {
+    margin-right: 90px;}
+
+
+/*cellier*/
+body > main > header {
+
+/*    background-color: black;*/
+    opacity: 0.9;
+    width: 100%;
+    flex-direction: row;
+    display: flex;
+    color: white;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    height: 40px;
+    background-image:url("../images/red-wine-4813262_1920.jpg");
+}
+body>main>header>h1{
+    
+    text-align: center;
+    font-family: cardo;
+    margin-top: 0;
+    align-content: center;
+}
+
+.bouteille {
+    /* Force l'entête à prendre toute la largeur du parent */
+    flex-basis: 100%;
+    flex-shrink: 0;
+    flex-wrap: wrap-reverse;
+    display: flex;
+    align-items: flex-start;
+
+}
+
+/* Conteneur nécessaire *si* nous voulons 
+	insérer une couleur d'arrière-plan */
+.cellier {
+    /* Générer un nouveau contexte d'affichage
+		en grille avec gouttières pour les enfants */
+
+    flex-wrap: wrap;
+    margin-left: -20px;
+    margin-top: -20px;
+    /* Utiliser pour montrer le problème*/
+    
+
+
+
+}
+
+/* Forcer les enfants de l'entête de contenu 
+	sur deux lignes. Les espacer d'une gouttière. */
+.vignette {
+    /*	flex-basis: calc(50% - 20px);*/
+    margin-top: 20px;
+    margin-left: 20px;
+    flex-grow: 1;
+    width: 40%;
+
+}
+
+/* Composantes spécifiques */
+
+/* Retirer toutes les marges par défaut */
+.vignette * {
+    margin: 0;
+}
+
+/*
+.vignette {
+	max-width: 40em;
+	min-width: 20em;
+}
+*/
+
+/* Créer un espace pour l'image de la vignette
+	et la flotter à la gauche. Assurer que l'image
+	soit carrée et en proportion de son parent */
+.img {
+    /*
+	background-color: rgba(0,0,0,.06);
+	outline: 1px solid lightgrey;
+	outline-offset: -2px;
+	height: 0;
+*/
+    width: 25%;
+    /*	padding-top: 25%;*/
+    float: left;
+    margin-right: 10px;
+    margin-bottom: 10px;
+
+}
+
+.img img{
+    
+    mix-blend-mode: multiply;
+   
+}
+
+
+.img ~ * {
+    overflow: hidden;
+}
+
+/* Espacer les éléments successifs au float
+	ne fonctionne pas. Il faut appliquer la marge
+	à l'élément comme tel */
+/*.vignette figure~* {
+	margin-left: 10px;
+}*/
+
+/* Forcer le parent à clairer l'image flottante */
+.vignette:after {
+    content: "";
+    display: block;
+    clear: both;
+}
+
+/* Réduire la taille de caractères de base
+	pour affecter tous les éléments */
+.vignette {
+    font-size: 0.80em;
+}
+
+.vignette > *:not(figure) + * {
+    margin-top: 5px;
+}
+
+/* Variante — petite */
+main > section .vignette {
+    font-size: .75em;
+}
+
+.vignette h4 {
+    margin-top: 20px;
+}
+
+.description span {
+    
+/*    color: yellow;*/
+}
+
+/* Forcer le champ de recherche
+	à la droite du conteneur flex */
+body > main > header > aside input {
+    margin-right: auto;
+align-content: flex-end;
+    margin-top: 10px;
+}
+
+body > main > header > aside span{
+    
+   opacity: 0.7;
+}
+
+.vignette:first-child{
+    
+    margin-top: 40px;
+}
+
+@media only screen and (max-width: 44em) {
+    label {
+        display: block;
+        cursor: pointer;
+    }
+
+    /**mettre le menu en premier plan*/
+    .nav {
+
+        position: relative;
+        z-index: 1;
+    }
+
+    .menu {
+        text-align: center;
+        width: 100%;
+        display: none;
+        background-color: black;
+
+
+    }
+
+    .menu li a {
+        display: block;
+        border-bottom: 1px solid #EAEAEB;
+        margin: 0;
+        color: #ffe8e8;
+    }
+
+    .menu li a :hover {
+        background-color: #f4f4f4;
+    }
+
+    /*
+
+    .compte-logo a img {
+
+        position: absolute;
+        left: 0px;
+        top: 0px;
+        width: 100%;
+    }
+*/
+
+    #toggle:checked + .menu {
+        display: block;
+
+    }
+
+    .compte-logo a img {
+
+
+
+        /*        width: 250%;*/
+        /*        flex-shrink: 0;*/
+
+        /*
+        position: absolute;
+        left: -630px;
+        top: -190px;
+*/
+
+    }
+
+    .vignette {
+        flex-grow: 1;
+        flex-shrink: 0;
+       
+    }
+    .img{
+        
+         margin-right: 70px;
+    }
+
 }
