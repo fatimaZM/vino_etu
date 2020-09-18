@@ -12,6 +12,7 @@
 
 //const BaseURL = "https://jmartel.webdev.cmaisonneuve.qc.ca/n61/vino/";
 
+ //const BaseURL = "http://localhost/vino_etu/";
  const BaseURL = document.baseURI;
 
 console.log(BaseURL);
@@ -60,6 +61,7 @@ window.addEventListener("load", function () {
           console.error(error);
         });
     });
+    // evt.preventDefault();
   });
 
   /* Comportement du bouton "Ajouter" sur la page de cellier : */
@@ -101,6 +103,7 @@ window.addEventListener("load", function () {
           console.error(error);
         });
     });
+    // evt.preventDefault();
   });
 
   /* comportement du formulaire d'ajout d'une nouvelle bouteille au cellier : */
@@ -276,6 +279,7 @@ window.addEventListener("load", function () {
               "Erreur de modification";
           }
         })
+        
         .catch((error) => {
           console.error(error);
         });
@@ -286,4 +290,41 @@ window.addEventListener("load", function () {
         });
     });
   }
+
+   /* Comportement du bouton "supprimer" sur la page de cellier :*/
+   document.querySelectorAll(".btnSupprimer").forEach(function (element) {
+    element.addEventListener("click", function (evt) {
+
+       console.log('btn supprimer');
+      
+      let id = evt.target.parentElement.dataset.id;
+      let requete = new Request(
+        BaseURL + "index.php?requete=supprimerBouteille",
+        { method: "DELETE", body: '{"id": ' + id + "}" }
+      );
+       fetch(requete)
+      .then((response) => {
+        if (response.status === 200) {
+          console.log(response.status);
+          
+          return response.json();
+          
+        } else {
+          throw new Error("Erreur");
+        }
+      })
+      .then((response) => {
+     if(response) {
+       console.log("suppression effectuée");
+     }
+     else{
+
+      console.log("suppression non effectuée");
+     }
+    })
+        .catch((error) => {
+          console.error(error);
+        });
+      });})
+  
 });
