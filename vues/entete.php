@@ -2,6 +2,7 @@
 <html lang="fr">
 
 <head>
+
     <title>Un petit verre de vino</title>
 
     <meta charset="utf-8">
@@ -14,6 +15,7 @@
     <base href="<?php echo BASEURL; ?>">
     <script src="./js/main.js"></script>
     <script src='https://kit.fontawesome.com/a076d05399.js'></script>
+
 </head>
 
 <body>
@@ -26,7 +28,7 @@
         <ul class="menu">
             <li><a href="?requete=accueil">Mon cellier</a></li>
             <li><a href="?requete=ajouterNouvelleBouteilleCellier">Ajouter une bouteille au cellier</a></li>
-            <li><a href="?requete=authentification">Se deconnecter</a></li>
+            <li> <a href="?requete=deconnexion"> déconnexion</a></li>
 
         </ul>
         
@@ -38,7 +40,7 @@
         <aside>
             
                 <a href=""><i class='fas fa-user-alt'></i> Mon Compte</a>
-                <p>Nicolas Cage</p>
+                <span class="utlisateur_connecte">Bienvenue <?= $_SESSION['info_utilisateur']['prenom_utilisateur'] ?? '' ?> !</span>
                 
         </aside>
       

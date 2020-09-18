@@ -526,3 +526,7 @@ body > main > header > aside span{
     }
 
 }
+
+img{
+    max-height: 200px; /* limiter la taille des images des bouteilles */
+}

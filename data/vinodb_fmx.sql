@@ -5,19 +5,19 @@ SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
 
 -- -----------------------------------------------------
--- Schema vinodb
+-- Schema e1995672
 -- -----------------------------------------------------
 
 -- -----------------------------------------------------
--- Schema vinodb
+-- Schema e1995672
 -- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `vinodb` DEFAULT CHARACTER SET utf8mb4 ;
-USE `vinodb` ;
+CREATE SCHEMA IF NOT EXISTS `e1995672` DEFAULT CHARACTER SET utf8mb4 ;
+USE `e1995672` ;
 
 -- -----------------------------------------------------
--- Table `vinodb`.`vino__type`
+-- Table `e1995672`.`vino__type`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `vinodb`.`vino__type` (
+CREATE TABLE IF NOT EXISTS `e1995672`.`vino__type` (
   `id` INT(11) NOT NULL,
   `type` VARCHAR(20) NOT NULL,
   PRIMARY KEY (`id`))
@@ -26,9 +26,9 @@ DEFAULT CHARACTER SET = latin1;
 
 
 -- -----------------------------------------------------
--- Table `vinodb`.`vino__bouteille`
+-- Table `e1995672`.`vino__bouteille`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `vinodb`.`vino__bouteille` (
+CREATE TABLE IF NOT EXISTS `e1995672`.`vino__bouteille` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
   `nom` VARCHAR(200) NULL,
   `image` VARCHAR(200) NULL,
@@ -44,7 +44,7 @@ CREATE TABLE IF NOT EXISTS `vinodb`.`vino__bouteille` (
   INDEX `fk_vino__bouteille_vino__type_idx` (`fk_type_id` ASC),
   CONSTRAINT `fk_vino__bouteille_vino__type`
     FOREIGN KEY (`fk_type_id`)
-    REFERENCES `vinodb`.`vino__type` (`id`)
+    REFERENCES `e1995672`.`vino__type` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -53,9 +53,9 @@ DEFAULT CHARACTER SET = latin1;
 
 
 -- -----------------------------------------------------
--- Table `vinodb`.`vino__utilisateur`
+-- Table `e1995672`.`vino__utilisateur`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `vinodb`.`vino__utilisateur` (
+CREATE TABLE IF NOT EXISTS `e1995672`.`vino__utilisateur` (
   `id_utilisateur` INT NOT NULL AUTO_INCREMENT,
   `prenom_utilisateur` VARCHAR(200) NOT NULL,
   `nom_utilisateur` VARCHAR(200) NOT NULL,
@@ -68,9 +68,9 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `vinodb`.`vino__cellier`
+-- Table `e1995672`.`vino__cellier`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `vinodb`.`vino__cellier` (
+CREATE TABLE IF NOT EXISTS `e1995672`.`vino__cellier` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
   `date_creation_cellier` DATE NOT NULL,
   `notes_cellier` VARCHAR(200) NULL,
@@ -79,7 +79,7 @@ CREATE TABLE IF NOT EXISTS `vinodb`.`vino__cellier` (
   INDEX `fk_vino__cellier_vino__utilisateur1_idx` (`fk_id_utilisateur` ASC),
   CONSTRAINT `fk_vino__cellier_vino__utilisateur1`
     FOREIGN KEY (`fk_id_utilisateur`)
-    REFERENCES `vinodb`.`vino__utilisateur` (`id_utilisateur`)
+    REFERENCES `e1995672`.`vino__utilisateur` (`id_utilisateur`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -88,9 +88,9 @@ DEFAULT CHARACTER SET = latin1;
 
 
 -- -----------------------------------------------------
--- Table `vinodb`.`cellier__bouteille`
+-- Table `e1995672`.`cellier__bouteille`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `vinodb`.`cellier__bouteille` (
+CREATE TABLE IF NOT EXISTS `e1995672`.`cellier__bouteille` (
   `vino__cellier_id` INT(11) NOT NULL,
   `vino__bouteille_id` INT(11) NOT NULL,
   `date_achat` DATE NOT NULL,
@@ -104,12 +104,12 @@ CREATE TABLE IF NOT EXISTS `vinodb`.`cellier__bouteille` (
   INDEX `fk_vino__cellier_has_vino__bouteille_vino__cellier1_idx` (`vino__cellier_id` ASC),
   CONSTRAINT `fk_vino__cellier_has_vino__bouteille_vino__cellier1`
     FOREIGN KEY (`vino__cellier_id`)
-    REFERENCES `vinodb`.`vino__cellier` (`id`)
+    REFERENCES `e1995672`.`vino__cellier` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_vino__cellier_has_vino__bouteille_vino__bouteille1`
     FOREIGN KEY (`vino__bouteille_id`)
-    REFERENCES `vinodb`.`vino__bouteille` (`id`)
+    REFERENCES `e1995672`.`vino__bouteille` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
