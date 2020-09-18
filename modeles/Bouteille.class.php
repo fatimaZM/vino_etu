@@ -314,4 +314,32 @@ class Bouteille extends Modele
 			return $res;
 		}
 	}
+
+	public function ajouterUtilisateur(){
+
+
+	}
+
+	public function seConnecter(){
+
+	}
+
+	public function supprimerBouteilleCellier($id)
+	{
+       
+		$requete = "DELETE FROM ". self::CELLIER_BOUTEILLE . " WHERE vino__bouteille_id =".$id. " AND vino__cellier_id = 2";
+
+		if($stmt = $this->_db->prepare($requete)){ 
+		//   $stmt->bind_param('i', $id);
+		     $stmt->execute();
+		 
+		 return true;
+		}
+		else{  
+		// 	var_dump($id);
+		
+		//  var_dump($this->_db->error);
+         return false;
+		}
+	}
 }
