@@ -16,7 +16,10 @@
     /** Fichier de configuration, contient les define et l'autoloader **/
     /***************************************************/
     require_once('./dataconf.php');
-	require_once("./config.php");
+    require_once("./config.php");
+    header("Access-Control-Allow-Origin: *");
+    header("Access-Control-Allow-Methods: OPTIONS,GET,POST,PUT,DELETE");
+   
 	
    /***************************************************/
     /** Initialisation des variables **/
