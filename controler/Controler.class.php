@@ -182,11 +182,10 @@ class Controler
 
 	     $body = json_decode(file_get_contents('php://input'));
 
-		if (!empty($body)) {
+		
 			$bte = new Bouteille();
 			$resultat = $bte->supprimerBouteilleCellier($_GET['id']);
-			echo json_encode($resultat);
-		} 
+			echo json_encode($resultat);	
 		
 	}
 }
