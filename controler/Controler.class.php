@@ -37,6 +37,9 @@ class Controler
 			case 'boireBouteilleCellier':
 				$this->boireBouteilleCellier();
 				break;
+			case 'supprimerBouteille':
+				$this->supprimerBouteille();
+				break;
 			default:
 				$this->accueil();
 				break;
@@ -140,5 +143,50 @@ class Controler
 		$bte = new Bouteille();
 		$resultat = $bte->modifierQuantiteBouteilleCellier($body->id, 1);
 		echo json_encode($resultat);
+	}
+   
+	private function ajouterNouvelUtilisateur()
+	{
+		$body = json_decode(file_get_contents('php://input'));
+
+
+		if (!empty($body)) {
+			// var_dump($body);
+			$bte = new Bouteille();
+			$resultat = $bte->ajouterUtilisateur($body);
+			echo json_encode($resultat);
+		} else {
+			include("vues/entete.php");
+			include("vues/creerCompte.php");
+			include("vues/pied.php");
+		}
+	}
+
+	private function authentification(){
+		//$body = json_decode(file_get_contents('php://input'));
+
+		
+		$bte = new Bouteille();
+		$resultat = $bte->seConnecter();
+		//echo json_encode($resultat);
+		
+		include("vues/entete.php");
+		include("vues/authentification.php");
+		include("vues/pied.php");
+
+	}
+
+
+	private function supprimerBouteille(){
+
+
+	     $body = json_decode(file_get_contents('php://input'));
+
+		if (!empty($body)) {
+			$bte = new Bouteille();
+			$resultat = $bte->supprimerBouteilleCellier($_GET['id']);
+			echo json_encode($resultat);
+		} 
+		
 	}
 }
