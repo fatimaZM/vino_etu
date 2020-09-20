@@ -104,7 +104,9 @@ class Controler
 			include("vues/cellier.php");
 			include("vues/pied.php");
 		}
-		if (isset($_POST['recherche'])) {
+
+		
+		else if (isset($_POST['recherche'])) {
 			$recherche = $_POST['nom_bouteille_cellier'];
 			$bte = new Bouteille();
 
@@ -260,13 +262,9 @@ class Controler
 
 
 	     $body = json_decode(file_get_contents('php://input'));
-
-		
-			$bte = new Bouteille();
+            $bte = new Bouteille();
 			$resultat = $bte->supprimerBouteilleCellier($_GET['id']);
-			echo json_encode($resultat);
-			
-	
+            echo json_encode($resultat);
 		
 	}
 }
