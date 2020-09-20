@@ -78,7 +78,7 @@ class Bouteille extends Modele
 		if (($res = $this->_db->query($requete)) ==     true) {
 			if ($res->num_rows) {
 				while ($row = $res->fetch_assoc()) {
-					$row['nom'] = trim(utf8_encode($row['nom']));
+					$row['nom'] = trim(($row['nom']));
 					$rows[] = $row;
 				}
 			}
@@ -128,7 +128,7 @@ class Bouteille extends Modele
 		if (($res = $this->_db->query($requete)) ==     true) {
 			if ($res->num_rows) {
 				while ($row = $res->fetch_assoc()) {
-					$row['nom'] = trim(utf8_encode($row['nom']));
+					$row['nom'] = trim(($row['nom']));
 					$rows[] = $row;
 				}
 			}
@@ -493,21 +493,13 @@ class Bouteille extends Modele
 		$requete = "DELETE FROM ". self::CELLIER_BOUTEILLE . " WHERE vino__bouteille_id =".$id. " AND vino__cellier_id = 2";
 
 		if($stmt = $this->_db->prepare($requete)){ 
-		//   $stmt->bind_param('i', $id);
 		     $stmt->execute();
 		 
-		 return true;
 		}
 		else{  
-		// 	var_dump($id);
-		
-		//  var_dump($this->_db->error);
+		 var_dump($this->_db->error);
 
-			$requete = "UPDATE " . self::CELLIER_BOUTEILLE . " SET quantite = GREATEST(quantite + " . $nombre . ", 0) WHERE vino__bouteille_id = " . $id_bouteille . " AND vino__cellier_id = $id_cellier";
-			//echo $requete;
-			$res = $this->_db->query($requete);
-
-			return $res;
+			return false;
 
 		}
 	}
