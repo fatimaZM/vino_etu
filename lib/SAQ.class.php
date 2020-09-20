@@ -40,7 +40,7 @@ class SAQ extends Modele
 	public function getProduits($nombre = 24, $page = 1)
 	{
 		$s = curl_init();
-		$url = "https://www.saq.com/fr/produits/vin/vin-rouge?p=1&product_list_limit=24&product_list_order=name_asc";
+		$url = "https://www.saq.com/fr/produits/vin/vin-rouge?p=2&product_list_limit=24&product_list_order=name_asc";
 		curl_setopt($s, CURLOPT_URL, $url);
 		curl_setopt($s, CURLOPT_RETURNTRANSFER, true);
 		//curl_setopt($s, CURLOPT_FOLLOWLOCATION, 1);
