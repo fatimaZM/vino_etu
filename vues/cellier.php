@@ -1,19 +1,31 @@
+<div class= "cellier">
 <header> 
-<h1>Mon cellier</h1>
-<aside>
-				<input placeholder="Trouvez une bouteille" type="search">
-				<span>🔍</span>
-			</aside>
-    </header>
 
+
+				
+                    <!-- Recherche dans le celier -->
+    <form id="recherche_cellier" method="post">
+        <div class="rechercheBouteilleCellier" vertical layout>
+            
+            <input type="text" class="nom_bouteille_cellier" name="nom_bouteille_cellier" placeholder="Trouver bouteille par id,nom, pays " value="">
+            <button type="submit" name="recherche" value="Rechercher"><i class="fa fa-search"></i></button>
+            <ul class="listeAutoComplete">
+            </ul>
+        </div>
+    </form>
+				
+			
+    </header>
+<div class ="tri_cellier">
+   
     <form id="tri" method="post">
-        <h3><strong>Critères de tri :</strong></h3>
+        
         <?php
         //Vérifie si un champs de tri "type" a déja été appliqué
         //Si oui le laisse sélectionné au submit ou refresh
         if (isset($_POST["type"])) {
         ?>
-            <label>Type</label>
+            
             <select name="type">
 
                 <option <?php if (!(strcmp("nom", $_POST["type"]))) {
@@ -36,7 +48,7 @@
             //Si aucun champs sélectionné 
         } else {
         ?>
-            <label>Type</label>
+            
             <select name="type">
                 <option value="" disabled selected>Choisir un tri</option>
                 <option value="nom">Nom</option>
@@ -51,7 +63,7 @@
         //Si oui le laisse sélectionné au submit ou refresh
         if (isset($_POST["ordre"])) {
         ?>
-            <label>Ordre</label>
+           
             <select name="ordre">
 
                 <option <?php if (!(strcmp("ASC", $_POST["ordre"]))) {
@@ -65,7 +77,7 @@
             //Si aucun champs sélectionné
         } else {
         ?>
-            <label>Ordre</label>
+           
             <select name="ordre">
 
                 <option value="ASC" selected>Croissant</option>
@@ -74,27 +86,22 @@
         <?php
         }
         ?>
-        <input type="submit" name="tri" value="Triez">
-    </form>
+        <input type="submit" name="tri" value="Triez"></form>
+</div>
 
-    <!-- Recherche dans le celier -->
-    <form id="recherche_cellier" method="post">
-        <div class="rechercheBouteilleCellier" vertical layout>
-            <h3><strong>Recherche par id,nom ou pays:</strong></h3>
-            <input type="text" class="nom_bouteille_cellier" name="nom_bouteille_cellier" value="">
-            <input type="submit" name="recherche" value="Rechercher">
-            <ul class="listeAutoComplete">
-            </ul>
-
-    </form>
-    
+<div class="container_bouteille">    
     <?php
     if ($data == null) {
     ?><h4>La recherche n'a donnée aucun résultat</h4>
+   
     <?php
-    }
+    }?>
+
+    
+    <?php
     foreach ($data as $cle => $bouteille) {
     ?>
+ <div class="container_bouteille">
     <div class="bouteille" data-quantite="">
         <article class="vignette">
             
@@ -103,18 +110,24 @@
                 </div>
             
             <div class="description">
+                
                 <h4 class="nom"><?php echo $bouteille['nom'] ?></h4>
+                
                 <p class="quantite">Quantité : <span><?php echo $bouteille['quantite'] ?></span></p>
-                <p class="pays">Pays : <?php echo $bouteille['pays'] ?></p>
-                <p class="type">Type : <?php echo $bouteille['type'] ?></p>
-                <p class="notes">Notes : <?php echo $bouteille['notes'] ?></p>
-                <p class="millesime">Millesime : <?php echo $bouteille['millesime'] ?></p>
+                <div class ="description_colunne1">
+                <p class="pays"><i class='fas fa-flag'></i>  <?php echo  $bouteille['pays'] ?></p>
+                <p class="type"><i class='fas fa-wine-bottle'></i>   <?php echo $bouteille['type'] ?></p>
+                <p class="notes"><i class='far fa-sticky-note'></i>  <?php echo  $bouteille['notes'] ?></p>
+                </div>
+                <div class ="description_colunne2">
+                <p class="millesime"><i class='fas fa-wine-glass-alt'></i>  <?php echo  $bouteille['millesime'] ?></p>
 
-                <p><span>★★☆☆☆</span></p>
+<!--                <p><span>★★☆☆☆</span></p>-->
 
-                <p class="date_achat">Date d'achat : <?php echo $bouteille['date_achat'] ?></p>
+                <p class="date_achat"><i class='far fa-calendar-alt'></i>  <?php echo  $bouteille['date_achat'] ?></p>
 
-                <p><a href="<?php echo $bouteille['url_saq'] ?>">Voir SAQ</a></p>
+                <p><a href="<?php echo  $bouteille['url_saq'] ?>"><i class="fas fa-external-link-square-alt"></i>    Voir SAQ</a></p>
+                    </div>
             </div>
 
             <div class="options" data-id_bouteille="<?php echo $bouteille['vino__bouteille_id'] ?>" data-id_cellier="<?php echo $bouteille['vino__cellier_id'] ?>">
@@ -128,6 +141,8 @@
         </article>
     </div>
 
+       </div>
+<!--</div>-->
     <div class="modal">
         <div class="contenu_modal">
             <p class="msg_sql"></p>

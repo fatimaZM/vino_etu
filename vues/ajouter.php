@@ -1,25 +1,29 @@
 <div class="ajouter">
 
     <div class="nouvelleBouteille" vertical layout>
-        Recherche : <input type="text" name="nom_bouteille">
+        <form id="recherche_catalogue">
+        <input type="text" name="nom_bouteille" placeholder="Rechercher une bouteille dans le catalogue ">
+            </form>
         <ul class="listeAutoComplete">
         </ul>
-        <div>
-            <p>Nom : <span name = "nom" data-id_cellier="<?= $_SESSION['info_utilisateur']['id']?>" class="nom_bouteille"></span></p>
-            <p>Millesime : <input name="millesime"></p>
+        
+        <div id="ajouter_une_bouteille">
+            <p><label>Nom   </label><span name = "nom" data-id_cellier="<?= $_SESSION['info_utilisateur']['id']?>" class="nom_bouteille"></span></p>
+            <p><label>Millesime   </label><input type="text" name="millesime"></p>
             <span class='erreur millesime'></span>
-            <p>Quantite : <input name="quantite" value="1"></p>
+            <p><label>Quantite   </label><input input type="text" name="quantite" value="1"></p>
             <span class='erreur quantite'></span>
-            <p>Date achat : <input type="date" name="date_achat"></p>
+            <p><label>Date achat   </label><input type="date" name="date_achat"></p>
             <span class='erreur date_achat'></span>
-            <p>Prix : <input name="prix"></p>
+            <p><label>Prix   </label><input input type=number name="prix"></p>
             <span class='erreur prix'></span>
-            <p>Garde : <input name="garde_jusqua"></p>
+            <p><label>Garde   </label><input input type="text" name="garde_jusqua"></p>
             <span class='erreur garde_jusqua'></span>
-            <p>Notes <input name="notes"></p>
+            <p><label>Notes </label><input input type="text" name="notes"></p>
             <span class='erreur notes'></span>
-        </div>
+       
         <button name="ajouterBouteilleCellier">Ajouter la bouteille</button>
+             </div>
     </div>
 
     <div class="modal">
