@@ -162,6 +162,7 @@ window.addEventListener("load", function () {
             if (evt.target.tagName == "LI") {
                 bouteille.nom.dataset.id = evt.target.dataset.id;
                 bouteille.nom.innerHTML = evt.target.innerHTML;
+               
 
                 liste.innerHTML = "";
                 inputNomBouteille.value = "";
@@ -290,6 +291,7 @@ window.addEventListener("load", function () {
     if(liste) {
         liste.addEventListener("click", function (evt) {
             console.dir(evt.target);
+            // document.querySelector(".tri_cellier").style.display = "none";
             if (evt.target.tagName == "LI") {
                 bouteille.nomBtlCellier.dataset.id = evt.target.dataset.id;
                 bouteille.nomBtlCellier.value = evt.target.innerText;
@@ -412,7 +414,7 @@ window.addEventListener("load", function () {
     element.addEventListener("click", function (evt) {
 
        console.log('btn supprimer');
-      
+     
       let id = evt.target.parentElement.dataset.id;
       let requete = new Request(
         BaseURL + "index.php?requete=supprimerBouteille",
@@ -422,7 +424,7 @@ window.addEventListener("load", function () {
       .then((response) => {
         if (response.status === 200) {
           console.log(response.status);
-          
+          window.location.href = BaseURL;
           return response.json();
           
         } else {
@@ -430,17 +432,13 @@ window.addEventListener("load", function () {
         }
       })
       .then((response) => {
-     if(response) {
-       console.log("suppression effectuée");
-     }
-     else{
-
-      console.log("suppression non effectuée");
-     }
-    })
-        .catch((error) => {
-          console.error(error);
-        });
-      });
-    });
+                    console.debug(response);
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
+           
+            
+      
+    });});
 })
