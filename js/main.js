@@ -480,6 +480,7 @@ window.addEventListener("load", function () {
     });
 
     //Évenement lié à la bulle info sur la page ajouter et modifier une bouteille
+    // Ajoute la classe apparait pour rendre la bulle visible
 
     document.querySelector(".remplir_Champs").addEventListener("click", function () {
 
