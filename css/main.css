@@ -634,6 +634,7 @@ p.msg_sql {
     padding-top: 30px;
 
 }
+
 /*Titre formulaire d'ajout*/
 #ajouter_une_bouteille p {
 
@@ -931,6 +932,7 @@ p.nom_bouteille {
 /******************************/
 /***Page d'authentification*****/
 /******************************/
+
 /*logo*/
 .connexion a > img {
 
@@ -951,15 +953,14 @@ p.nom_bouteille {
     margin: auto;
     flex-basis: 80%;
     max-width: 30rem;
-    padding: 10px !important;
+    padding: 20px !important;
+    padding-bottom: 30px !important;
     box-sizing: border-box;
     border-radius: 5px;
     background-color: #ece4cc;
     padding: 10px;
-    justify-content: space-between;
     margin-top: 100px;
-    padding-top: 10px;
-    padding-bottom: 20px !important;
+
 
 }
 
@@ -987,20 +988,20 @@ p.titre_connexion {
 
 .form input[type=email] {
     box-sizing: border-box;
-    width: 80%;
+    width: 100%;
     padding: 12px;
     border-radius: 4px;
     border: 2px solid #c79169;
-    margin-top: -6px;
+    margin-top: -30px;
     /*      margin-left: 30px;*/
 }
 
 .form input[type=password] {
-    width: 72%;
+    width: 92%;
     padding: 12px;
     border-radius: 4px;
     border: 2px solid #c79169;
-    margin-top: -6px;
+    margin-top: -30px;
 
 
 }
@@ -1010,15 +1011,13 @@ p.titre_connexion {
     display: inline-block;
     float: left;
     width: 15%;
-    margin-top: -20px;
+    margin-top: -30px;
     font-size: 17px;
     white-space: nowrap;
     color: black;
     font-family: 'Patua One', cursive;
     font-weight: bold;
     text-align: left;
-
-
 
 }
 
@@ -1056,6 +1055,7 @@ p.message {
     font-weight: bold;
 }
 
+
 .form p,
 .form input {
     font-family: 'Bentham', serif;
@@ -1079,7 +1079,7 @@ p.message {
     font-size: 1.2rem;
     margin-top: 6px;
     flex-direction: row-reverse;
-    width: 80%;
+    width: 100%;
 }
 
 
@@ -1302,6 +1302,20 @@ p.message {
     /*Taille Logo su la page d'authentification*/
     .connexion a > img {
         width: 52%;
+    }
+
+    /*    réduire la taille du contenaire du formulaire*/
+    .info_utilisateur {
+
+
+        max-width: 25rem;
+    }
+
+    /*    réduire la taille du texte*/
+    p.message {
+
+        text-align: left;
+        font-size: 1.22em;
     }
 
 
