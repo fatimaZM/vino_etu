@@ -130,6 +130,8 @@ body > main {
 
 }
 
+
+
 /* Rythme pour les sections de la
 	navigation principale */
 body > nav > * + * {
@@ -379,10 +381,6 @@ button a:visited {
     font-weight: bold;
 }
 
-a[href="<?php echo  $bouteille['url_saq'] ?>"]:hover {
-
-    text-decoration: underline;
-}
 
 /*Style du boutton de recherche dans le cellier*/
 #recherche_cellier input[name="nom_bouteille_cellier"] {
@@ -418,6 +416,7 @@ a[href="<?php echo  $bouteille['url_saq'] ?>"]:hover {
     background-color: antiquewhite;
     color: white;
     position: absolute;
+    border-radius: 5px;
     z-index: 1;
     top: 185px;
     overflow: auto;
@@ -433,7 +432,7 @@ a[href="<?php echo  $bouteille['url_saq'] ?>"]:hover {
 }
 
 .cellier .listeAutoComplete li a {
-    font-family: 'Syne', sans-serif;
+    font-family: 'Bentham', serif;
 }
 
 
@@ -485,6 +484,16 @@ input[name="tri"] {
 
 }
 
+/*Style du message en cas de recherche infructueuse*/
+.container_bouteille h4 {
+
+    font-size: 1.2em;
+    background: #faf7eb;
+    font-family: 'Bentham', serif;
+    padding-left: 20px;
+
+}
+
 /*Footer*/
 footer {
     display: flex;
@@ -512,19 +521,18 @@ footer p {
 .modal {
     display: none;
     position: fixed;
-    z-index: 1;
+    z-index: 999;
     left: 0;
     top: 0;
     width: 100%;
     height: 100%;
     overflow: auto;
-    background-color: rgb(0, 0, 0);
     background-color: rgba(0, 0, 0, 0.4);
 
 }
 
-.modal p {
-    color: black;
+p.msg_sql {
+    color: black !important;
 
 }
 
@@ -542,8 +550,6 @@ footer p {
     display: block;
     border-top: 1px solid #ccc;
     border-bottom: none;
-    /*background: #666;*/
-    /*color: #03a9f4;*/
     list-style: none;
     margin: 0;
     padding: 0;
@@ -554,10 +560,8 @@ footer p {
     line-height: 40px;
     padding: 0 20px;
     border-bottom: 1px solid #ccc;
-    /*background: #666;*/
     cursor: pointer;
     transition: color 200ms ease-in-out;
-    /*background-color: #003777;*/
     background-color: #e85e30;
     color: #ffffff;
 }
@@ -567,64 +571,67 @@ footer p {
     transition: color 200ms ease-in-out;
 }
 
-/*Ajouter une nouvelle bouteille*/
+/**************************************/
+/* Page ajouter une nouvelle bouteille*/
+/**************************************/
 
-.ajouter {
-    /*    display: flex;*/
-    justify-content: space-between;
-}
+
 
 /*Style du nom de la bouteille choisie*/
 .ajouter span[name="nom"] {
 
     color: black;
     font-family: 'Bentham', serif;
-    font-size: 20px;
+
 }
 
 
 /*Style du boutton de recherche*/
-#recherche_catalogue input[name="nouvelleBouteille"] {
+#recherche_catalogue input[name="nom_bouteille"] {
     padding: 10px;
+    padding-right: 25px;
+    margin-right: 10px;
     border: none;
     font-family: 'Bentham', serif;
-    padding: 5px;
-
+    font-size: 17px;
+    background-image: url('../images/toolbar_find.png');
+    background-position: right;
+    background-repeat: no-repeat;
 }
+
+
 
 #recherche_catalogue {
     width: 97%;
     padding: 10px;
-
-
     display: flex;
     color: white;
     justify-content: flex-end;
-
     flex-wrap: wrap;
     height: 40px;
     margin-top: 15px;
     font-family: 'Bentham', serif;
     font-size: 20px;
-    margin-right: 80px;
+
 
 }
 
+/*conteneur formulaire d'ajout d'une nouvelle bouteille*/
 #ajouter_une_bouteille {
 
     display: flex;
     flex-direction: column;
     margin: auto;
-    background-color: aqua;
     flex-basis: 80%;
-    max-width: 40rem;
-    padding: 10px;
+    max-width: 50rem;
+    padding: 5px;
     box-sizing: border-box;
     border-radius: 5px;
     background-color: #ece4cc;
-    padding: 20px;
+    padding: 10px;
     justify-content: space-between;
-    margin-top: 80px;
+    margin-top: 100px;
+    padding-top: 30px;
 
 }
 
@@ -632,7 +639,6 @@ footer p {
 
     width: 80%;
     margin: auto;
-
     text-align: center;
 }
 
@@ -642,11 +648,8 @@ input[type=number] {
     box-sizing: border-box;
     width: 60%;
     padding: 12px;
-    border: 1px solid antiquewhite;
     border-radius: 4px;
     border: 2px solid #c79169;
-
-    /*  float: right;*/
     margin-top: 6px;
 }
 
@@ -666,6 +669,32 @@ input[type=number] {
 
 }
 
+/*style et positionnement texte veuillez...*/
+#ajouter_une_bouteille p:first-of-type {
+
+    text-align: left;
+    font-weight: 100;
+    margin-top: 40px;
+    color: black;
+    border-top: 3px double;
+    padding-bottom: 20px;
+    padding-top: 5px;
+}
+
+#ajouter_une_bouteille p:first-of-type span {
+
+    font-size: 12px;
+    color: gray;
+
+}
+
+#ajouter_une_bouteille p,
+#ajouter_une_bouteille input {
+    font-family: 'Bentham', serif;
+    font-size: 18px;
+
+}
+
 /*Style et positionnement bouton Ajouter bouteille*/
 #ajouter_une_bouteille button[name="ajouterBouteilleCellier"] {
 
@@ -675,7 +704,7 @@ input[type=number] {
     border: 1px solid antiquewhite;
     border-radius: 4px;
     margin-left: auto;
-    margin-right: 80px;
+    margin-right: 110px;
     color: white;
     font-family: 'Bentham', serif;
     font-size: 1.2rem;
@@ -688,32 +717,376 @@ input[type=number] {
 
     width: 300px;
     background-color: antiquewhite;
-    color: white;
+    text-align: center;
+    font-size: 15px;
+    border-radius: 5px;
     position: absolute;
-    z-index: 1;
+    z-index: 999;
     top: 190px;
     overflow: auto;
     right: 22px;
     cursor: pointer;
 
-
-
 }
 
 .ajouter .listeAutoComplete li {
-    color: black;
+    color: #000000;
     text-decoration: none;
     list-style-type: none;
 }
 
 .ajouter .listeAutoComplete li a {
-    font-family: 'Syne', sans-serif;
+    font-family: 'Bentham', serif;
 }
 
-.ajouter p {
-    color: ghostwhite;
+.ajouter .listeAutoComplete li a:hover {
+
+
+    font-weight: bold !important;
 }
 
+
+/*Bulle Infos*/
+
+.remplir_Champs {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+    text-align: center;
+    font-family: 'Bentham', serif;
+    font-size: 20px;
+    font-weight: bold;
+    margin: 0;
+}
+
+/*Cacher la fenetre infos */
+.remplir_Champs #fenetre_info {
+    visibility: hidden;
+    width: 200px;
+    background-color: #0a0a0a;
+    color: #fff;
+    text-align: center;
+    font-size: 15px;
+    border-radius: 5px;
+    padding: 5px;
+    position: absolute;
+    top: 125%;
+    left: 70%;
+
+
+}
+
+/* ajouter cette classe avec son style lors du clique*/
+.apparait {
+    visibility: visible !important;
+
+    -webkit-animation: fadeIn 1s;
+    animation: fadeIn 1s;
+}
+
+/* animation de la bulle info*/
+@-webkit-keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+/*fin fentre info*/
+
+/***************************************/
+/*Page Modification d'une bouteille*/
+/**************************************/
+
+
+
+/*style et positionnement du contenaire formulaire modification d'une bouteille*/
+
+.modifierBouteille {
+
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    background-color: aqua;
+    flex-basis: 80%;
+    max-width: 50rem;
+    padding: 5px;
+    box-sizing: border-box;
+    border-radius: 5px;
+    background-color: #ece4cc;
+    padding: 10px;
+    justify-content: space-between;
+    margin-top: 100px;
+    /*    margin-top: -20px;*/
+    padding-top: 30px;
+
+}
+
+.modifierBouteille p {
+
+    width: 80%;
+    margin: auto;
+
+    text-align: center;
+}
+
+.modifierBouteille input[type=text],
+input[type=date],
+input[type=number] {
+    box-sizing: border-box;
+    width: 60%;
+    padding: 12px;
+    border-radius: 4px;
+    border: 2px solid #c79169;
+    margin-top: 6px;
+}
+
+.modifierBouteille label {
+    box-sizing: border-box;
+    padding: 5px;
+    display: inline-block;
+    float: left;
+    width: 20%;
+    margin-top: 6px;
+    font-size: 17px;
+    white-space: nowrap;
+    color: black;
+    font-family: 'Patua One', cursive;
+    font-weight: bold;
+
+
+}
+
+.modifierBouteille p:first-of-type {
+
+    text-align: left;
+    font-weight: 100;
+    margin-top: 40px;
+    color: black;
+    border-top: 3px double;
+    padding-bottom: 20px;
+    padding-top: 5px;
+}
+
+.modifierBouteille p:first-of-type span {
+
+    font-size: 12px;
+    color: gray;
+
+}
+
+div p:first-of-type {
+
+    border: none;
+}
+
+.modifierBouteille p,
+.modifierBouteille input {
+    font-family: 'Bentham', serif;
+    font-size: 18px;
+
+}
+
+/*style du nom de la bouteille a modifier*/
+p.nom_bouteille {
+
+
+    text-align: left !important;
+    padding: 5px;
+    box-sizing: border-box;
+}
+
+
+
+/*Style et positionnement bouton Ajouter bouteille*/
+.modifierBouteille button[name="modifierBouteilleCellier"] {
+
+    box-sizing: border-box;
+    background: #c79169;
+    padding: 12px;
+    border: 1px solid antiquewhite;
+    border-radius: 4px;
+    margin-left: auto;
+    margin-right: 110px;
+    color: white;
+    font-family: 'Bentham', serif;
+    font-size: 1.2rem;
+    max-width: 40rem;
+    margin-top: 6px;
+}
+
+/******************************/
+/***Page d'authentification*****/
+/******************************/
+/*logo*/
+.connexion a > img {
+
+    margin-top: 60px;
+    align-content: flex-start;
+    width: 51%;
+    opacity: 1;
+    flex-shrink: 0;
+    margin-top: -15px;
+
+}
+
+/*style et positionnement du formulaire d'authentification*/
+.info_utilisateur {
+
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    flex-basis: 80%;
+    max-width: 30rem;
+    padding: 10px !important;
+    box-sizing: border-box;
+    border-radius: 5px;
+    background-color: #ece4cc;
+    padding: 10px;
+    justify-content: space-between;
+    margin-top: 100px;
+    padding-top: 10px;
+    padding-bottom: 20px !important;
+
+}
+
+/*Arriére plan de la page*/
+#authentification {
+
+    background-image: url(../images/wine-4813260_1920.jpg);
+    background-repeat: repeat;
+    background-position: center;
+}
+
+.form {
+
+    width: 80%;
+    align-self: center;
+
+}
+
+p.titre_connexion {
+    border-bottom: 3px double !important;
+    font-size: 1.8em !important;
+    font-weight: bold;
+
+}
+
+.form input[type=email] {
+    box-sizing: border-box;
+    width: 80%;
+    padding: 12px;
+    border-radius: 4px;
+    border: 2px solid #c79169;
+    margin-top: -6px;
+    /*      margin-left: 30px;*/
+}
+
+.form input[type=password] {
+    width: 72%;
+    padding: 12px;
+    border-radius: 4px;
+    border: 2px solid #c79169;
+    margin-top: -6px;
+
+
+}
+
+.info_utilisateur .form label {
+    padding: 10px;
+    display: inline-block;
+    float: left;
+    width: 15%;
+    margin-top: -20px;
+    font-size: 17px;
+    white-space: nowrap;
+    color: black;
+    font-family: 'Patua One', cursive;
+    font-weight: bold;
+    text-align: left;
+
+
+
+}
+
+.form p:first-of-type {
+
+
+    text-align: left;
+    color: black;
+    padding-bottom: 20px;
+
+}
+
+.form p:first-of-type span {
+
+    font-size: 12px;
+    color: gray;
+
+}
+
+/*Style et positionnement nouvel utilisateur*/
+p.message {
+
+    flex-direction: row;
+    margin-bottom: 30px;
+    flex-basis: 100%;
+    margin-right: auto;
+    text-align: end;
+
+
+}
+
+/*Mettre créer un compte en gras*/
+.message a {
+
+    font-weight: bold;
+}
+
+.form p,
+.form input {
+    font-family: 'Bentham', serif;
+    font-size: 18px;
+
+}
+
+
+/*Style et positionnement bouton Valider*/
+.form button[name="validerAuthentification"] {
+
+    box-sizing: border-box;
+    background: #c79169;
+    padding: 12px;
+    border: 1px solid antiquewhite;
+    border-radius: 4px;
+    display: inline-block;
+    margin-right: 10px !important;
+    color: white;
+    font-family: 'Bentham', serif;
+    font-size: 1.2rem;
+    margin-top: 6px;
+    flex-direction: row-reverse;
+    width: 80%;
+}
+
+
+
+
+/************************/
+/**Version Mobile********/
 
 @media only screen and (max-width: 44em) {
     label {
@@ -754,7 +1127,7 @@ input[type=number] {
         background-color: #fcf9f9;
     }
 
-
+    /*Dérouler le menu par le click sur l'icone*/
     #toggle:checked + .menu {
         display: block;
 
@@ -763,6 +1136,8 @@ input[type=number] {
     .logo_nav a > img {
         width: 85%;
     }
+
+    /* Page Cellier*/
 
     .description {
         flex-wrap: wrap;
@@ -796,12 +1171,138 @@ input[type=number] {
 
     }
 
-
     .bouteille {
         padding-bottom: 10px;
         padding-top: 10px;
+    }
+
+    /*Page ajouter une nouvelle bouteille*/
+
+    #ajouter_une_bouteille {
+        max-width: 25rem;
+
+    }
+
+    #recherche_catalogue input[name="nom_bouteille"] {
+
+        margin-right: 30px;
+
+    }
+
+    #ajouter_une_bouteille input[type=text],
+    input[type=date],
+    input[type=number] {
+        font-family: 'Bentham', serif;
+        font-size: 15px;
+        float: left;
+        width: 100%;
+        margin-top: -10px;
+
+    }
+
+    #ajouter_une_bouteille label {
+        box-sizing: border-box;
+        padding: 5px;
+        display: inline-block;
+        float: left;
+        text-align: left;
+        width: 100%;
+        margin-top: -6px;
+    }
+
+    #ajouter_une_bouteille button[name="ajouterBouteilleCellier"] {
+
+        margin-top: 15px;
+        margin-right: auto;
+    }
+
+    #ajouter_une_bouteille p:first-of-type {
 
 
+        margin-top: 100px;
+
+    }
+
+    /* fenetre info */
+    .remplir_Champs #fenetre_info {
+        width: 300px;
+        top: 90%;
+        left: 20%;
+    }
+
+    .remplir_Champs {
+        margin-bottom: -70px;
+        font-size: 18px;
+
+    }
+
+    /*Page de modification d'une bouteille*/
+
+    .modifierBouteille {
+        max-width: 25rem;
+
+    }
+
+
+    .modifierBouteille input[name="nom_bouteille"] {
+
+        margin-right: 30px;
+
+    }
+
+    .modifierBouteille input[type=text],
+    input[type=date],
+    input[type=number] {
+        font-family: 'Bentham', serif;
+        font-size: 15px;
+        float: left;
+        width: 100%;
+        margin-top: -10px;
+
+    }
+
+    .modifierBouteille label {
+        box-sizing: border-box;
+        padding: 5px;
+        display: inline-block;
+        float: left;
+        text-align: left;
+        width: 100%;
+        margin-top: -6px;
+    }
+
+    .modifierBouteille button[name="modifierBouteilleCellier"] {
+
+        margin-top: 20px;
+
+    }
+
+    .modifierBouteille p:first-of-type {
+
+
+        margin-top: 100px;
+
+    }
+
+    /* fenetre info */
+    .remplir_Champs #fenetre_info {
+        width: 300px;
+        top: 90%;
+        left: 20%;
 
 
     }
+
+    .remplir_Champs {
+        margin-bottom: -70px;
+        font-size: 18px;
+
+    }
+
+    /*Taille Logo su la page d'authentification*/
+    .connexion a > img {
+        width: 52%;
+    }
+
+
+}

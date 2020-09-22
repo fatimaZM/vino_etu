@@ -257,7 +257,10 @@ class Controler
     }
 
 
-
+  /**
+     * Récupère l'id de la bouteille à supprimer et déclenche la requete sql de suppression.
+     * @return json
+     */
 	private function supprimerBouteille(){
 
 

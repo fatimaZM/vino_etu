@@ -42,7 +42,7 @@
                 <ul class="menu">
                     <li><a href="?requete=accueil">Mon cellier</a></li>
                     <li><a href="?requete=ajouterNouvelleBouteilleCellier">Ajouter une bouteille au cellier</a></li>
-                    <li> <a href="?requete=deconnexion"> déconnexion</a></li>
+                    <li> <a href="?requete=deconnexion"> Déconnexion</a></li>
 
                 </ul>
 

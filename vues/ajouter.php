@@ -2,24 +2,30 @@
 
     <div class="nouvelleBouteille" vertical layout>
         <form id="recherche_catalogue">
-        <input type="text" name="nom_bouteille" placeholder="Rechercher une bouteille dans le catalogue ">
+        <input type="text" name="nom_bouteille" placeholder="Rechercher une bouteille">
             </form>
         <ul class="listeAutoComplete">
         </ul>
-        
+       
         <div id="ajouter_une_bouteille">
+             <div class="remplir_Champs">
+            Ajouter une nouvelle bouteille au cellier <i class="fas fa-info-circle"></i>
+            <span id="fenetre_info">Faites une recherche d'une bouteille dans le champs de recherche à droite et la sélectionner puis compléter le formulaire pour l'ajouter au cellier</span>
+        </div>
+            <p>Veuillez remplir les champs suivants <br>
+                <span>* Champs obligatoires</span></p>
             <p><label>Nom   </label><span name = "nom" data-id_cellier="<?= $_SESSION['info_utilisateur']['id']?>" class="nom_bouteille"></span></p>
-            <p><label>Millesime   </label><input type="text" name="millesime"></p>
+            <p><label>Millesime   </label><input type="text" name="millesime" placeholder="Entrer le millesime"></p>
             <span class='erreur millesime'></span>
-            <p><label>Quantite   </label><input input type="text" name="quantite" value="1"></p>
+            <p><label>Quantite *   </label><input input type="text" name="quantite" value="1"></p>
             <span class='erreur quantite'></span>
-            <p><label>Date achat   </label><input type="date" name="date_achat"></p>
+            <p><label>Date achat *   </label><input type="date" name="date_achat"></p>
             <span class='erreur date_achat'></span>
-            <p><label>Prix   </label><input input type=number name="prix"></p>
+            <p><label>Prix *   </label><input input type=number name="prix" placeholder="Entrer le prix"></p>
             <span class='erreur prix'></span>
-            <p><label>Garde   </label><input input type="text" name="garde_jusqua"></p>
+            <p><label>Garde   </label><input input type="text" name="garde_jusqua" placeholder="Entrer la date de conservation"></p>
             <span class='erreur garde_jusqua'></span>
-            <p><label>Notes </label><input input type="text" name="notes"></p>
+            <p><label>Notes </label><input input type="text" name="notes" placeholder="Entrer une note"></p>
             <span class='erreur notes'></span>
        
         <button name="ajouterBouteilleCellier">Ajouter la bouteille</button>

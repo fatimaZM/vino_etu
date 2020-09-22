@@ -1,31 +1,31 @@
-<div class= "cellier">
-<header> 
+<div class="cellier">
+    <header>
 
 
-				
-                    <!-- Recherche dans le celier -->
-    <form id="recherche_cellier" method="post">
-        <div class="rechercheBouteilleCellier" vertical layout>
-            
-            <input type="text" class="nom_bouteille_cellier" name="nom_bouteille_cellier" placeholder="Trouver bouteille par id,nom, pays " value="">
-            <button type="submit" name="recherche" value="Rechercher"><i class="fa fa-search"></i></button>
-            <ul class="listeAutoComplete">
-            </ul>
-        </div>
-    </form>
-				
-			
+
+        <!-- Recherche dans le celier -->
+        <form id="recherche_cellier" method="post">
+            <div class="rechercheBouteilleCellier" vertical layout>
+
+                <input type="text" class="nom_bouteille_cellier" name="nom_bouteille_cellier" placeholder="Trouver bouteille par id,nom, pays " value="">
+                <button type="submit" name="recherche" value="Rechercher"><i class="fa fa-search"></i></button>
+                <ul class="listeAutoComplete">
+                </ul>
+            </div>
+        </form>
+
+
     </header>
-<div class ="tri_cellier">
-   
-    <form id="tri" method="post">
-        
-        <?php
+    <div class="tri_cellier">
+
+        <form id="tri" method="post">
+
+            <?php
         //Vérifie si un champs de tri "type" a déja été appliqué
         //Si oui le laisse sélectionné au submit ou refresh
         if (isset($_POST["type"])) {
         ?>
-            
+
             <select name="type">
 
                 <option <?php if (!(strcmp("nom", $_POST["type"]))) {
@@ -44,11 +44,11 @@
                             echo "selected=\"selected\"";
                         } ?>value="date_achat">Date d'achat</option>
             </select>
-        <?php
+            <?php
             //Si aucun champs sélectionné 
         } else {
         ?>
-            
+
             <select name="type">
                 <option value="" disabled selected>Choisir un tri</option>
                 <option value="nom">Nom</option>
@@ -57,13 +57,13 @@
                 <option value="quantite">Quantité</option>
                 <option value="date_achat">Date d'achat</option>
             </select>
-        <?php
+            <?php
         }
         //Vérifie si un champs de tri "ordre" a déja été appliqué
         //Si oui le laisse sélectionné au submit ou refresh
         if (isset($_POST["ordre"])) {
         ?>
-           
+
             <select name="ordre">
 
                 <option <?php if (!(strcmp("ASC", $_POST["ordre"]))) {
@@ -73,86 +73,78 @@
                             echo "selected=\"selected\"";
                         } ?>value="DESC">Décroissant</option>
             </select>
-        <?php
+            <?php
             //Si aucun champs sélectionné
         } else {
         ?>
-           
+
             <select name="ordre">
 
                 <option value="ASC" selected>Croissant</option>
                 <option value="DESC">Décroissant</option>
             </select>
-        <?php
+            <?php
         }
         ?>
-        <input type="submit" name="tri" value="Triez"></form>
-</div>
+            <input type="submit" name="tri" value="Triez"></form>
+    </div>
 
-<div class="container_bouteille">    
-    <?php
+    <div class="container_bouteille">
+        <?php
     if ($data == null) {
     ?><h4>La recherche n'a donnée aucun résultat</h4>
-   
-    <?php
+
+        <?php
     }?>
 
-    
-    <?php
+
+        <?php
     foreach ($data as $cle => $bouteille) {
     ?>
- <div class="container_bouteille">
-    <div class="bouteille" data-quantite="">
-        <article class="vignette">
-            
-                <div class="img">
-                    <img src="https:<?php echo $bouteille['image'] ?>">
-                </div>
-            
-            <div class="description">
-                
-                <h4 class="nom"><?php echo $bouteille['nom'] ?></h4>
-                
-                <p class="quantite">Quantité : <span><?php echo $bouteille['quantite'] ?></span></p>
-                <div class ="description_colunne1">
-                <p class="pays"><i class='fas fa-flag'></i>  <?php echo  $bouteille['pays'] ?></p>
-                <p class="type"><i class='fas fa-wine-bottle'></i>   <?php echo $bouteille['type'] ?></p>
-                <p class="notes"><i class='far fa-sticky-note'></i>  <?php echo  $bouteille['notes'] ?></p>
-                </div>
-                <div class ="description_colunne2">
-                <p class="millesime"><i class='fas fa-wine-glass-alt'></i>  <?php echo  $bouteille['millesime'] ?></p>
+        <div class="container_bouteille">
+            <div class="bouteille" data-quantite="">
+                <article class="vignette">
 
-<!--                <p><span>★★☆☆☆</span></p>-->
-
-                <p class="date_achat"><i class='far fa-calendar-alt'></i>  <?php echo  $bouteille['date_achat'] ?></p>
-
-                <p><a href="<?php echo  $bouteille['url_saq'] ?>"><i class="fas fa-external-link-square-alt"></i>    Voir SAQ</a></p>
+                    <div class="img">
+                        <img src="https:<?php echo $bouteille['image'] ?>">
                     </div>
+
+                    <div class="description">
+
+                        <h4 class="nom"><?php echo $bouteille['nom'] ?></h4>
+
+                        <p class="quantite">Quantité : <span><?php echo $bouteille['quantite'] ?></span></p>
+                        <div class="description_colunne1">
+                            <p class="pays"><i class='fas fa-flag'></i> <?php echo  $bouteille['pays'] ?></p>
+                            <p class="type"><i class='fas fa-wine-bottle'></i> <?php echo $bouteille['type'] ?></p>
+                            <p class="notes"><i class='far fa-sticky-note'></i> <?php echo  $bouteille['notes'] ?></p>
+                        </div>
+                        <div class="description_colunne2">
+                            <p class="millesime"><i class='fas fa-wine-glass-alt'></i> <?php echo  $bouteille['millesime'] ?></p>
+
+
+
+                            <p class="date_achat"><i class='far fa-calendar-alt'></i> <?php echo  $bouteille['date_achat'] ?></p>
+
+                            <p><a href="<?php echo  $bouteille['url_saq'] ?>"><i class="fas fa-external-link-square-alt"></i> Voir SAQ</a></p>
+                        </div>
+                    </div>
+
+                    <div class="options" data-id_bouteille="<?php echo $bouteille['vino__bouteille_id'] ?>" data-id_cellier="<?php echo $bouteille['vino__cellier_id'] ?>">
+
+                        <button class='btnModifier'><a href="?requete=modifierBouteilleCellier&id=<?php echo $bouteille['id'] ?>&cellier=<?php echo $bouteille['vino__cellier_id'] ?>">Modifier</a></button>
+                        <button class='btnAjouter'>Ajouter</button>
+                        <button class='btnBoire'>Boire</button>
+                        <button class='btnSupprimer'><a href="?requete=supprimerBouteille&id=<?php echo $bouteille['id'] ?>&cellier=<?php echo $bouteille['vino__cellier_id'] ?>">Supprimer</a></button>
+
+                    </div>
+                </article>
             </div>
 
-            <div class="options" data-id_bouteille="<?php echo $bouteille['vino__bouteille_id'] ?>" data-id_cellier="<?php echo $bouteille['vino__cellier_id'] ?>">
-
-                <button class='btnModifier'><a href="?requete=modifierBouteilleCellier&id=<?php echo $bouteille['id'] ?>&cellier=<?php echo $bouteille['vino__cellier_id'] ?>">Modifier</a></button>
-                <button class='btnAjouter'>Ajouter</button>
-                <button class='btnBoire'>Boire</button>
-                <button class='btnSupprimer'><a href="?requete=supprimerBouteille&id=<?php echo $bouteille['id'] ?>&cellier=<?php echo $bouteille['vino__cellier_id'] ?>">Supprimer</a></button>
-
-            </div>
-        </article>
-    </div>
-
-       </div>
-<!--</div>-->
-    <div class="modal">
-        <div class="contenu_modal">
-            <p class="msg_sql"></p>
-            <input type="button" class="confirmer_suppression" value="Confirmer la suppression">
-
-            <input type="button" class="retour_cellier" value="Retour au cellier">
         </div>
 
-    </div>
-    <?php
+
+        <?php
     }
     ?>
-</div>
+    </div>

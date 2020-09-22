@@ -478,28 +478,26 @@ class Bouteille extends Modele
 		}
 	}
 
-	public function ajouterUtilisateur(){
-
-
-	}
-
-	public function seConnecter(){
-
-	}
-
+    	/**
+	 * Cette méthode supprime une bouteille selon l'id dans le cellier
+	 * 
+	 * @param int $id id de la bouteille
+	 * 
+	 * @return Boolean Succès ou échec de la suppression.
+	 */
 	public function supprimerBouteilleCellier($id)
 	{
        
 		$requete = "DELETE FROM ". self::CELLIER_BOUTEILLE . " WHERE vino__bouteille_id =".$id. " AND vino__cellier_id = 2";
 
 		if($stmt = $this->_db->prepare($requete)){ 
-		     $stmt->execute();
-		 
+			  $stmt->execute();
+			  return true;
 		}
 		else{  
-		 var_dump($this->_db->error);
+		      var_dump($this->_db->error);
 
-			return false;
+			   return false;
 
 		}
 	}
