@@ -44,7 +44,7 @@
             <div class=info_utilisateur vertical layout>
 
                 <div class="form">
-                    <p class="titre_connexion">Connexion au compte <br>
+                    <p class="titre_connexion">Connexion au Compte <br>
                         <span>* Champs obligatoires</span></p>
                     <p class="message">Nouvel utilisateur?<a href="?requete=ajouterNouvelUtilisateur"> Créer un compte</a></p>
                     <form class="authentification-form" method="post">

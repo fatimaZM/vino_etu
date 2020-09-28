@@ -1,17 +1,18 @@
 <div class="ajouter">
 
     <div class="nouvelleBouteille" vertical layout>
-        <form id="recherche_catalogue">
-        <input type="text" name="nom_bouteille" placeholder="Rechercher une bouteille">
-            </form>
-        <ul class="listeAutoComplete">
-        </ul>
+        
        
         <div id="ajouter_une_bouteille">
              <div class="remplir_Champs">
             Ajouter une nouvelle bouteille au cellier <i class="fas fa-info-circle"></i>
-            <span id="fenetre_info">Faites une recherche d'une bouteille dans le champs de recherche à droite et la sélectionner puis compléter le formulaire pour l'ajouter au cellier</span>
+            <span id="fenetre_info">Faites une recherche d'une bouteille dans le champs de recherche et la sélectionner puis compléter le formulaire pour l'ajouter au cellier.</span>
         </div>
+            <form id="recherche_catalogue">
+        <input type="text" name="nom_bouteille" placeholder="Rechercher une bouteille">
+            </form>
+        <ul class="listeAutoComplete">
+        </ul>
             <p>Veuillez remplir les champs suivants <br>
                 <span>* Champs obligatoires</span></p>
             <p><label>Nom   </label><span name = "nom" data-id_cellier="<?= $_SESSION['info_utilisateur']['id']?>" class="nom_bouteille"></span></p>

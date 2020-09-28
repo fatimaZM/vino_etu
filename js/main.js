@@ -155,6 +155,7 @@ window.addEventListener("load", function () {
                         console.log(response);
 
                         response.forEach(function (element) {
+                            console.log(element);
                             liste.innerHTML +=
                                 "<li data-id='" + element.id + "'>" + element.nom + "</li>";
                         });
@@ -401,6 +402,7 @@ window.addEventListener("load", function () {
                 courriel: document.querySelector("[name='courriel']").value,
                 mdp: document.querySelector("[name='mdp']").value
             };
+
             let requete = new Request(
                 BaseURL + "index.php?requete=authentification", {
                     method: "POST",
@@ -416,15 +418,86 @@ window.addEventListener("load", function () {
                     }
                 })
                 .then((response) => {
-                    if (response.data !== null) { //la requête à fonctionnée, redirection vers la page du cellier de l'utilisateur connecté :
-                        window.location = BaseURL + "index.php?requete=afficherCellier&id_utilisateur=" + response.data.id_utilisateur;
-                        console.log("aller vers le cellier");
 
-                    } else if (response.data == null && response.erreurs == null) { //la requete à focntionnée mais n'a rien retournée
+                    //la requête à fonctionnée, redirection vers la page du cellier de l'utilisateur connecté :
+                    if (response.data !== null) { 
+                        window.location = BaseURL + "index.php?requete=afficherCellier&id_utilisateur=" + response.data.id_utilisateur;
+
+                    //la requete à fonctionnée mais n'a rien retournée
+                    } else if (response.data == null && response.erreurs == null) { 
                         document.querySelector(".identifiants_inconnus").innerHTML = "Aucun compte utlisateur lié aux identifiants renseignés";
+
+                    //il y a des erreurs de validation du formulaire :
                     } else if (response.erreurs !== null) {
-                        document.querySelector(".courriel").innerHTML =
-                            response.erreurs.courriel || "";
+                        document.querySelector(".courriel").innerHTML = response.erreurs.courriel || "";
+                        document.querySelector(".mdp").innerHTML = response.erreurs.mdp || "";
+                    }
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
+        });
+    }
+
+    //Comportement du bouton "créer compte" de la page creeCompte.php :
+    let btnCreerCompte = document.querySelector(".confirmerCompte");
+    if (btnCreerCompte) {
+        btnCreerCompte.addEventListener("click", function (evt) {
+            evt.preventDefault();
+            var utilisateur = {
+                prenom: document.querySelector("[name='prenom']").value,
+                nom: document.querySelector("[name='nom']").value,
+                courriel: document.querySelector("[name='courriel']").value,
+                mdp: document.querySelector("[name='mdp']").value,
+            };
+            let requete = new Request(
+                BaseURL + "index.php?requete=creerCompte",
+                { method: "POST", body: JSON.stringify(utilisateur) }
+            );
+
+            fetch(requete)
+                .then((response) => {
+                    if (response.status === 200) {
+                        return response.json();
+                    } else {
+                        throw new Error("Erreur");
+                    }
+                })
+                .then((response) => {
+                    //si la création de compte s'est bien passée, authentification directe du nouvel utilisateur :
+                    if (response.data === true) {
+                        var param = {
+                            courriel: response.email,
+                            mdp:response.mdp
+                        };
+                        // let requete2 = new Request(
+                        //     BaseURL + "index.php?requete=authentification",
+                        //     { method: "POST", body: JSON.stringify(param) });
+                        // return fetch(requete2);
+
+                    //affichage des erreurs renvoyées par la vérification des données du formulaire :
+                    } else if (response.erreurs != null) {
+                        document.querySelector('.prenom').innerHTML = response.erreurs.prenom  || '';
+                        document.querySelector('.nom').innerHTML = response.erreurs.nom  || '';
+                        document.querySelector('.courriel').innerHTML = response.erreurs.courriel  || '';
+                        document.querySelector('.mdp').innerHTML = response.erreurs.mdp  || '';
+
+                    //affichage d'une erreur si le courriel est déjà dans la base de données :
+                    } else if (response.existant != null) {
+                        document.querySelector('.resultat').innerHTML = "Il existe déjà un compte utilisateur lié à ce courriel" || '';
+                    }
+                    console.log(response);
+                })
+            
+               
+
+                fetch(requete2)
+                .then((response2) =>{
+                    //si l'authentification du nouvel utilisateur s'est bien passée, redirection vers la page d'accueil (son cellier)
+                    if (response2.status === 200) {
+                        window.location.href = BaseURL;
+                    } else {
+                        throw new Error("Erreur");
                     }
                 })
                 .catch((error) => {
@@ -482,12 +555,25 @@ window.addEventListener("load", function () {
     //Évenement lié à la bulle info sur la page ajouter et modifier une bouteille
     // Ajoute la classe apparait pour rendre la bulle visible
 
-    document.querySelector(".remplir_Champs").addEventListener("click", function () {
+    let bulle = document.querySelector(".remplir_Champs");
+    if(bulle) {
+        bulle.addEventListener("click", function () {
+    
+            let info = document.getElementById("fenetre_info");
+            info.classList.toggle("apparait");
+    
+    
+        });
+    }
 
-        let info = document.getElementById("fenetre_info");
-        info.classList.toggle("apparait");
+    let menu = document.querySelector(".menu");
+    let lienNav = menu.querySelectorAll("li");
+    lienNav.forEach(function (element) {
+        element.addEventListener("click", function () {
+            console.log("clické");
 
-
+            element.classList.add("active");
+    
+        });
     });
-
 })

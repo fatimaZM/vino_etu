@@ -23,8 +23,6 @@ a:link {
     text-decoration: none;
 }
 
-
-
 /* Établir une marge intérieure
 	qui aligne mieux les puces */
 ul {
@@ -38,14 +36,8 @@ ul > * + * {
 
 /*---------------------------------------*/
 
-/* Structure */
-/* Tout ce qui est de l'ordre de la structure maîtresse */
-/* Marges, dimensions, positionnement, etc. */
-
 html,
 body {
-
-    background-color: #f5f2f2;
     font-family: "Roboto", "RobotoDraft", sans-serif;
     font-size: 95%;
     width: 100%;
@@ -54,11 +46,16 @@ body {
     display: flex;
     flex-wrap: wrap;
     height: 100%;
+    /*    backdrop-filter: <filter-function> [<filter-function>]* | none;*/
+    background: url("../images/tree-4599374.jpg");
+    align-items: stretch;
+    background-size: cover;
 }
 
 body {
 
     margin: 0;
+    height: 100%;
 }
 
 /* Retirer les marges par défaut 
@@ -113,9 +110,10 @@ body > nav > ul {
 }
 
 /*donner une taille a l'icone mon compte */
-.header aside a i {
+.header aside i {
 
-    font-size: 15px;
+    font-size: 22px;
+    color: white;
 }
 
 
@@ -123,14 +121,10 @@ body > main {
     /* Permettre l'occupation totale de l'espace
 		sur fenêtre moyenne ou étroite */
     flex-grow: 1;
-    background: url("../images/tree-4599374_1920.jpg");
-    background-repeat: no-repeat;
-    background-size: cover;
+
     padding-bottom: 50px;
 
 }
-
-
 
 /* Rythme pour les sections de la
 	navigation principale */
@@ -153,15 +147,20 @@ body > nav > * + * {
 
 }
 
-.menu li a {
+a {
+
+    color: black;
+}
+
+    {
     clear: right;
     text-decoration: none;
-    color: gray;
     margin: 0 10px;
     line-height: 70px;
     font-family: 'Patua One', cursive;
     font-size: 1.2rem;
     border-color: white;
+    color: black
 }
 
 .menu li a:hover {
@@ -200,6 +199,8 @@ label {
     height: 90px;
     width: 100%;
     display: flex;
+    margin-left: 0;
+    margin-right: 0;
 
 }
 
@@ -215,7 +216,17 @@ label {
 
 }
 
-/*cellier*/
+.active {
+
+    color: white !important;
+    text-decoration: underline !important;
+}
+
+
+
+/*********************/
+/****Page cellier***/
+/********************/
 
 /*positionnement du champs recherche*/
 
@@ -228,6 +239,7 @@ body > main > div > header {
     justify-content: flex-end;
     flex-wrap: wrap;
     height: 40px;
+    flex-shrink: 0;
 
 }
 
@@ -238,6 +250,8 @@ main .bouteille {
     margin: auto;
     margin-top: 20px;
     background-color: #faf7eb;
+    padding-bottom: 10px;
+
 
 }
 
@@ -363,6 +377,7 @@ button a:visited {
     border-radius: 2px;
     border: white;
     font-size: 12px;
+
 }
 
 .options button a {
@@ -397,8 +412,10 @@ button a:visited {
     border-radius: 2px;
     background: #c79169;
     border: none;
+    background-position: center;
 
 }
+
 
 #recherche_cellier {
     box-sizing: border-box;
@@ -413,8 +430,8 @@ button a:visited {
 .cellier .listeAutoComplete {
 
     width: 300px;
-    background-color: antiquewhite;
-    color: white;
+    background-color: #1d1d1d;
+    text-align: center;
     position: absolute;
     border-radius: 5px;
     z-index: 1;
@@ -426,13 +443,15 @@ button a:visited {
 }
 
 .cellier .listeAutoComplete li {
-    color: black;
+    color: #ffffff;
     text-decoration: none;
-    list-style-type: none;
+    list-style-type: square !important;
+    list-style-position: inside;
 }
 
 .cellier .listeAutoComplete li a {
     font-family: 'Bentham', serif;
+    text-align: center;
 }
 
 
@@ -497,13 +516,14 @@ input[name="tri"] {
 /*Footer*/
 footer {
     display: flex;
-    bottom: 0px;
+    margin-bottom: 0px !important;
     width: 100%;
     padding-top: 20px;
     justify-content: center;
     background-color: #0d0d0d;
     color: #ece4cc;
     height: 50px;
+    align-self: flex-end;
 
 }
 
@@ -513,9 +533,15 @@ footer p {
     font-size: 10px;
 }
 
+footer a {
+
+    color: #faf7eb;
+}
+
 /*texte en cas d'erreur sur un champs*/
 .erreur {
     color: red;
+    text-align: center;
 }
 
 .modal {
@@ -606,7 +632,7 @@ p.msg_sql {
     padding: 10px;
     display: flex;
     color: white;
-    justify-content: flex-end;
+    justify-content: center;
     flex-wrap: wrap;
     height: 40px;
     margin-top: 15px;
@@ -717,34 +743,33 @@ input[type=number] {
 .ajouter .listeAutoComplete {
 
     width: 300px;
-    background-color: antiquewhite;
+    background-color: #1d1d1d;
     text-align: center;
     font-size: 15px;
     border-radius: 5px;
+    padding-left: 5px;
+    padding-right: 5px;
     position: absolute;
-    z-index: 999;
-    top: 190px;
+    z-index: 9999;
+    top: 370px;
     overflow: auto;
-    right: 22px;
+    right: 490px;
     cursor: pointer;
 
 }
 
 .ajouter .listeAutoComplete li {
-    color: #000000;
+    color: #ffffff;
     text-decoration: none;
-    list-style-type: none;
+    list-style-type: square !important;
+    list-style-position: inside;
 }
 
 .ajouter .listeAutoComplete li a {
     font-family: 'Bentham', serif;
 }
 
-.ajouter .listeAutoComplete li a:hover {
 
-
-    font-weight: bold !important;
-}
 
 
 /*Bulle Infos*/
@@ -774,13 +799,11 @@ input[type=number] {
     top: 125%;
     left: 70%;
 
-
 }
 
 /* ajouter cette classe avec son style lors du clique*/
 .apparait {
     visibility: visible !important;
-
     -webkit-animation: fadeIn 1s;
     animation: fadeIn 1s;
 }
@@ -806,10 +829,10 @@ input[type=number] {
     }
 }
 
-/*fin fentre info*/
 
-/***************************************/
-/*Page Modification d'une bouteille*/
+
+/**************************************/
+/* Page modifier une bouteille*/
 /**************************************/
 
 
@@ -831,7 +854,6 @@ input[type=number] {
     padding: 10px;
     justify-content: space-between;
     margin-top: 100px;
-    /*    margin-top: -20px;*/
     padding-top: 30px;
 
 }
@@ -840,7 +862,6 @@ input[type=number] {
 
     width: 80%;
     margin: auto;
-
     text-align: center;
 }
 
@@ -912,7 +933,7 @@ p.nom_bouteille {
 
 
 
-/*Style et positionnement bouton Ajouter bouteille*/
+/*Style et positionnement bouton Modifier bouteille*/
 .modifierBouteille button[name="modifierBouteilleCellier"] {
 
     box-sizing: border-box;
@@ -1082,13 +1103,511 @@ p.message {
     width: 100%;
 }
 
+/*****************************/
+/****Page Créer un compte****/
+/****************************/
+
+/*logo*/
+.connexion a > img {
+
+    margin-top: 60px;
+    align-content: flex-start;
+    width: 51%;
+    opacity: 1;
+    flex-shrink: 0;
+    margin-top: -15px;
+
+}
+
+/*style et positionnement du formulaire d'authentification*/
+.creer-compte {
+
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    flex-basis: 80%;
+    max-width: 35rem;
+    padding: 20px !important;
+    padding-bottom: 30px !important;
+    box-sizing: border-box;
+    border-radius: 5px;
+    background-color: #ece4cc;
+    padding: 10px;
+    margin-top: 100px;
+
+
+}
+
+/*Arriére plan de la page*/
+#creer-compte {
+
+    background-image: url(../images/wine-4813260_1920.jpg);
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.container {
+
+    width: 80%;
+    align-self: center;
+
+}
+
+.creer-compte h1 {
+    border-bottom: 3px double !important;
+    font-family: 'Bentham', serif;
+    padding-bottom: 14px;
+
+}
+
+.creer-compte input[type=email] {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 12px;
+    border-radius: 4px;
+    border: 2px solid #c79169;
+    margin-top: -30px;
+}
+
+.creer-compte input[type=password] {
+    width: 92%;
+    padding: 12px;
+    border-radius: 4px;
+    border: 2px solid #c79169;
+    margin-top: -30px;
+
+}
+
+.creer-compte input[type=text] {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 12px;
+    border-radius: 4px;
+    border: 2px solid #c79169;
+    margin-top: -30px;
+
+}
+
+.creer-compte label {
+    padding: 10px;
+    display: inline-block;
+    float: left;
+    width: 15%;
+    margin-top: -30px;
+    font-size: 17px;
+    white-space: nowrap;
+    color: black;
+    font-family: 'Patua One', cursive;
+    font-weight: bold;
+    text-align: left;
+
+}
+
+.creer-compte p:first-of-type {
+    text-align: left;
+    color: black;
+    padding-top: 20px;
+
+}
+
+.container span {
+
+    font-size: 12px;
+    color: gray;
+    margin-top: -20px;
+
+}
 
 
 
-/************************/
-/**Version Mobile********/
 
-@media only screen and (max-width: 44em) {
+.creer-compte p,
+.creer-compte input {
+    font-family: 'Bentham', serif;
+    font-size: 18px;
+
+}
+
+.confirmer a {
+
+    font-weight: bold;
+    font-family: 'Bentham', serif;
+    font-size: 1.2em;
+    text-decoration: underline;
+    float: right;
+    padding-top: 5px;
+}
+
+
+/*Style et positionnement bouton créer un compte*/
+.creer-compte button.confirmerCompte {
+
+    box-sizing: border-box;
+    background: #c79169;
+    padding: 12px;
+    border: 1px solid antiquewhite;
+    border-radius: 4px;
+    display: inline-block;
+    margin-right: 10px !important;
+    color: white;
+    font-family: 'Bentham', serif;
+    font-size: 1.2rem;
+    margin-top: 6px;
+    flex-direction: row-reverse;
+    width: 100%;
+}
+
+/********************************/
+/*********Page Catalogue********/
+/******************************/
+
+
+
+
+/*liste recherche autocomplte*/
+.catalogue .listeAutoComplete {
+
+    width: 300px;
+    background-color: #1d1d1d;
+    text-align: center;
+    position: absolute;
+    border-radius: 5px;
+    z-index: 1;
+    top: 185px;
+    overflow: auto;
+    right: 22px;
+    cursor: pointer;
+
+}
+
+.catalogue .listeAutoComplete li {
+    color: #ffffff;
+    text-decoration: none;
+    list-style-type: square !important;
+    list-style-position: inside;
+}
+
+.catalogue .listeAutoComplete li a {
+    font-family: 'Bentham', serif;
+    text-align: center;
+}
+
+
+
+/*****************************/
+/******Version Mobile********/
+/****************************/
+
+@media only screen and (max-width: 600px) {
+
+    /* *****Entete******/
+    label {
+        display: block;
+        cursor: pointer;
+        position: relative;
+        z-index: 999;
+    }
+
+    /**mettre le menu en premier plan*/
+    .nav {
+
+        position: relative;
+        z-index: 1;
+
+    }
+
+    .menu {
+        position: absolute;
+        text-align: center;
+        width: 100%;
+        display: none;
+        background-color: rgba(250, 235, 215, 0.80);
+        right: 10px;
+
+
+    }
+
+    .menu li a {
+        display: block;
+        border-bottom: 1px solid white;
+        margin: 0;
+        color: white;
+    }
+
+    .menu li a :hover {
+        background-color: #fcf9f9;
+    }
+
+    /*Dérouler le menu par le click sur l'icone*/
+    #toggle:checked + .menu {
+        display: block;
+
+    }
+
+    .logo_nav a > img {
+        width: 85%;
+    }
+
+    /**************************/
+    /*******Page Cellier*******/
+    /**************************/
+
+
+    /*formulaire de  tri*/
+
+    select {
+        flex-basis: calc(20% - 10px) !important;
+
+
+    }
+
+    /*boutton triez*/
+    input[name="tri"] {
+
+        flex-basis: calc(20% - 10px) !important;
+
+
+    }
+
+
+    .description {
+        flex-wrap: wrap;
+
+
+    }
+
+    .description_colunne2 {
+
+        width: 100%;
+        margin-left: 0;
+
+    }
+
+    .description_colunne1 {
+
+        width: 100%;
+    }
+
+    .description .nom {
+        flex-basis: 100%;
+        font-size: 1.4em;
+        margin-bottom: 2px;
+        text-align: left;
+        margin-left: -20px;
+
+    }
+
+    .description .quantite {
+
+        margin-bottom: 3px;
+
+
+    }
+
+    .bouteille {
+        padding-bottom: 10px;
+        padding-top: 10px;
+
+    }
+
+    /*Positionnement des informations et l'image des bouteilles*/
+    main .bouteille {
+
+        max-width: 30em;
+        height: auto;
+    }
+
+
+
+    /*Positionnement des boutons*/
+    .options {
+
+        text-align: center;
+
+    }
+
+    /**************************************/
+    /* Page ajouter une nouvelle bouteille*/
+    /**************************************/
+
+    #ajouter_une_bouteille {
+        max-width: 25rem;
+
+    }
+
+    #recherche_catalogue input[name="nom_bouteille"] {
+
+        margin-right: 30px;
+
+    }
+
+    #recherche_catalogue {
+
+
+        margin-top: 100px;
+        margin-left: 10px;
+
+
+    }
+
+    #ajouter_une_bouteille input[type=text],
+    input[type=date],
+    input[type=number] {
+        font-family: 'Bentham', serif;
+        font-size: 15px;
+        float: left;
+        width: 100%;
+        margin-top: -10px;
+
+    }
+
+    #ajouter_une_bouteille label {
+        box-sizing: border-box;
+        padding: 5px;
+        display: inline-block;
+        /* float: left; */
+        text-align: left;
+        width: 100%;
+        margin-top: -6px;
+    }
+
+    #ajouter_une_bouteille button[name="ajouterBouteilleCellier"] {
+
+        margin-top: 15px;
+        margin-right: auto;
+    }
+
+    #ajouter_une_bouteille p:first-of-type {
+
+
+        margin-top: 20px;
+
+    }
+
+    .ajouter .listeAutoComplete {
+
+
+        top: 360px;
+
+        right: 90px;
+
+    }
+
+    /* fenetre info */
+    .remplir_Champs #fenetre_info {
+        width: 300px;
+        top: 90%;
+        left: 10%;
+    }
+
+    .remplir_Champs {
+        margin-bottom: -70px;
+        font-size: 18px;
+
+    }
+
+    /**************************************/
+    /**** Page modifier une bouteille******/
+    /**************************************/
+
+    .modifierBouteille {
+        max-width: 25rem;
+
+    }
+
+
+    .modifierBouteille input[name="nom_bouteille"] {
+
+        margin-right: 30px;
+
+    }
+
+    .modifierBouteille input[type=text],
+    input[type=date],
+    input[type=number] {
+        font-family: 'Bentham', serif;
+        font-size: 15px;
+        float: left;
+        width: 100%;
+        margin-top: -10px;
+
+    }
+
+    .modifierBouteille label {
+        box-sizing: border-box;
+        padding: 5px;
+        display: inline-block;
+        /* float: left; */
+        text-align: left;
+        width: 100%;
+        margin-top: -6px;
+    }
+
+    .modifierBouteille button[name="modifierBouteilleCellier"] {
+
+        margin-top: 20px;
+
+    }
+
+    .modifierBouteille p:first-of-type {
+
+
+        margin-top: 100px;
+
+    }
+
+    /* fenetre info */
+    .remplir_Champs #fenetre_info {
+        width: 300px;
+        top: 90%;
+        left: 20%;
+
+
+    }
+
+    .remplir_Champs {
+        margin-bottom: -70px;
+        font-size: 18px;
+
+    }
+
+    /**************************************/
+    /******Page authentification************/
+    /**************************************/
+
+    /*Taille Logo su la page d'authentification*/
+    .connexion a > img {
+        width: 52%;
+    }
+
+    /*réduire la taille du contenaire du formulaire*/
+    .info_utilisateur {
+
+        max-width: 25rem;
+
+    }
+
+    /*réduire la taille du texte*/
+    p.message {
+
+        text-align: left;
+        font-size: 1.22em;
+    }
+
+    .creer-compte {
+        max-width: 25rem;
+    }
+
+    .creer-compte input[type=password] {
+        width: 100%%;
+
+    }
+
+}
+
+@media only screen and (max-width: 900px) {
+
+    /* *****Entete******/
     label {
         display: block;
         cursor: pointer;
@@ -1135,187 +1654,6 @@ p.message {
 
     .logo_nav a > img {
         width: 85%;
-    }
-
-    /* Page Cellier*/
-
-    .description {
-        flex-wrap: wrap;
-
-    }
-
-    .description_colunne2 {
-
-        width: 40%;
-        margin-left: 20px;
-
-    }
-
-    .description_colunne1 {
-
-        width: 40%;
-    }
-
-    .description .nom {
-        flex-basis: 80%;
-        font-size: 1.4em;
-        margin-bottom: 2px;
-        clear: both;
-
-    }
-
-    .description .quantite {
-
-        margin-bottom: 3px;
-
-
-    }
-
-    .bouteille {
-        padding-bottom: 10px;
-        padding-top: 10px;
-    }
-
-    /*Page ajouter une nouvelle bouteille*/
-
-    #ajouter_une_bouteille {
-        max-width: 25rem;
-
-    }
-
-    #recherche_catalogue input[name="nom_bouteille"] {
-
-        margin-right: 30px;
-
-    }
-
-    #ajouter_une_bouteille input[type=text],
-    input[type=date],
-    input[type=number] {
-        font-family: 'Bentham', serif;
-        font-size: 15px;
-        float: left;
-        width: 100%;
-        margin-top: -10px;
-
-    }
-
-    #ajouter_une_bouteille label {
-        box-sizing: border-box;
-        padding: 5px;
-        display: inline-block;
-        float: left;
-        text-align: left;
-        width: 100%;
-        margin-top: -6px;
-    }
-
-    #ajouter_une_bouteille button[name="ajouterBouteilleCellier"] {
-
-        margin-top: 15px;
-        margin-right: auto;
-    }
-
-    #ajouter_une_bouteille p:first-of-type {
-
-
-        margin-top: 100px;
-
-    }
-
-    /* fenetre info */
-    .remplir_Champs #fenetre_info {
-        width: 300px;
-        top: 90%;
-        left: 20%;
-    }
-
-    .remplir_Champs {
-        margin-bottom: -70px;
-        font-size: 18px;
-
-    }
-
-    /*Page de modification d'une bouteille*/
-
-    .modifierBouteille {
-        max-width: 25rem;
-
-    }
-
-
-    .modifierBouteille input[name="nom_bouteille"] {
-
-        margin-right: 30px;
-
-    }
-
-    .modifierBouteille input[type=text],
-    input[type=date],
-    input[type=number] {
-        font-family: 'Bentham', serif;
-        font-size: 15px;
-        float: left;
-        width: 100%;
-        margin-top: -10px;
-
-    }
-
-    .modifierBouteille label {
-        box-sizing: border-box;
-        padding: 5px;
-        display: inline-block;
-        float: left;
-        text-align: left;
-        width: 100%;
-        margin-top: -6px;
-    }
-
-    .modifierBouteille button[name="modifierBouteilleCellier"] {
-
-        margin-top: 20px;
-
-    }
-
-    .modifierBouteille p:first-of-type {
-
-
-        margin-top: 100px;
-
-    }
-
-    /* fenetre info */
-    .remplir_Champs #fenetre_info {
-        width: 300px;
-        top: 90%;
-        left: 20%;
-
-
-    }
-
-    .remplir_Champs {
-        margin-bottom: -70px;
-        font-size: 18px;
-
-    }
-
-    /*Taille Logo su la page d'authentification*/
-    .connexion a > img {
-        width: 52%;
-    }
-
-    /*    réduire la taille du contenaire du formulaire*/
-    .info_utilisateur {
-
-
-        max-width: 25rem;
-    }
-
-    /*    réduire la taille du texte*/
-    p.message {
-
-        text-align: left;
-        font-size: 1.22em;
     }
 
 

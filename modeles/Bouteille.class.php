@@ -29,13 +29,23 @@ class Bouteille extends Modele
 	{
 
 		$rows = array();
-		$res = $this->_db->query('SELECT * FROM ' . self::BOUTEILLE);
+		$res = $this->_db->query('SELECT
+											b.id,
+											b.nom,
+											b.image,
+											b.code_saq,
+											b.prix_saq,
+											b.url_saq,
+											b.pays,
+											b.format,
+											t.type
+										FROM vino__bouteille b
+										INNER JOIN ' . self::TYPE . ' t ON t.id = b.fk_type_id');
 		if ($res->num_rows) {
 			while ($row = $res->fetch_assoc()) {
 				$rows[] = $row;
 			}
 		}
-
 		return $rows;
 	}
 
@@ -133,7 +143,7 @@ class Bouteille extends Modele
 				}
 			}
 		} else {
-			var_dump($type, $ordre);
+			// var_dump($type, $ordre);
 			throw new Exception("Erreur de requête sur la base de donnée", 1);
 			//$this->_db->error;
 		}
@@ -189,7 +199,7 @@ class Bouteille extends Modele
 				}
 			}
 		} else {
-			var_dump($recherche);
+			// var_dump($recherche);
 			throw new Exception("Erreur de requête sur la base de donnée", 1);
 			//$this->_db->error;
 		}
@@ -198,6 +208,48 @@ class Bouteille extends Modele
 
 		return $rows;
 	}
+
+
+	/**
+	 * Cette méthode retourne la bouteille contenue dans le catalogue 
+	 * 
+	 * @return Array $rows contenant toutes les bouteilles.
+	 */
+	public function getRechercheBouteilleCatalogue($recherche)
+	{
+		// var_dump($recherche);
+		// exit;
+		$rows = array();
+		$requete = 'SELECT
+								b.id,
+								b.nom,
+								b.image,
+								b.code_saq,
+								b.url_saq,
+								b.prix_saq,
+								b.pays,
+								b.format,
+								t.type
+							FROM ' . self::BOUTEILLE . ' b
+							INNER JOIN ' . self::TYPE . ' t ON t.id = b.fk_type_id
+							WHERE b.nom =' . "'$recherche'" . ' OR b.pays =' . "'$recherche'" . ' OR b.code_saq =' . "'$recherche'";
+
+
+		if (($res = $this->_db->query($requete)) ==     true) {
+			if ($res->num_rows) {
+				while ($row = $res->fetch_assoc()) {
+					$row['nom'] = trim(utf8_encode($row['nom']));
+					$rows[] = $row;
+				}
+			}
+		} else {
+
+			throw new Exception("Erreur de requête sur la base de donnée", 1);
+			//$this->_db->error;
+		}
+		return $rows;
+	}
+
 
 	/**
 	 * Cette méthode retourne une bouteille contenue dans un cellier 
@@ -239,7 +291,36 @@ class Bouteille extends Modele
 
 
         return $rows;
-    }
+	}
+	
+	/**
+	 * Cette méthode retourne un code SAQ d une bouteile contenue dans un cellier 
+	 * 
+	 * @return Array $rows contenant la bouteille.
+	 */
+	public function trouverCodeSaq($data)
+	{
+		$requete = 'SELECT
+								c.vino__cellier_id,
+								c.vino__bouteille_id,
+								b.code_saq,
+								b.id
+							
+							FROM ' . self::CELLIER_BOUTEILLE . ' c
+							INNER JOIN ' . self::BOUTEILLE . ' b ON c.vino__bouteille_id = b.id
+							WHERE b.code_saq =' . $data->code_saq . ' AND c.vino__cellier_id=' . $data->id_cellier;
+
+		if (($res = $this->_db->query($requete)) ==     true) {
+			if ($res->num_rows) {
+				$row = $res->fetch_assoc();
+			}
+		} else {
+			throw new Exception("Erreur de requête sur la base de donnée", 1);
+			//$this->_db->error;
+		}
+		return $row;
+	}
+
 
 	
 
@@ -324,6 +405,45 @@ class Bouteille extends Modele
 	}
 
 	/**
+	 * Cette méthode permet de retourner les résultats de recherche pour la fonction d'autocomplete de recherche de bouteilles dans le catalogue
+	 * 
+	 * @param string $nom La chaine de caractère à rechercher
+	 * @param integer $nb_resultat Le nombre de résultat maximal à retourner.
+	 * 
+	 * @throws Exception Erreur de requête sur la base de données 
+	 * 
+	 * @return array id et nom de la bouteille trouvée dans le catalogue
+	 */
+	public function autocompleteCatalogue($nom, $nb_resultat = 10)
+	{
+
+		$rows = array();
+		$nom = $this->_db->real_escape_string($nom);
+		$nom = preg_replace("/\*/", "%", $nom);
+
+		//echo $nom;
+		$requete = 'SELECT 
+							id, 
+							nom 
+							FROM ' . self::BOUTEILLE . '
+							WHERE LOWER(nom) like LOWER("%' . $nom . '%") LIMIT 0,' . $nb_resultat;
+		//var_dump($requete);
+		if (($res = $this->_db->query($requete)) ==     true) {
+			if ($res->num_rows) {
+				while ($row = $res->fetch_assoc()) {
+					$row['nom'] = trim(utf8_encode($row['nom']));
+					$rows[] = $row;
+				}
+			}
+		} else {
+			throw new Exception("Erreur de requête sur la base de données", 1);
+		}
+		//var_dump($rows);
+		return $rows;
+	}
+
+
+	/**
 	 * Cette méthode modifie une ou des bouteilles au cellier
 	 * 
 	 * @param Object $data Tableau des données représentants la bouteille.
@@ -366,10 +486,14 @@ class Bouteille extends Modele
 			$this->erreurs['quantite'] = "Veuillez entrer la quantité en chiffre.";
 		}
 
-		/* millesime */
-		if (!preg_match('/^\d{4}$/', $data->millesime) || $data->millesime >= date('Y')) {
-			$this->erreurs['millesime'] = "Veuillez entrer une année à 4 chiffres.";
-		}
+			/* millesime */
+
+			if ($data->millesime !== "" && !preg_match('/^\d{4}$/', $data->millesime)) {
+				$this->erreurs['millesime'] = "Veuillez entrer une année à 4 chiffres.";
+			}
+			if ($data->millesime !== "" && $data->millesime > date('Y')) {
+				$this->erreurs['millesime'] = "Veuillez entrer une année inférieur ou égale à l'année en cours.";
+			}
 		if (empty($this->erreurs)) {
 			//requete pour vérifier si la bouteille à ajouter n'est pas déjà au cellier :
 
@@ -430,10 +554,13 @@ class Bouteille extends Modele
 			$this->erreurs['quantite'] = "Veuillez entrer la quantité en chiffre.";
 		}
 
-		/* millesime */
-		if (!preg_match('/^\d{4}$/', $data->millesime) || $data->millesime > date('Y')) {
-			$this->erreurs['millesime'] = "Veuillez entrer une année à 4 chiffres.";
-		}
+			/* millesime */
+			if ($data->millesime !== "" && !preg_match('/^\d{4}$/', $data->millesime)) {
+				$this->erreurs['millesime'] = "Veuillez entrer une année à 4 chiffres.";
+			}
+			if ($data->millesime !== "" && $data->millesime > date('Y')) {
+				$this->erreurs['millesime'] = "Veuillez entrer une année inférieur ou égale à l'année en cours.";
+			}
 
 		if (empty($this->erreurs)) {
 			//requete pour vérifier si la bouteille à ajouter n'est pas déjà au cellier :
@@ -470,7 +597,7 @@ class Bouteille extends Modele
 		/* validation du nombre de bouteilles */
 		if (preg_match('/^[-+]?\d*$/', $nombre)) {
 
-			$requete = "UPDATE " . self::CELLIER_BOUTEILLE . " SET quantite = GREATEST(quantite + " . $nombre . ", 0) WHERE vino__bouteille_id = " . $id . " AND vino__cellier_id = 2";
+			$requete = "UPDATE " . self::CELLIER_BOUTEILLE . " SET quantite = GREATEST(quantite + " . $nombre . ", 0) WHERE vino__bouteille_id = " . $id_bouteille . " AND vino__cellier_id = ". $id_cellier;
 			//echo $requete;
 			$res = $this->_db->query($requete);
 
@@ -479,23 +606,24 @@ class Bouteille extends Modele
 	}
 
     	/**
-	 * Cette méthode supprime une bouteille selon l'id dans le cellier
+	 * Cette méthode supprime une bouteille selon l'id dans le cellier et id du cellier
 	 * 
 	 * @param int $id id de la bouteille
+	 * @param int $id_cellier id du cellier
 	 * 
 	 * @return Boolean Succès ou échec de la suppression.
 	 */
-	public function supprimerBouteilleCellier($id)
+	public function supprimerBouteilleCellier($id, $id_cellier)
 	{
        
-		$requete = "DELETE FROM ". self::CELLIER_BOUTEILLE . " WHERE vino__bouteille_id =".$id. " AND vino__cellier_id = 2";
+		$requete = "DELETE FROM ". self::CELLIER_BOUTEILLE . " WHERE vino__bouteille_id =".$id. " AND vino__cellier_id =". $id_cellier;
 
 		if($stmt = $this->_db->prepare($requete)){ 
 			  $stmt->execute();
 			  return true;
 		}
 		else{  
-		      var_dump($this->_db->error);
+		    //   var_dump($this->_db->error);
 
 			   return false;
 
