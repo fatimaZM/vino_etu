@@ -28,6 +28,9 @@ class Controler
             case 'autocompleteBouteilleCellier':
                 $this->autocompleteBouteilleCellier();
                 break;
+            case 'autocompleteBouteilleCatalogue':
+                $this->autocompleteBouteilleCatalogue();
+                break;
             case 'ajouterNouvelleBouteilleCellier':
                 $this->ajouterNouvelleBouteilleCellier();
                 break;
@@ -50,17 +53,17 @@ class Controler
                 $this->afficherCellier();
                 break;
             case 'afficherCatalogue':
-                 $this->afficherCatalogue();
-                 break;
+                $this->afficherCatalogue();
+                break;
             case 'deconnexion':
                 $this->deconnexion();
-				break;
-				case 'supprimerBouteille':
-					$this->supprimerBouteille();
                 break;
-                case 'infoCodeSaq':
-                    $this->getCodeSaq();
-                    break;
+            case 'supprimerBouteille':
+                $this->supprimerBouteille();
+                break;
+            case 'infoCodeSaq':
+                $this->getCodeSaq();
+                break;
             default:
                 $this->accueil();
                 break;
@@ -104,27 +107,28 @@ class Controler
     }
 
     /**
-	 * Affiche la page de création d'un compte et ajout d'un utilisateur à la base de donnée
-	 * @return files
-	 */
-	private function getCodeSaq()
-	{
+     * Affiche la page de création d'un compte et ajout d'un utilisateur à la base de donnée
+     * @return files
+     */
+    private function getCodeSaq()
+    {
 
 
-		$body = json_decode(file_get_contents('php://input'));
+        $body = json_decode(file_get_contents('php://input'));
 
 
-		if (!empty($body)) {
-			$bte = new Bouteille();
-			$resultat = $bte->trouverCodeSaq($body);
-			echo json_encode($resultat);
-		} else {
+        if (!empty($body)) {
+            $bte = new Bouteille();
+            $resultat = $bte->trouverCodeSaq($body);
+            // var_dump($resultat);
+            echo json_encode($resultat);
+        } else {
 
-			include("vues/entete.php");
-			include("vues/cellier.php");
-			include("vues/pied.php");
-		}
-	}
+            include("vues/entete.php");
+            include("vues/cellier.php");
+            include("vues/pied.php");
+        }
+    }
 
     /**
      * Affiche la liste des bouteilles du cellier d'un utilisateur
@@ -133,74 +137,70 @@ class Controler
     private function afficherCellier($id_utilisateur = '')
     {
         if (isset($_POST['tri'])) {
-			$type = $_POST['type'];
-			$ordre = $_POST['ordre'];
-			$bte = new Bouteille();
+            $type = $_POST['type'];
+            $ordre = $_POST['ordre'];
+            $bte = new Bouteille();
 
-			// var_dump($type, $ordre);
-			// exit;
-			$data = $bte->getListeBouteilleCellierTri($type, $ordre);
-			include("vues/entete.php");
-			include("vues/cellier.php");
-			include("vues/pied.php");
-		}
+            // var_dump($type, $ordre);
+            // exit;
+            $data = $bte->getListeBouteilleCellierTri($type, $ordre, $_SESSION['info_utilisateur']['id']); //$_SESSION['info_utilisateur']['id'] = id du cellier
+            include("vues/entete.php");
+            include("vues/cellier.php");
+            include("vues/pied.php");
+        } else if (isset($_POST['recherche'])) {
+            $recherche = $_POST['nom_bouteille_cellier'];
+            $bte = new Bouteille();
 
-		
-		else if (isset($_POST['recherche'])) {
-			$recherche = $_POST['nom_bouteille_cellier'];
-			$bte = new Bouteille();
-
-			// var_dump($recherche);
-			// exit;
-			$data = $bte->getRechercheBouteilleCellier($recherche);
-			include("vues/entete.php");
-			include("vues/cellier.php");
-			include("vues/pied.php");
-		} else {
-			$bte = new Bouteille();
+            // var_dump($recherche);
+            // exit;
+            $data = $bte->getRechercheBouteilleCellier($recherche, $_SESSION['info_utilisateur']['id']); //$_SESSION['info_utilisateur']['id'] = id du cellier
+            include("vues/entete.php");
+            include("vues/cellier.php");
+            include("vues/pied.php");
+        } else {
+            $bte = new Bouteille();
             $data = $bte->getListeBouteilleCellier($_GET['id_utilisateur'] ?? $id_utilisateur);
             include("vues/entete.php");
             include("vues/cellier.php");
             include("vues/pied.php");
-		}
+        }
     }
 
     /**
-	 * Affiche la liste des bouteilles du cellier d'un utilisateur
-	 * @return files
-	 */
-	private function afficherCatalogue()
-	{
-		if (isset($_POST['tri'])) {
-			$type = $_POST['type'];
-			$ordre = $_POST['ordre'];
-			$bte = new Bouteille();
+     * Affiche la liste des bouteilles du cellier d'un utilisateur
+     * @return files
+     */
+    private function afficherCatalogue()
+    {
+        if (isset($_POST['tri'])) {
+            $type = $_POST['type'];
+            $ordre = $_POST['ordre'];
+            $bte = new Bouteille();
 
-			// var_dump($type, $ordre);
-			// exit;
-			$data = $bte->getListeBouteilleCatalogueTri($type, $ordre);
-			include("vues/entete.php");
-			include("vues/catalogue.php");
-			include("vues/pied.php");
-		} else if (isset($_POST['recherche'])) {
-			$recherche = $_POST['nom_bouteille_cellier'];
-			$bte = new Bouteille();
+            // var_dump($type, $ordre);
+            // exit;
+            $data = $bte->getListeBouteilleCatalogueTri($type, $ordre);
+            include("vues/entete.php");
+            include("vues/catalogue.php");
+            include("vues/pied.php");
+        } else if (isset($_POST['recherche'])) {
+            $recherche = $_POST['nom_bouteille_catalogue'];
+            $bte = new Bouteille();
 
-			// var_dump($recherche);
-			// exit;
-			$data = $bte->getRechercheBouteilleCatalogue($recherche);
-			include("vues/entete.php");
-			include("vues/catalogue.php");
-			include("vues/pied.php");
-		} else {
-			$bte = new Bouteille();
-			$data = $bte->getListeBouteille();
-			include("vues/entete.php");
-			include("vues/catalogue.php");
-			include("vues/pied.php");
-		}
-	}
-
+            // var_dump($recherche);
+            // exit;
+            $data = $bte->getRechercheBouteilleCatalogue($recherche);
+            include("vues/entete.php");
+            include("vues/catalogue.php");
+            include("vues/pied.php");
+        } else {
+            $bte = new Bouteille();
+            $data = $bte->getListeBouteille();
+            include("vues/entete.php");
+            include("vues/catalogue.php");
+            include("vues/pied.php");
+        }
+    }
 
     /**
      * Récupère les résultats de la recherche d'auto-complétion.
@@ -218,20 +218,35 @@ class Controler
     }
 
     /**
-	 * Récupère les résultats de la recherche d'auto-complétion.
+     * Récupère les résultats de la recherche d'auto-complétion.
+     * @return json
+     */
+    private function autocompleteBouteilleCellier()
+    {
+        $bte = new Bouteille();
+        // var_dump(file_get_contents('php://input'));
+        $body = json_decode(file_get_contents('php://input'));
+        // var_dump($body);
+        $listeBouteille = $bte->autocompleteCellier($body->nom, $_SESSION['info_utilisateur']['id']); //$_SESSION['info_utilisateur']['id'] = id du cellier
+
+        echo json_encode($listeBouteille);
+    }
+
+    /**
+	 * Récupère les résultats de la recherche d'auto-complétion dans le catalogue.
 	 * @return json
 	 */
-	private function autocompleteBouteilleCellier()
+	private function autocompleteBouteilleCatalogue()
 	{
 		$bte = new Bouteille();
 		// var_dump(file_get_contents('php://input'));
 		$body = json_decode(file_get_contents('php://input'));
 		// var_dump($body);
-		$listeBouteille = $bte->autocompleteCellier($body->nom);
+		$listeBouteille = $bte->autocompleteCatalogue($body->nom);
 
 		echo json_encode($listeBouteille);
-	}
-
+    }
+    
     /**
      * Récupère les informations sur la bouteille à ajouter et déclenche la requete sql d'ajout.
      * Si php://input est vide, affiche le formulaire d'ajout de bouteille
@@ -334,17 +349,17 @@ class Controler
     }
 
 
-  /**
+    /**
      * Récupère l'id de la bouteille à supprimer et déclenche la requete sql de suppression.
      * @return json
      */
-	private function supprimerBouteille(){
+    private function supprimerBouteille()
+    {
 
 
-	     $body = json_decode(file_get_contents('php://input'));
-            $bte = new Bouteille();
-			$resultat = $bte->supprimerBouteilleCellier($_GET['id'], $_GET['cellier']);
-            echo json_encode($resultat);
-		
-	}
+        $body = json_decode(file_get_contents('php://input'));
+        $bte = new Bouteille();
+        $resultat = $bte->supprimerBouteilleCellier($_GET['id'], $_GET['cellier']);
+        echo json_encode($resultat);
+    }
 }

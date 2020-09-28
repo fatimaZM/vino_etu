@@ -4,12 +4,12 @@
 
 
         <!-- Recherche dans le celier -->
-        <form id="recherche_cellier" method="post">
+        <form id="recherche" method="post">
             <div class="rechercheBouteilleCellier" vertical layout>
 
-                <input type="text" class="nom_bouteille_cellier" name="nom_bouteille_cellier" placeholder="Trouver bouteille par id,nom, pays " value="">
+                <input type="text" class="nom_bouteille_cellier" name="nom_bouteille_cellier" placeholder="id, nom, pays " value="">
                 <button type="submit" name="recherche" value="Rechercher"><i class="fa fa-search"></i></button>
-                <ul class="listeAutoComplete">
+                <ul class="listeAutoCompleteCellier">
                 </ul>
             </div>
         </form>
@@ -88,11 +88,11 @@
         ?>
             <input type="submit" name="tri" value="Triez"></form>
     </div>
-
+    <h2>Cellier</h2>
     <div class="container_bouteille">
         <?php
     if ($data == null) {
-    ?><h4>La recherche n'a donnée aucun résultat</h4>
+    ?><h4>Aucune bouteille trouvée</h4>
 
         <?php
     }?>

@@ -1,3 +1,4 @@
+  
 <!DOCTYPE html>
 <html lang="fr">
 
@@ -27,8 +28,7 @@
 
         <aside>
 
-
-            <span class="utlisateur_connecte"><i class='fas fa-user-circle'></i> Bienvenue <?= $_SESSION['info_utilisateur']['nom_utilisateur'] ?? '' ?> !</span>
+            <span class="utlisateur_connecte"><i class='fas fa-user-circle'></i> Bienvenue <?= $_SESSION['info_utilisateur']['prenom_utilisateur'] ?? '' ?> !</span>
 
         </aside>
 
@@ -42,7 +42,7 @@
                 <ul class="menu">
                     <li><a href="?requete=accueil">Mon cellier</a></li>
                     <li><a href="?requete=ajouterNouvelleBouteilleCellier">Ajouter une bouteille au cellier</a></li>
-                    <li><a href="?requete=afficherCatalogue">Catalogue</a></li>
+                    <li><a href="?requete=afficherCatalogue">Catalogue de la SAQ</a></li>
                     <li> <a href="?requete=deconnexion"> Déconnexion</a></li>
 
                 </ul>

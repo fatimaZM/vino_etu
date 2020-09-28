@@ -19,7 +19,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Patua+One&family=Syne&display=swap" rel="stylesheet">
 </head>
 
-<body>
+<body id="body_authentification">
 
 
     <header class="header">
@@ -44,15 +44,19 @@
             <div class=info_utilisateur vertical layout>
 
                 <div class="form">
-                    <p class="titre_connexion">Connexion au Compte <br>
+                    <p class="titre_connexion">Connexion au compte <br>
                         <span>* Champs obligatoires</span></p>
                     <p class="message">Nouvel utilisateur?<a href="?requete=ajouterNouvelUtilisateur"> Créer un compte</a></p>
                     <form class="authentification-form" method="post">
                         <p><label>Courriel *</label><br>
 
-                            <input type="email" id="courriel" name="courriel" placeholder="courriel" required /></p>
+                            <input type="email" id="courriel" name="courriel" placeholder="courriel" required value="<?= $_SESSION['courriel_creation_compte'] ?? '' ?>" /></p>
+                        <span class="erreur courriel"></span>
+
                         <p><label>Mot de passe *</label><br>
                             <input type="password" name="mdp" placeholder="Mot de passe" required /></p>
+                        <span class="erreur mdp"></span>
+
                         <span class="erreur identifiants_inconnus"></span>
                     </form>
 
